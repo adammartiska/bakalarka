@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import JazdyAbsolvovane from '../Ziak/JazdyAbsolvovane';
-import JazdyNadchadzajuce from '../Ziak/JazdyNadchadzajuce';
+import JazdyAbsolvovane from '../Instruktor/JazdyAbsolvovane';
+import JazdyNadchadzajuce from '../Instruktor/JazdyNadchadzajuce';
 import Colors from '../../constants/Colors';
 import { TabBar } from 'react-native-tab-view';
 
