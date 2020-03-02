@@ -45,7 +45,7 @@ const Testy = props => {
             <View>
                 <Image
                     style={styles.logo}
-                    source={require('../Images/test.png')}
+                    source={require('../../Images/test.png')}
                 />
             </View>
             {/*<PickerTesty 

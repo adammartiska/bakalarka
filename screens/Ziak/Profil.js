@@ -56,7 +56,7 @@ const Profil = props => {
         <TouchableOpacity onPress={() => _pickImage()}>
         <Image 
         style={styles.logo}
-         source={require('../Images/user.png')}
+         source={require('../../Images/user.png')}
     />
     </TouchableOpacity>
         <View style={styles.heading}>

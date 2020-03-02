@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
 import RezervovanaJazda from '../../components/RezervovanaJazda';
+import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 
 
 const JazdyNadchadzajuce = props => {
@@ -26,6 +27,26 @@ const JazdyNadchadzajuce = props => {
           title: '18.4.2018',
           time: '10:00',
         },
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72',
+          title: '18.4.2018',
+          time: '10:00',
+        },
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72',
+          title: '18.4.2018',
+          time: '10:00',
+        },
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72',
+          title: '18.4.2018',
+          time: '10:00',
+        },
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72',
+          title: '18.4.2018',
+          time: '10:00',
+        },
       ]);
 
 
@@ -38,7 +59,7 @@ const JazdyNadchadzajuce = props => {
         <SafeAreaView style = {styles.screen}>
         <FlatList
         data={DATA}
-        renderItem={({item}) => <RezervovanaJazda datum = {item.title} cas = {item.time} id={item.id} onPress={() => zmazHandler(item.id)}/>}
+        renderItem={({item}) => <NadchadzajuceInstruktor datum={item.title} cas={item.time}/>}
         />      
         
         

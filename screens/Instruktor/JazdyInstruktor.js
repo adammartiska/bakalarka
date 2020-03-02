@@ -20,7 +20,7 @@ const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
     useEffect(() => {
     console.log('useEffect');
-  }, [dateChangeHandler]);
+  }, []);
   const selectedStartDate = null;
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
@@ -121,7 +121,7 @@ const dajPole = (pole, id) => {
   const dateChangeHandler = (date) => {
       setIsLoading(false);
       setDisplayText(false);
-       const upravenyDate = moment(date).format("MM DD YYYY");
+       const upravenyDate = moment(date).format("YYYY-MM-DD");
       const dataToSent = {
         token: token,
         date: upravenyDate

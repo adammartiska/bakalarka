@@ -12,13 +12,15 @@ import Testy from './screens/Ziak/Testy';
 import ReduxThunk from 'redux-thunk';
 import authReducer from './store/reducers/auth';
 import orderReducer from './store/reducers/orders';
-import JazdyAbsolvovane from './screens/Ziak/JazdyAbsolvovane';
+import JazdyAbsolvovane from './screens/Instruktor/JazdyAbsolvovane';
 import Profil from './screens/Ziak/Profil';
 import JazdyRezervacia from './screens/Ziak/JazdyRezervacia';
 import JazdyInstruktor from './screens/Instruktor/JazdyInstruktor';
 import Prvy from './screens/Testy/Prvy';
 import ProfilSettings from './screens/Ziak/ProfilSettings';
 import NavigaciaInstrktor from './navigation/NavigaciaInstruktor';
+import NadchadzajuceInstruktor from './components/NadchadzajuceInstruktor';
+import JazdyNadchadzajuce from './screens/Instruktor/JazdyNadchadzajuce';
 
 //useScreens();  //optimalizacia screenov performance
 
@@ -62,7 +64,7 @@ render() {
   // const Layout = createRootNavigator(signedIn);
   return (
     <Provider store = {store}>
-    <NavigaciaInstrktor />
+    <Navigacia />
     </Provider>
   );
 };
