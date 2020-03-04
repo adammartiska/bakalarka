@@ -64,7 +64,7 @@ render() {
   // const Layout = createRootNavigator(signedIn);
   return (
     <Provider store = {store}>
-    <Navigacia />
+    <NavigaciaInstrktor />
     </Provider>
   );
 };

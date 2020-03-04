@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, SafeAreaView, Image} from 'react-native';
+import {View, Text, StyleSheet, FlatList, SafeAreaView, Image, Alert} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../components/DetailJazdy';
 import { useState } from 'react';
@@ -7,10 +7,35 @@ import Colors from '../constants/Colors';
 import InstruktorBar from '../components/InstruktorBar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import TimeButton from './TimeButton';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const RezervovanaJazda = props => {
     const [showDetails, setShowDetails] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const alertZmazHandler = () => {
+      Alert.alert(
+        'Zrusenie rezervacie',
+        'Naozaj si prajete zavazne zrusit vasu jazdu?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
+    }
+
+    showAlertfunction = () => {
+      setShowAlert(true);
+    };
+   
+    hideAlert = () => {
+      setShowAlert(false);
+    };
+
     return (
         
         <View style={{elevation: 50}} id={props.id}>
@@ -34,27 +59,14 @@ const RezervovanaJazda = props => {
          </View>
         </View>
       <View style = {{marginLeft: 90, marginTop: 18,}}>
-      <TouchableOpacity onPress = {() => setShowDetails(!showDetails)}>
+      <TouchableOpacity onPress = {props.onPress}>
         <Icon name="md-close-circle-outline" size={35} color='#000'/>
         </TouchableOpacity>
     </View> 
         
         </View>
-        {showDetails && (
-        <View style={styles.vysunute}>
-        
-        <Text style={{fontSize: 15}}>
-        Naozaj si prajete zavazne zrusit jazdu?
-        </Text>
-       
-        <TimeButton 
-        name = 'zrus'
-        styles = {{backgroundColor: '#f00', width: '30%', marginTop: 15,}}
-        onPress = {props.onPress}/>
 
-        </View>)
-    
-        }
+        
         </View>
         
         
@@ -121,3 +133,19 @@ const RezervovanaJazda = props => {
 
 
   export default RezervovanaJazda;
+
+  {/* showDetails && (
+    <View style={styles.vysunute}>
+    
+    <Text style={{fontSize: 15}}>
+    Naozaj si prajete zavazne zrusit jazdu?
+    </Text>
+   
+    <TimeButton 
+    name = 'zrus'
+    styles = {{backgroundColor: '#f00', width: '30%', marginTop: 15,}}
+    onPress = {props.onPress}/>
+
+    </View>)
+*/
+    }

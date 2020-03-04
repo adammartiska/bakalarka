@@ -78,6 +78,7 @@ const JazdyAbsolvovane = props => {
 
     return (
       <View style={styles.screen}>  
+      {!recent ? (
       <View style={{alignItems: 'center'}}>  
       <Text style={{textAlign: 'center'}}>Ak by ste si chceli prezriet jazdy z predoslych datumov, staci si zvolit datum</Text>
         
@@ -95,10 +96,11 @@ const JazdyAbsolvovane = props => {
           )}
           <View style={{marginVertical: 15, alignItems: 'center'}}>
           <Text style={{textAlign: 'center'}}>... alebo si mozte len zobrazit nedavne jazdy</Text>
-          <CustomButton name="zobrazit jazdy" iconName="md-time" onPress={showRecent}/>          
           </View>  
-          </View>  
-          {recent && (
+          </View> 
+
+          )          
+       : (
             <SafeAreaView>
           <FlatList
         data={DATA}
@@ -106,7 +108,9 @@ const JazdyAbsolvovane = props => {
             />
             </SafeAreaView>
           )
-          }
+          
+        }
+        <CustomButton name="zobrazit jazdy" iconName="md-time" onPress={showRecent}/>
           </View>
 
 
@@ -124,6 +128,7 @@ const JazdyAbsolvovane = props => {
 
 const styles = StyleSheet.create({
     screen: {
+      flex: 1,
         marginTop: 13,
         marginHorizontal: 20,
 

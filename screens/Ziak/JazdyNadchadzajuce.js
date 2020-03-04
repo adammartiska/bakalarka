@@ -1,15 +1,20 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, SafeAreaView, Image} from 'react-native';
+import {View, Text, StyleSheet, FlatList, SafeAreaView, Image, Alert} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
 import { useState } from 'react';
 import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
 import RezervovanaJazda from '../../components/RezervovanaJazda';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const JazdyNadchadzajuce = props => {
-   
+    const [zvolenaCancel, setZvolenaCancel] = useState({
+      date: '',
+      time: '',
+      id: '',
+    })
     const [DATA, setDATA] = useState([
         {
           id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -27,19 +32,50 @@ const JazdyNadchadzajuce = props => {
           time: '10:00',
         },
       ]);
+      const [showAlert, setShowAlert] = useState(false);
 
 
       const zmazHandler = id => {
           const newData = DATA.filter(item => item.id !== id)
           setDATA(newData);
+          setShowAlert(false);
       }
-
+      const showAlertfunction = (date, time, id) => {
+        setZvolenaCancel({
+          date: date,
+          time: time,
+          id: id,
+        })
+        setShowAlert(true);
+        console.log(zvolenaCancel);
+      };
+     
+      const hideAlert = () => {
+        setShowAlert(false);
+      };
+     // const message = `Naozaj si prajete zrusit jazdu ${item.title}?`
+    //!!!! chcem uchovavat zvolenu jazdu v stave objekte kvoli alertu!
     return (
         <SafeAreaView style = {styles.screen}>
         <FlatList
         data={DATA}
-        renderItem={({item}) => <RezervovanaJazda datum = {item.title} cas = {item.time} id={item.id} onPress={() => zmazHandler(item.id)}/>}
+        renderItem={({item}) => <RezervovanaJazda datum = {item.title} cas = {item.time} id={item.id} onPress={() => showAlertfunction(item.title, item.time, item.id)}/>}
         />      
+        <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Zrusenie rezervacie"
+        message= {`Naozaj si prajete zrusit jazdu \n         ${zvolenaCancel.date} - ${zvolenaCancel.time}?`}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="Nie"
+        confirmText="Ano, zrusit jazdu"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={hideAlert}
+        onConfirmPressed={() => zmazHandler(zvolenaCancel.id)}
+      />
         
         
         </SafeAreaView>
