@@ -11,9 +11,11 @@ import CalendarPicker from 'react-native-calendar-picker';
 //import { Colors } from 'react-native-paper';
 import Colors from '../../constants/Colors';
 import moment from 'moment';
-import {useSelector, connect} from 'react-redux';
+import {useSelector, connect, useDispatch} from 'react-redux';
 import TimeButtonCheck from '../../components/TimeButtonCheck';
 import TimeButton from '../../components/TimeButton';
+import * as authActions from '../../store/actions/auth';
+import { useFetchGet } from '../../hooks/useFetch';
 
 
 const JazdyInstruktor = props => {
@@ -22,6 +24,8 @@ const JazdyInstruktor = props => {
     console.log('useEffect');
   }, []);
   const selectedStartDate = null;
+  const res = useFetchGet('geh');
+  const { error, isloadink, response } = res;
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
   const dataToMap = ["11:00", "12:00", "13:00", "14:00", "15:00"];
@@ -42,6 +46,7 @@ const JazdyInstruktor = props => {
 
 };
 
+
 const list = [
   { value: "1100", label: "11:00" },
   { value: "1200", label: "12:00" },
@@ -57,6 +62,7 @@ list.map(item => ({
 }))
 );
 
+
 const zhromazdiData = (data) => {
     data.map(item => {
     if(item.isChecked === true) {
@@ -64,6 +70,7 @@ const zhromazdiData = (data) => {
     }
   });
   console.log(pole);
+ console.log(response.status);
 }
 
 function handleToggleCheckbox(value) {
