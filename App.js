@@ -21,6 +21,11 @@ import ProfilSettings from './screens/Ziak/ProfilSettings';
 import NavigaciaInstrktor from './navigation/NavigaciaInstruktor';
 import NadchadzajuceInstruktor from './components/NadchadzajuceInstruktor';
 import JazdyNadchadzajuce from './screens/Instruktor/JazdyNadchadzajuce';
+import { createClient } from 'react-fetching-library';
+import JazdyPending from './screens/Instruktor/JazdyPending';
+import { ClientContextProvider } from 'react-fetching-library';
+
+
 
 //useScreens();  //optimalizacia screenov performance
 
@@ -49,6 +54,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
   // const [isLoggedIn, setIsLoggedIn] = useState('false');
 
 export default class App extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -58,14 +64,22 @@ export default class App extends React.Component {
     };
   };
 
-  // }
+  
 render() {
-  // const { signedIn, checkedSignIn } = this.state;
-  // const Layout = createRootNavigator(signedIn);
+
+  {/*const client = createClient({
+    //None of the options is required
+    requestInterceptors: [requestHostInterceptor('http://example.com/')],
+    responseInterceptors: [],
+    cacheProvider: cacheProvider,
+    fetch: customFetchImplementation,
+  }); */}
   return (
+   
     <Provider store = {store}>
     <NavigaciaInstrktor />
     </Provider>
+  
   );
 };
 }

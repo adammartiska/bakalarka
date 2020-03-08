@@ -12,11 +12,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import CustomButon from '../../components/CustomButton';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Profil = props => {
     const dispatch = useDispatch();
     const [progress, setProgress] = useState(0);
     const [image, setImage] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
     const odjazedene = 10;
     const celkovo = 20;
     let prog = (odjazedene/celkovo) * 100;
@@ -41,14 +43,18 @@ const Profil = props => {
         }
       };
     
-    const logoutHandler = useCallback(() => {        
-        dispatch(authActions.logout());
-        props.navigation.navigate('SignedOut')
+    const logoutHandler = useCallback(() => {      
+       dispatch(authActions.logout());
+       props.navigation.navigate('SignedOut')
     }, [dispatch]);
 
     useEffect(() => {
-        props.navigation.setParams({odhlas: logoutHandler})
+        props.navigation.setParams({odhlas: () => setShowAlert(true)})
     }, [logoutHandler]); 
+
+    const hideAlert = () => {
+      setShowAlert(false);
+    };
 
 
     return (
@@ -84,6 +90,21 @@ const Profil = props => {
         <View style={{marginTop: 10}}>
         <CustomButon name='Nastavenia' iconName = 'md-settings' onPress={() => props.navigation.navigate('ProfilSettings')} />
         </View>
+        <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title='Prajete si zavazne odhlasit?'
+        message= 'Pred tym nez sa odhlasite, skontrolujte prosim ci mate potvrdene vsetky jazdy pre dnesny den'
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="Nie, skontrolovat jazdy"
+        confirmText="Odhlasit ma!"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={hideAlert}
+        onConfirmPressed={logoutHandler}
+      />
         </View>
 
     );

@@ -9,6 +9,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomButton from '../../components/CustomButton';
 import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 import TimeButton from '../../components/TimeButton';
+import AbsolvovaneInstruktor from '../../components/AbsolvovaneInstruktor';
+import AbsolvovanePending from '../../components/AbsolvovanePending';
 
 const JazdyAbsolvovane = props => {
    
@@ -53,6 +55,7 @@ const JazdyAbsolvovane = props => {
       const [mode, setMode] = useState('date');
       const [show, setShow] = useState(false);
       const [recent, setRecent] = useState(false);
+      const [pending, setPending] = useState(false);
     
       const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;      
@@ -70,15 +73,18 @@ const JazdyAbsolvovane = props => {
         showMode('date');
       };
 
-      const showRecent = () => {
+      const handleRecent = () => {
         setRecent(!recent);
+      }
+      const handlePending = () => {
+        setPending(!pending);
+        console.log('som tu')
       }
 
 
 
     return (
       <View style={styles.screen}>  
-      {!recent ? (
       <View style={{alignItems: 'center'}}>  
       <Text style={{textAlign: 'center'}}>Ak by ste si chceli prezriet jazdy z predoslych datumov, staci si zvolit datum</Text>
         
@@ -97,20 +103,17 @@ const JazdyAbsolvovane = props => {
           <View style={{marginVertical: 15, alignItems: 'center'}}>
           <Text style={{textAlign: 'center'}}>... alebo si mozte len zobrazit nedavne jazdy</Text>
           </View>  
+          <CustomButton name="zobrazit jazdy" iconName="md-time" onPress={handleRecent}/>
           </View> 
-
-          )          
-       : (
-            <SafeAreaView>
+          {
+            recent &&          
+        <SafeAreaView>
           <FlatList
         data={DATA}
-        renderItem={({item}) => <NadchadzajuceInstruktor datum={item.title} cas={item.time} style={{marginHorizontal: 2,}}/>}
+        renderItem={({item}) => <AbsolvovaneInstruktor state='absolvovana' datum={item.title} cas={item.time} style={{marginHorizontal: 2,}}/>}
             />
             </SafeAreaView>
-          )
-          
-        }
-        <CustomButton name="zobrazit jazdy" iconName="md-time" onPress={showRecent}/>
+          }
           </View>
 
 

@@ -5,13 +5,15 @@ import JazdyAbsolvovane from '../Instruktor/JazdyAbsolvovane';
 import JazdyNadchadzajuce from '../Instruktor/JazdyNadchadzajuce';
 import Colors from '../../constants/Colors';
 import { TabBar } from 'react-native-tab-view';
+import JazdyPending from '../Instruktor/JazdyPending';
 
 export default class TabViewExample extends React.Component {
   state = {
     index: 0,
     routes: [
-      { key: 'first', title: 'Rezervovane ziakmi' },
+      { key: 'first', title: 'Rezervovane' },
       { key: 'second', title: 'Absolvovane' },
+      { key: 'third', title: 'Cakajuce'}
     ],
   };
 
@@ -22,6 +24,7 @@ export default class TabViewExample extends React.Component {
         renderScene={SceneMap({
           first: JazdyNadchadzajuce,
           second: JazdyAbsolvovane,
+          third: JazdyPending
         })}
         renderTabBar={props =>
             <TabBar
@@ -29,7 +32,7 @@ export default class TabViewExample extends React.Component {
               indicatorStyle={{ backgroundColor: 'white' }}
               style={{ backgroundColor: 'white' }}
               activeColor={Colors.primaryColor}
-        inactiveColor={Colors.carhartt}
+              inactiveColor={'black'}
             />
           }
         

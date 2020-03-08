@@ -10,7 +10,7 @@ import RideState from '../components/RideState';
 import CustomButton from '../components/CustomButton';
 
 
-const NadchadzajuceInstruktor = props => {
+const AbsolvovaneInstruktor = props => {
     const [showDetails, setShowDetails] = useState(false);
     return (
         
@@ -26,6 +26,9 @@ const NadchadzajuceInstruktor = props => {
         </View>
         <View style = {{marginTop: 7, alignItems: 'center'}}>
         <InstruktorBar />
+        </View>
+        <View style={{alignItems: 'center'}}>
+        <RideState state={props.state} />
         </View>
         </View>
         
@@ -95,4 +98,4 @@ const NadchadzajuceInstruktor = props => {
 });
 
 
-  export default NadchadzajuceInstruktor;
+  export default AbsolvovaneInstruktor;

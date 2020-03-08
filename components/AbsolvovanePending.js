@@ -6,11 +6,11 @@ import { useState } from 'react';
 import Colors from '../constants/Colors';
 import InstruktorBar from '../components/InstruktorBar';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RideState from '../components/RideState';
+import TimeButton from './TimeButton';
 import CustomButton from '../components/CustomButton';
 
 
-const NadchadzajuceInstruktor = props => {
+const AbsolvovanePending = props => {
     const [showDetails, setShowDetails] = useState(false);
     return (
         
@@ -26,6 +26,10 @@ const NadchadzajuceInstruktor = props => {
         </View>
         <View style = {{marginTop: 7, alignItems: 'center'}}>
         <InstruktorBar />
+        </View>
+        <View style={{flexDirection:'row', justifyContent: 'space-evenly', marginTop: 10, }}>
+        <TimeButton name='potvrdit' styles={{width: 100, backgroundColor: Colors.lightGreen, }} onPress={props.onPressConfirm} />
+        <TimeButton name='zrusit' styles={{width: 100, backgroundColor: Colors.lightRed}} onPress={props.onPressDecline} />
         </View>
         </View>
         
@@ -95,4 +99,4 @@ const NadchadzajuceInstruktor = props => {
 });
 
 
-  export default NadchadzajuceInstruktor;
+  export default AbsolvovanePending;

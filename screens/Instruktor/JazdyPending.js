@@ -7,6 +7,7 @@ import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
 import RezervovanaJazda from '../../components/RezervovanaJazda';
 import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
+import AbsolvovanePending from '../../components/AbsolvovanePending';
 
 
 const JazdyNadchadzajuce = props => {
@@ -57,12 +58,9 @@ const JazdyNadchadzajuce = props => {
 
     return (
         <SafeAreaView style = {styles.screen}>
-        <View>
-        <Text></Text>
-        </View>
         <FlatList
         data={DATA}
-        renderItem={({item}) => <NadchadzajuceInstruktor datum={item.title} cas={item.time}/>}
+        renderItem={({item}) => <AbsolvovanePending datum={item.title} cas={item.time}/>}
         />      
         
         
