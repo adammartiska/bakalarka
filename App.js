@@ -24,18 +24,16 @@ import JazdyNadchadzajuce from './screens/Instruktor/JazdyNadchadzajuce';
 import { createClient } from 'react-fetching-library';
 import JazdyPending from './screens/Instruktor/JazdyPending';
 import { ClientContextProvider } from 'react-fetching-library';
-
-
+import { create } from 'apisauce';
 
 //useScreens();  //optimalizacia screenov performance
-
 
 const rootReducer = combineReducers({
   orders: orderReducer,
   auth: authReducer
 });
 
-const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 // const fetchfonts = () => {
 //   return Font.loadAsync({
@@ -43,57 +41,48 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 //     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
 //   });
 // }; //funkcia na nacitanie fontov
-  // const [fontLoaded, setFontLoaded] = useState('false');
-  // if(!fontLoaded) {
-  //   return <AppLoading startAsync={fetchfonts}
-  //     onFinish={() => setFontLoaded(true)}
-  //     />
-    
-  // };
+// const [fontLoaded, setFontLoaded] = useState('false');
+// if(!fontLoaded) {
+//   return <AppLoading startAsync={fetchfonts}
+//     onFinish={() => setFontLoaded(true)}
+//     />
 
-  // const [isLoggedIn, setIsLoggedIn] = useState('false');
+// };
+
+// const [isLoggedIn, setIsLoggedIn] = useState('false');
 
 export default class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
       signedIn: false,
-      checkedSignIn: false,
+      checkedSignIn: false
     };
-  };
+  }
 
-  
-render() {
-
-  {/*const client = createClient({
-    //None of the options is required
-    requestInterceptors: [requestHostInterceptor('http://example.com/')],
-    responseInterceptors: [],
-    cacheProvider: cacheProvider,
-    fetch: customFetchImplementation,
-  }); */}
-  return (
-   
-    <Provider store = {store}>
-    <NavigaciaInstrktor />
-    </Provider>
-  
-  );
-};
+  render() {
+    {
+      const api = create({
+        baseURL: 'http://147.175.121.250:80'
+      });
+    }
+    return (
+      <Provider store={store}>
+        <JazdyInstruktor />
+      </Provider>
+    );
+  }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
-
 
 // {
 //   const { checkedSignIn, signedIn } = this.state;

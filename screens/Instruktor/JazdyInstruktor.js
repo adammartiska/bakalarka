@@ -5,7 +5,8 @@ import {
   View,
   Button,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 //import { Colors } from 'react-native-paper';
@@ -15,7 +16,9 @@ import { useSelector, connect, useDispatch } from 'react-redux';
 import TimeButtonCheck from '../../components/TimeButtonCheck';
 import TimeButton from '../../components/TimeButton';
 import * as authActions from '../../store/actions/auth';
-import { useFetchGet } from '../../hooks/useFetch';
+import { useFetchGet } from '../../hooks/useFetchGet';
+import { useFetchPost } from '../../hooks/useFetchPost';
+import { create } from 'apisauce';
 
 const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
@@ -23,11 +26,20 @@ const JazdyInstruktor = props => {
     console.log('useEffect');
   }, []);
   const selectedStartDate = null;
-  const res = useFetchGet('geh');
-  const { error, isloadink, response } = res;
+
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
+  const [dateToSent, setDateToSent] = useState('');
+  const [bigData, setBigData] = useState([]);
   const dataToMap = ['11:00', '12:00', '13:00', '14:00', '15:00'];
+  const res = useFetchGet('/info/listOfUsers');
+  const jazdyOffer = useFetchPost('/instructor/addRides', pole);
+  const resData = useFetchGet('/info/schoolsAvailable');
+  const { error, response } = res;
+  const api = create({
+    baseURL: 'http://147.175.121.250:80'
+  });
+  // start making calls
 
   const checkHandler = id => {
     setCeknute(!ceknute);
@@ -57,14 +69,21 @@ const JazdyInstruktor = props => {
     }))
   );
 
-  const zhromazdiData = data => {
+  const zhromazdiData = async data => {
     data.map(item => {
       if (item.isChecked === true) {
         pole.push(item.label);
       }
     });
     console.log(pole);
-    console.log(response.status);
+    pole.map(item => {
+      bigData.push({
+        date: dateToSent,
+        time: item
+      });
+    });
+    const result = await api.post('/instructor/addRides', bigData);
+    console.log(result);
   };
 
   function handleToggleCheckbox(value) {
@@ -80,14 +99,6 @@ const JazdyInstruktor = props => {
       })
     );
   }
-
-  const dajPole = (pole, id) => {
-    const novePole = pole.slice();
-    novePole.push(id);
-    console.log('pushuj');
-    setPole(novePole);
-    console.log(pole);
-  };
 
   const maper = data => {
     return (
@@ -117,6 +128,7 @@ const JazdyInstruktor = props => {
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = date => {
+    setDateToSent(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
     const upravenyDate = moment(date).format('YYYY-MM-DD');
@@ -128,7 +140,7 @@ const JazdyInstruktor = props => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerstyle={styles.container}>
       <CalendarPicker onDateChange={dateChangeHandler} />
       <View>
         {isLoading ? (
@@ -145,7 +157,8 @@ const JazdyInstruktor = props => {
           maper(data)
         )}
       </View>
-    </View>
+      <Button title="odosli" onPress={() => console.log(bigData)} />
+    </ScrollView>
   );
 };
 

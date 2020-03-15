@@ -62,7 +62,7 @@ const JazdyNadchadzajuce = props => {
   const [show, setShow] = useState(false);
   const [recent, setRecent] = useState(false);
   const [pending, setPending] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
