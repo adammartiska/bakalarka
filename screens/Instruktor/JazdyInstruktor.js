@@ -32,12 +32,20 @@ const JazdyInstruktor = props => {
   const [dateToSent, setDateToSent] = useState('');
   const [bigData, setBigData] = useState([]);
   const dataToMap = ['11:00', '12:00', '13:00', '14:00', '15:00'];
-  const res = useFetchGet('/info/listOfUsers');
+  const [{ response, error, isLoadink }, doFetch] = useFetchGet(
+    'http://147.175.121.250:80/info/listOfUsers'
+  );
   const jazdyOffer = useFetchPost('/instructor/addRides', pole);
   const resData = useFetchGet('/info/schoolsAvailable');
-  const { error, response } = res;
+  //const { error, response } = res;
+
   const api = create({
-    baseURL: 'http://147.175.121.250:80'
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: '324vcdjko45'
+    }
   });
   // start making calls
 
@@ -82,8 +90,10 @@ const JazdyInstruktor = props => {
         time: item
       });
     });
-    const result = await api.post('/instructor/addRides', bigData);
-    console.log(result);
+    //doFetch('http://147.175.121.250:80/info/listOfUsers');
+    console.log(response);
+    // const result = await api.post('/instructor/addRides', bigData);
+    // console.log(result);
   };
 
   function handleToggleCheckbox(value) {
@@ -157,7 +167,14 @@ const JazdyInstruktor = props => {
           maper(data)
         )}
       </View>
-      <Button title="odosli" onPress={() => console.log(bigData)} />
+      <Button
+        title="odosli"
+        onPress={() => {
+          doFetch('http://147.175.121.250:80/info/linksAvailable');
+
+          console.log(response);
+        }}
+      />
     </ScrollView>
   );
 };

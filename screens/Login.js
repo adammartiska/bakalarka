@@ -68,7 +68,7 @@ const Login = props => {
 
   const authHandler = async () => {
     let action;
-    action = authActions.login(
+    action = authActions.loginmyapp(
       formState.inputValues.email,
       formState.inputValues.password
     );

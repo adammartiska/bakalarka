@@ -69,7 +69,7 @@ export default class App extends React.Component {
     }
     return (
       <Provider store={store}>
-        <JazdyInstruktor />
+        <Navigacia />
       </Provider>
     );
   }

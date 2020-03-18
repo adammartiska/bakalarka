@@ -8,21 +8,13 @@ import { create } from 'apisauce';
  * a nasledne uz viem pouzivat napriklad payload.ziak, ...
  */
 
-export const useFetchGet = () => {
+export const skusfec = () => {
   const api = create({
-    baseURL: 'http://147.175.121.250:80'
+    baseURL: 'http://147.175.121.250:80/info/listOfUsers'
   });
-  const [url, setUrl] = useState('');
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+  return async () => {
       try {
         const res = await api.get(url);
-        // const res = await fetch(`http://147.175.121.250:80/info${endpoint}`);
-        //const json = await res.json();
         setResponse(res);
         console.log('nacitavam skoro?');
         setIsLoading(false);
@@ -34,3 +26,9 @@ export const useFetchGet = () => {
   }, []);
   return [{ response, error, isLoading }, setUrl];
 };
+const [url, setUrl] = useState('');
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const fetchData = 

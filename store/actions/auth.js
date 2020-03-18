@@ -5,10 +5,10 @@ export const LOGIN = 'LOGIN';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 export const FORGOTPASS = 'FORGOTPASS';
+export const LOGINMYAPP = 'LOGINMYAPP';
 
 export const authenticate = (userId, token) => {
-  return { type: AUTHENTICATE, userId: userId, token: token};
-
+  return { type: AUTHENTICATE, userId: userId, token: token };
 };
 
 export const signup = (fullname, email, phonenumber, password) => {
@@ -37,7 +37,7 @@ export const signup = (fullname, email, phonenumber, password) => {
       console.log(errorResData);
       console.log(errorId);
       let message = 'Something went wrong!';
-      if(errorId === 'EMAIL_EXISTS') {
+      if (errorId === 'EMAIL_EXISTS') {
         message = 'Entered email already exists!';
       }
       throw new Error(message);
@@ -46,11 +46,12 @@ export const signup = (fullname, email, phonenumber, password) => {
     const resData = await response.json();
     console.log(resData);
     dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localId });
-    const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
 };
-
 
 export const login = (email, password) => {
   return async dispatch => {
@@ -60,7 +61,7 @@ export const login = (email, password) => {
       {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: email,
@@ -75,10 +76,9 @@ export const login = (email, password) => {
       console.log(errorResData);
       const errorId = errorResData.error.message;
       let message = 'Something went wrong!';
-      if(errorId === 'EMAIL_NOT_FOUND') {
+      if (errorId === 'EMAIL_NOT_FOUND') {
         message = 'Entered email not found!';
-      }
-      else if(errorId === 'INVALID_PASSWORD') {
+      } else if (errorId === 'INVALID_PASSWORD') {
         message = 'Entered password is not valid!';
       }
       throw new Error(message);
@@ -87,7 +87,9 @@ export const login = (email, password) => {
     const resData = await response.json();
     console.log(JSON.stringify(resData));
     dispatch({ type: LOGIN, token: resData.token, userId: resData.id });
-    const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
 };
@@ -98,12 +100,13 @@ export const casy = (date, time) => {
       {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWthc0BnbWFpbC5jb20iLCJleHAiOjE1ODMzNTcyOTMsImlhdCI6MTU4MzM1Mzk5M30.nDVJHMMUnCxSOTdQkIWjXy9ll-vyns56Zos6tyOZoZY',
-          'Content-Type': 'application/json',
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWthc0BnbWFpbC5jb20iLCJleHAiOjE1ODMzNTcyOTMsImlhdCI6MTU4MzM1Mzk5M30.nDVJHMMUnCxSOTdQkIWjXy9ll-vyns56Zos6tyOZoZY',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          date: "2020-02-13",
-          time: "13:00",
+          date: '2020-02-13',
+          time: '13:00'
         })
       }
     );
@@ -113,10 +116,9 @@ export const casy = (date, time) => {
       console.log(errorResData);
       const errorId = errorResData.error.message;
       let message = 'Something went wrong!';
-      if(errorId === 'EMAIL_NOT_FOUND') {
+      if (errorId === 'EMAIL_NOT_FOUND') {
         message = 'Entered email not found!';
-      }
-      else if(errorId === 'INVALID_PASSWORD') {
+      } else if (errorId === 'INVALID_PASSWORD') {
         message = 'Entered password is not valid!';
       }
       throw new Error(message);
@@ -130,62 +132,63 @@ export const casy = (date, time) => {
   };
 };
 
-  export const logout = () => {
-    return { type: LOGOUT };
-  }
+export const logout = () => {
+  return { type: LOGOUT };
+};
 
-  export const forgotpass = (email) => {
-    return async dispatch => {
-      const response = await fetch(
-        'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
-        //'http://192.168.43.52:8080/authenticate',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            requestType: 'PASSWORD_RESET',
-            email: email,
-          })
-        }
-      );
-  
-      if (!response.ok) {
-        const errorResData = await response.json();
-        errorId = errorResData.error.message;
-        console.log(errorResData);
-        console.log(errorId);
-        let message = 'Something went wrong!';
-        if(errorId === 'EMAIL_EXISTS') {
-          message = 'Entered email already exists!';
-        }
-        throw new Error(message);
-      }
-  
-      const resData = await response.json();
-      console.log(resData);
-      dispatch({ type: FORGOTPASS, email: resData.email});
-      //const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
-      //saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-    };
-  };
-
-const saveDataToStorage = (token, userId, expirationDate) => {
-  AsyncStorage.setItem('userData', JSON.stringify({
-    token: token,
-    userId: userId,
-    expiryDate: expirationDate.toISOString()
-  }));
-}
-/*token: resData.idToken, userId: resData.localId */
-
-
-/*
-export const login = (email, password) => {
+export const forgotpass = email => {
   return async dispatch => {
     const response = await fetch(
-      'http://169.254.251.4:8080/authenticate/login',
+      'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
+      //'http://192.168.43.52:8080/authenticate',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          requestType: 'PASSWORD_RESET',
+          email: email
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const errorResData = await response.json();
+      errorId = errorResData.error.message;
+      console.log(errorResData);
+      console.log(errorId);
+      let message = 'Something went wrong!';
+      if (errorId === 'EMAIL_EXISTS') {
+        message = 'Entered email already exists!';
+      }
+      throw new Error(message);
+    }
+
+    const resData = await response.json();
+    console.log(resData);
+    dispatch({ type: FORGOTPASS, email: resData.email });
+    //const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
+    //saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+  };
+};
+
+const saveDataToStorage = (token, userId, expirationDate) => {
+  AsyncStorage.setItem(
+    'userData',
+    JSON.stringify({
+      token: token,
+      userId: userId,
+      expiryDate: expirationDate.toISOString()
+    })
+  );
+};
+/*token: resData.idToken, userId: resData.localId */
+
+export const loginmyapp = (email, password) => {
+  return async dispatch => {
+    const response = await fetch(
+      'http://147.175.121.250:80/authenticate/login',
       {
         method: 'POST',
         headers: {
@@ -193,16 +196,15 @@ export const login = (email, password) => {
         },
         body: JSON.stringify({
           email: email,
-          password: password,
-          //returnSecureToken: true
+          password: password
         })
       }
     );
-    console.log('posielam')
 
     if (!response.ok) {
       const errorResData = await response.json();
       console.log(errorResData);
+      /*
       const errorId = errorResData.error.message;
       let message = 'Something went wrong!';
       if(errorId === 'EMAIL_NOT_FOUND') {
@@ -213,12 +215,24 @@ export const login = (email, password) => {
       }
       throw new Error(message);
     }
-    console.log(JSON.stringify(response));
-    const resData = await response.json();
-    console.log(JSON.stringify(resData));
-    dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
-    const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
-    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+    */
+      console.log(response);
+      const resData = await response.json();
+      console.log(resData);
+      const { jwtToken, relationID, info } = resData;
+      dispatch({
+        type: LOGIN,
+        token: jwtToken,
+        userId: relationID,
+        fullname: info.fullname,
+        phonenumber: info.phonenumber,
+        ridesCompleted: info.ridesCompleted,
+        startDate: info.startDate
+      });
+      const expirationDate = new Date(
+        new Date().getTime() + parseInt(resData.expiresIn) * 1000
+      );
+      saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+    }
   };
-}; */
-// 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
+};
