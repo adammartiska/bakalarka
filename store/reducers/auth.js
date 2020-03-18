@@ -8,8 +8,12 @@ import {
 } from '../actions/auth';
 
 const initialState = {
-  token: null,
-  userId: null
+  token: 'token nezmeneny napr',
+  userId: null,
+  fullname: '',
+  phonenumber: '',
+  ridesCompleted: '',
+  startDate: null
 };
 
 export default (state = initialState, action) => {
@@ -28,10 +32,10 @@ export default (state = initialState, action) => {
       };
     case LOGINMYAPP:
       return {
-        token: action.token,
+        token: 'custom hard coded token',
         userId: action.userId,
-        fullname: action.fullname,
-        phonenumber: action.phonenumber,
+        fullName: action.fullName,
+        phoneNumber: action.phoneNumber,
         ridesCompleted: action.ridesCompleted,
         startDate: action.startDate
       };

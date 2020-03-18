@@ -51,28 +51,12 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 // const [isLoggedIn, setIsLoggedIn] = useState('false');
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-      signedIn: false,
-      checkedSignIn: false
-    };
-  }
-
-  render() {
-    {
-      const api = create({
-        baseURL: 'http://147.175.121.250:80'
-      });
-    }
-    return (
-      <Provider store={store}>
-        <Navigacia />
-      </Provider>
-    );
-  }
+export default function App() {
+  return (
+    <Provider store={store}>
+      <Navigacia />
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({

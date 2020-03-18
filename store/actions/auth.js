@@ -56,8 +56,8 @@ export const signup = (fullname, email, phonenumber, password) => {
 export const login = (email, password) => {
   return async dispatch => {
     const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
-      //'http://169.254.251.4:8080/authenticate/login',
+      //'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
+      'http://147.175.121.250:80/authenticate/login',
       {
         method: 'POST',
         headers: {
@@ -65,8 +65,8 @@ export const login = (email, password) => {
         },
         body: JSON.stringify({
           email: email,
-          password: password,
-          returnSecureToken: true
+          password: password
+          /*returnSecureToken: true  */
         })
       }
     );
@@ -86,49 +86,17 @@ export const login = (email, password) => {
     console.log(JSON.stringify(response));
     const resData = await response.json();
     console.log(JSON.stringify(resData));
-    dispatch({ type: LOGIN, token: resData.token, userId: resData.id });
+    dispatch({
+      type: LOGIN,
+      token: resData.jwtToken,
+      userId: resData.relationID
+    });
+    /*
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-  };
-};
-export const casy = (date, time) => {
-  return async dispatch => {
-    const response = await fetch(
-      'http://169.254.251.4:8080/instructor/addRide',
-      {
-        method: 'POST',
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsdWthc0BnbWFpbC5jb20iLCJleHAiOjE1ODMzNTcyOTMsImlhdCI6MTU4MzM1Mzk5M30.nDVJHMMUnCxSOTdQkIWjXy9ll-vyns56Zos6tyOZoZY',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          date: '2020-02-13',
-          time: '13:00'
-        })
-      }
-    );
-
-    if (!response.ok) {
-      const errorResData = await response.json();
-      console.log(errorResData);
-      const errorId = errorResData.error.message;
-      let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_NOT_FOUND') {
-        message = 'Entered email not found!';
-      } else if (errorId === 'INVALID_PASSWORD') {
-        message = 'Entered password is not valid!';
-      }
-      throw new Error(message);
-    }
-    console.log(JSON.stringify(response));
-    const resData = await response.json();
-    console.log(JSON.stringify(resData));
-    dispatch({ type: LOGIN, token: resData.token, userId: resData.id });
-    /*const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
-    saveDataToStorage(resData.idToken, resData.localId, expirationDate);*/
+    */
   };
 };
 
@@ -204,35 +172,25 @@ export const loginmyapp = (email, password) => {
     if (!response.ok) {
       const errorResData = await response.json();
       console.log(errorResData);
-      /*
       const errorId = errorResData.error.message;
       let message = 'Something went wrong!';
-      if(errorId === 'EMAIL_NOT_FOUND') {
+      if (errorId === 'EMAIL_NOT_FOUND') {
         message = 'Entered email not found!';
-      }
-      else if(errorId === 'INVALID_PASSWORD') {
+      } else if (errorId === 'INVALID_PASSWORD') {
         message = 'Entered password is not valid!';
       }
       throw new Error(message);
     }
-    */
-      console.log(response);
-      const resData = await response.json();
-      console.log(resData);
-      const { jwtToken, relationID, info } = resData;
-      dispatch({
-        type: LOGIN,
-        token: jwtToken,
-        userId: relationID,
-        fullname: info.fullname,
-        phonenumber: info.phonenumber,
-        ridesCompleted: info.ridesCompleted,
-        startDate: info.startDate
-      });
-      const expirationDate = new Date(
-        new Date().getTime() + parseInt(resData.expiresIn) * 1000
-      );
-      saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-    }
+    const resData = await response.json();
+    console.log(resData);
+    dispatch({
+      type: LOGINMYAPP,
+      token: resData.jwtToken,
+      userId: resData.relationID,
+      fullName: resData.info.fullName,
+      phoneNumber: resData.info.phoneNumber,
+      ridesCompleted: resData.info.ridesCompleted,
+      startDate: resData.info.startDate
+    });
   };
 };
