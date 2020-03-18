@@ -56,7 +56,7 @@ const JazdyNadchadzajuce = props => {
     });
     setShowAlert(true);
     console.log(zvolenaCancel);
-    console.log(selected)
+    console.log(selected);
   };
 
   const hideAlert = () => {

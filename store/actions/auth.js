@@ -186,7 +186,7 @@ export const loginmyapp = (email, password) => {
     dispatch({
       type: LOGINMYAPP,
       token: resData.jwtToken,
-      userId: resData.relationID,
+      relationId: resData.relationIDd,
       fullName: resData.info.fullName,
       phoneNumber: resData.info.phoneNumber,
       ridesCompleted: resData.info.ridesCompleted,

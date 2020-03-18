@@ -13,7 +13,8 @@ const initialState = {
   fullname: '',
   phonenumber: '',
   ridesCompleted: '',
-  startDate: null
+  startDate: null,
+  relationId: null,
 };
 
 export default (state = initialState, action) => {
@@ -32,8 +33,8 @@ export default (state = initialState, action) => {
       };
     case LOGINMYAPP:
       return {
-        token: 'custom hard coded token',
-        userId: action.userId,
+        token: action.token,
+        relationId: action.relationId,
         fullName: action.fullName,
         phoneNumber: action.phoneNumber,
         ridesCompleted: action.ridesCompleted,

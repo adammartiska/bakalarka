@@ -26,7 +26,8 @@ const JazdyInstruktor = props => {
     console.log('useEffect');
   }, []);
   const selectedStartDate = null;
-
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
   const [dateToSent, setDateToSent] = useState('');
@@ -44,7 +45,8 @@ const JazdyInstruktor = props => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: '324vcdjko45'
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
     }
   });
   // start making calls
@@ -90,8 +92,14 @@ const JazdyInstruktor = props => {
         time: item
       });
     });
+    console.log(bigData);
+    console.log(jwt);
+    console.log(relationId);
+    //console.log(bigData);
+    const poslane = await api.post('/instructor/addRides', bigData);
+
     //doFetch('http://147.175.121.250:80/info/listOfUsers');
-    console.log(response);
+    console.log(poslane);
     // const result = await api.post('/instructor/addRides', bigData);
     // console.log(result);
   };

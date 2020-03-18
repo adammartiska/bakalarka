@@ -54,7 +54,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default function App() {
   return (
     <Provider store={store}>
-      <Navigacia />
+      <NavigaciaInstrktor />
     </Provider>
   );
 }
