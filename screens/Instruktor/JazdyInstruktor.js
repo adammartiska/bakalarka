@@ -24,21 +24,39 @@ const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
   useEffect(() => {
     console.log('useEffect');
+    calculateDisabledDates();
   }, []);
   const selectedStartDate = null;
+  const [casy, setCasy] = useState([
+    {
+      value: 1100,
+      label: '11:00',
+      isChecked: true
+    },
+    {
+      value: 1200,
+      label: '12:00',
+      isChecked: true
+    },
+    {
+      value: 1300,
+      label: '13:00',
+      isChecked: true
+    }
+  ]);
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
   const [dateToSent, setDateToSent] = useState('');
   const [bigData, setBigData] = useState([]);
+  const [unavailableDates, setUnavailableDates] = useState([]);
   const dataToMap = ['11:00', '12:00', '13:00', '14:00', '15:00'];
   const [{ response, error, isLoadink }, doFetch] = useFetchGet(
     'http://147.175.121.250:80/info/listOfUsers'
   );
   const jazdyOffer = useFetchPost('/instructor/addRides', pole);
   const resData = useFetchGet('/info/schoolsAvailable');
-  //const { error, response } = res;
 
   const api = create({
     baseURL: 'http://147.175.121.250:80',
@@ -95,7 +113,6 @@ const JazdyInstruktor = props => {
     console.log(bigData);
     console.log(jwt);
     console.log(relationId);
-    //console.log(bigData);
     const poslane = await api.post('/instructor/addRides', bigData);
 
     //doFetch('http://147.175.121.250:80/info/listOfUsers');
@@ -142,13 +159,39 @@ const JazdyInstruktor = props => {
     );
   };
 
+  const fetchniCasy = async date => {
+    const resCasy = await api.get(`/instructor/showTimes/${date}`);
+    console.log(resCasy);
+    setCasy(resCasy.data.body);
+  };
+
+  const calculateDisabledDates = () => {
+    const disabledDates = [];
+    const today = new Date();
+    const todayM = moment(todayM).format('YYYY-MM-DD');
+    const trimmed = todayM.slice(0, 8);
+    const startDate = `${trimmed}01`;
+    const startDateM = new Date(startDate);
+    while (startDateM <= today) {
+      disabledDates.push(new Date(startDateM));
+      startDateM.setDate(startDateM.getDate() + 1);
+    }
+    setUnavailableDates(disabledDates);
+  };
+
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
-  const dateChangeHandler = date => {
+  const dateChangeHandler = async date => {
+    console.log(date);
+    const dis = calculateDisabledDates();
+    console.log(dis);
     setDateToSent(moment(date).format('YYYY-MM-DD'));
+
+    fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
+
     const upravenyDate = moment(date).format('YYYY-MM-DD');
     const dataToSent = {
       token: token,
@@ -159,7 +202,10 @@ const JazdyInstruktor = props => {
 
   return (
     <ScrollView contentContainerstyle={styles.container}>
-      <CalendarPicker onDateChange={dateChangeHandler} />
+      <CalendarPicker
+        onDateChange={dateChangeHandler}
+        disabledDates={unavailableDates}
+      />
       <View>
         {isLoading ? (
           displayText ? (
@@ -172,7 +218,7 @@ const JazdyInstruktor = props => {
             </View>
           )
         ) : (
-          maper(data)
+          maper(casy)
         )}
       </View>
       <Button
