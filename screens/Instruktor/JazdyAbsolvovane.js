@@ -20,8 +20,22 @@ import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 import TimeButton from '../../components/TimeButton';
 import AbsolvovaneInstruktor from '../../components/AbsolvovaneInstruktor';
 import AbsolvovanePending from '../../components/AbsolvovanePending';
+import { create } from 'apisauce';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 const JazdyAbsolvovane = props => {
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
   const DATA = [
     {
       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -67,11 +81,15 @@ const JazdyAbsolvovane = props => {
   const [dateRides, setDateRides] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onChange = (event, selectedDate) => {
+  const onChange = async (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
     setShow(Platform.OS === 'ios' ? true : false);
-    console.log(date);
+    const dateToSend = moment(currentDate).format('YYYY-MM-DD');
+    const podlaDatumuJazdy = await api.get(
+      `/instructor/getCompletedRides/${dateToSend}`
+    );
+    console.log(podlaDatumuJazdy);
   };
 
   const showMode = currentMode => {
@@ -83,7 +101,10 @@ const JazdyAbsolvovane = props => {
     showMode('date');
   };
 
-  const handleRecent = () => {
+  const handleRecent = async () => {
+   // const recentJazdy = await api.get('/instructor/getLastRides?count=1');
+    const recentJazdy = await api.get('/instructor/myRides');
+    console.log(recentJazdy);
     setRecent(!recent);
   };
   const handlePending = () => {
@@ -129,6 +150,7 @@ const JazdyAbsolvovane = props => {
           iconName="md-time"
           onPress={handleRecent}
         />
+        <Button title="skus" onPress={handleRecent} />
       </View>
 
       {recent &&
@@ -141,6 +163,7 @@ const JazdyAbsolvovane = props => {
               renderItem={({ item }) => (
                 <AbsolvovaneInstruktor
                   state="absolvovana"
+                  key={item.title}
                   datum={item.title}
                   cas={item.time}
                   style={{ marginHorizontal: 2 }}

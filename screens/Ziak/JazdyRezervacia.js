@@ -20,10 +20,13 @@ import TimeButton from '../../components/TimeButton';
 import InstruktorBar from '../../components/InstruktorBar';
 import TimeButtonCheck from '../../components/TimeButtonCheck';
 import ObjednajButton from '../../components/ObjednajButton';
+import { create } from 'apisauce';
 
 const JazdyRezervacia = props => {
   const screenWidth = Math.round(Dimensions.get('window').width);
   const scrollViewRef = useRef();
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
   const [title, setTitle] = useState({
     datum: '',
     cas: ''
@@ -46,6 +49,17 @@ const JazdyRezervacia = props => {
     console.log(screenWidth);
     scrollViewRef.current.scrollToEnd();
   });
+
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
+
   const selectedStartDate = null;
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
@@ -55,6 +69,13 @@ const JazdyRezervacia = props => {
   ];
   const [objednal, setObjednal] = useState(false);
   const [selected, setSelected] = useState('');
+  const [casy, setCasy] = useState([]);
+
+  const fetchniCasy = async date => {
+    const resCasy = await api.get(`/student/freeRides/${date}`);
+    console.log(resCasy.data[0].rides);
+    setCasy(resCasy.data[0].rides);
+  };
 
   const jazdaHandler = id => {
     setTitle({
@@ -103,9 +124,10 @@ const JazdyRezervacia = props => {
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = date => {
+    fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
-    upravenyDate = moment(date).format('MM DD YYYY');
+    const upravenyDate = moment(date).format('MM DD YYYY');
     setTitle({
       ...title,
       datum: upravenyDate
@@ -222,8 +244,7 @@ export default JazdyRezervacia;
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#FFF',
-    marginTop: 20
+    backgroundColor: '#FFF'
   },
   centered: {
     justifyContent: 'center',

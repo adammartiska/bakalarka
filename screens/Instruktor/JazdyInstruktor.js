@@ -27,23 +27,7 @@ const JazdyInstruktor = props => {
     calculateDisabledDates();
   }, []);
   const selectedStartDate = null;
-  const [casy, setCasy] = useState([
-    {
-      value: 1100,
-      label: '11:00',
-      isChecked: true
-    },
-    {
-      value: 1200,
-      label: '12:00',
-      isChecked: true
-    },
-    {
-      value: 1300,
-      label: '13:00',
-      isChecked: true
-    }
-  ]);
+  const [casy, setCasy] = useState([]);
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
   const [isLoading, setIsLoading] = useState(true);
@@ -99,9 +83,10 @@ const JazdyInstruktor = props => {
 
   const zhromazdiData = async data => {
     data.map(item => {
-      if (item.isChecked === true) {
-        pole.push(item.label);
-      }
+      pole.push({
+        time: item.label,
+        isChecked: item.isChecked
+      });
     });
     console.log(pole);
     pole.map(item => {
@@ -122,7 +107,7 @@ const JazdyInstruktor = props => {
   };
 
   function handleToggleCheckbox(value) {
-    setData(list =>
+    setCasy(list =>
       list.map(item => {
         if (item.value === value) {
           return {
@@ -184,8 +169,6 @@ const JazdyInstruktor = props => {
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = async date => {
     console.log(date);
-    const dis = calculateDisabledDates();
-    console.log(dis);
     setDateToSent(moment(date).format('YYYY-MM-DD'));
 
     fetchniCasy(moment(date).format('YYYY-MM-DD'));
@@ -221,14 +204,6 @@ const JazdyInstruktor = props => {
           maper(casy)
         )}
       </View>
-      <Button
-        title="odosli"
-        onPress={() => {
-          doFetch('http://147.175.121.250:80/info/linksAvailable');
-
-          console.log(response);
-        }}
-      />
     </ScrollView>
   );
 };
