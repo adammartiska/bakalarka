@@ -187,10 +187,7 @@ export const loginmyapp = (email, password) => {
       type: LOGINMYAPP,
       token: resData.jwtToken,
       relationId: resData.relationIDd,
-      fullName: resData.info.fullName,
-      phoneNumber: resData.info.phoneNumber,
-      ridesCompleted: resData.info.ridesCompleted,
-      startDate: resData.info.startDate
+      info: resData.info
     });
   };
 };

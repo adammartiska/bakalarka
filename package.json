@@ -17,6 +17,7 @@
     "expo-linear-gradient": "~8.0.0",
     "linear-gradient": "^1.0.6",
     "moment": "^2.24.0",
+    "ramda": "^0.27.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-fetching-library": "^1.7.0",

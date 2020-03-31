@@ -35,10 +35,7 @@ export default (state = initialState, action) => {
       return {
         token: action.token,
         relationId: action.relationId,
-        fullName: action.fullName,
-        phoneNumber: action.phoneNumber,
-        ridesCompleted: action.ridesCompleted,
-        startDate: action.startDate
+        info: action.info
       };
 
     case SIGNUP:
