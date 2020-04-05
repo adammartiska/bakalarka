@@ -6,16 +6,20 @@ import {
   FlatList,
   SafeAreaView,
   Image,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
 import RezervovanaJazda from '../../components/RezervovanaJazda';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { useSelector } from 'react-redux';
+import { create } from 'apisauce';
+import { useFetchGet } from '../../hooks/useFetchGet';
+import moment from 'moment';
 
 const JazdyNadchadzajuce = props => {
   const [zvolenaCancel, setZvolenaCancel] = useState({
@@ -23,32 +27,49 @@ const JazdyNadchadzajuce = props => {
     time: '',
     id: ''
   });
-  const selected = useSelector(state => state.auth.phoneNumber);
-  const [DATA, setDATA] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: '12.3.2018',
-      time: '15:00'
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: '5.4.2018',
-      time: '12:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
+  const [isLoading, setIsLoading] = useState(false);
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const [gotResponse, setGotResponse] = useState(false);
+  const [error, setError] = useState('');
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
     }
-  ]);
+  });
+  const [data, setData] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get('/student/getReservedRides');
+        setData(res.data);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const zmazHandler = id => {
-    const newData = DATA.filter(item => item.id !== id);
-    setDATA(newData);
+  const zmazHandler = async id => {
+    const response = await api.post(`/student/cancelRide/${id}`);
+    console.log(response);
+    if (response.ok) {
+      setGotResponse(true);
+    }
+    // tu budem musiet znova volat api call na data zo servera
+    const newData = data.filter(item => item.id !== id);
+    setData(newData);
     setShowAlert(false);
   };
-  const showAlertfunction = (date, time, id) => {
+  const showAlertfunction = item => {
+    const { date, time, id } = item;
     setZvolenaCancel({
       date: date,
       time: time,
@@ -56,7 +77,6 @@ const JazdyNadchadzajuce = props => {
     });
     setShowAlert(true);
     console.log(zvolenaCancel);
-    console.log(selected);
   };
 
   const hideAlert = () => {
@@ -66,25 +86,38 @@ const JazdyNadchadzajuce = props => {
   //!!!! chcem uchovavat zvolenu jazdu v stave objekte kvoli alertu!
   return (
     <SafeAreaView style={styles.screen}>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => (
-          <RezervovanaJazda
-            datum={item.title}
-            cas={item.time}
-            id={item.id}
-            onPress={() => showAlertfunction(item.title, item.time, item.id)}
-          />
-        )}
-      />
-      <View>
-        <Text>takze zvolena {selected}</Text>
-      </View>
+      {isLoading ? (
+        <View
+          style={{
+            marginTop: 80,
+            alignItems: 'center'
+          }}
+        >
+          <ActivityIndicator size="large" color="black" />
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <RezervovanaJazda
+              datum={moment(item.date).format('DD.MM.YYYY')}
+              cas={item.time}
+              id={item.id}
+              onPress={() => showAlertfunction(item)}
+            />
+          )}
+        />
+      )}
+
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        title="Zrusenie rezervacie"
-        message={`Naozaj si prajete zrusit jazdu \n         ${zvolenaCancel.date} - ${zvolenaCancel.time}?`}
+        title={gotResponse ? 'Takyto text' : 'Zrusenie rezervacie'}
+        message={
+          gotResponse
+            ? 'Takyto text'
+            : `Naozaj si prajete zrusit jazdu \n         ${zvolenaCancel.date} - ${zvolenaCancel.time}?`
+        }
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={true}

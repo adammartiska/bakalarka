@@ -21,10 +21,12 @@ import InstruktorBar from '../../components/InstruktorBar';
 import TimeButtonCheck from '../../components/TimeButtonCheck';
 import ObjednajButton from '../../components/ObjednajButton';
 import { create } from 'apisauce';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const JazdyRezervacia = props => {
   const screenWidth = Math.round(Dimensions.get('window').width);
   const scrollViewRef = useRef();
+  const [idToSend, setIdToSend] = useState('');
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
   const [title, setTitle] = useState({
@@ -32,18 +34,7 @@ const JazdyRezervacia = props => {
     cas: ''
   });
   const pole = ['8:00', '9:00', '10:00'];
-  const checkHandler = id => {
-    setCeknute(!ceknute);
-    if (!ceknute) {
-      const novePole = pole.slice();
-      novePole.push(id);
-      console.log('pushuj');
-      setPole(novePole);
-      console.log(novePole);
-    } else {
-      console.log('filtruj');
-    }
-  };
+
   useEffect(() => {
     console.log('useEffect');
     console.log(screenWidth);
@@ -63,10 +54,7 @@ const JazdyRezervacia = props => {
   const selectedStartDate = null;
   const [isLoading, setIsLoading] = useState(true);
   const [displayText, setDisplayText] = useState(true);
-  const dataToMap = [
-    { time: '11:00', id: 24431 },
-    { time: '12:00', id: 24331 }
-  ];
+  const [showAlert, setShowAlert] = useState(false);
   const [objednal, setObjednal] = useState(false);
   const [selected, setSelected] = useState('');
   const [casy, setCasy] = useState([]);
@@ -77,14 +65,15 @@ const JazdyRezervacia = props => {
     setCasy(resCasy.data[0].rides);
   };
 
-  const jazdaHandler = id => {
+  const jazdaHandler = item => {
     setTitle({
       ...title,
-      cas: id
+      cas: item.time
     });
     setObjednal(true);
-    setSelected(id);
-    console.log(id);
+    setIdToSend(item.id);
+    setSelected(item.time);
+    console.log(item.time);
     // scrollViewRef.current.scrollToEnd();
     // scrollViewRef.current.scrollToEnd();
   };
@@ -105,7 +94,7 @@ const JazdyRezervacia = props => {
                   }
                 }
                 name={item.time}
-                onPress={() => jazdaHandler(item.time)}
+                onPress={() => jazdaHandler(item)}
               />
             );
           })}
@@ -127,7 +116,7 @@ const JazdyRezervacia = props => {
     fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
-    const upravenyDate = moment(date).format('MM DD YYYY');
+    const upravenyDate = moment(date).format('YYYY-MM-DD');
     setTitle({
       ...title,
       datum: upravenyDate
@@ -137,6 +126,16 @@ const JazdyRezervacia = props => {
       date: upravenyDate
     };
     console.log(dataToSent);
+  };
+  const confirmReservation = async () => {
+    const response = await api.post(`/student/reserveRide/${idToSend}`);
+    console.log(response);
+    if (response.ok) {
+      setShowAlert(true);
+    }
+  };
+  const hideAlert = () => {
+    setShowAlert(false);
   };
 
   return (
@@ -154,7 +153,7 @@ const JazdyRezervacia = props => {
             </View>
           )
         ) : (
-          maper(dataToMap)
+          maper(casy)
         )}
       </View>
       {objednal && (
@@ -169,76 +168,30 @@ const JazdyRezervacia = props => {
           <ObjednajButton
             datum={`${title.datum}      -      ${title.cas}`}
             name="Rezervovat"
+            onPress={confirmReservation}
           />
-          {/* <Button title={`${title.datum}            ${title.cas}`} color={Colors.primaryColor}
-    onPress={() => rezervujHandler()}/> */}
         </View>
       )}
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Uspesna rezervacia"
+        message={`Vasa rezervacia jazdy na termin ${title.datum} o ${title.cas} bola uspesne vykonana`}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        cancelText=""
+        confirmText="Super!"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={hideAlert}
+        onConfirmPressed={hideAlert}
+      />
     </ScrollView>
   );
 
   //<View style={{width: '100%', height: 40, position: 'absolute', left: ((screenWidth/4) - 10), right: 0, bottom: 60}}>
 };
-
-//  export class Jazdy extends Component {
-
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       selectedStartDate: null,
-//     };
-//     this.onDateChange = this.onDateChange.bind(this);
-//   };
-//   // dateChangeHandler = (date) => {
-//   //   const upravenyDate = moment(date).format("MM DD YYYY");
-//   //   const token = useSelector(state => state.auth.token);
-//   //   console.log({token});
-//   // }
-
-//   onDateChange(date) {
-//     this.setState({
-//       selectedStartDate: date,
-//       datum: date,
-//     });
-
-//   }
-//   render() {
-//     const { selectedStartDate } = this.state;
-//     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-//     //const token = useSelector(state => state.auth.token);
-//     const dateChangeHandler = (date) => {
-//       const upravenyDate = moment(date).format("MM DD YYYY");
-//       const { token } = this.props;
-//       const dataToSent = {
-//         token: token,
-//         date: upravenyDate
-//       }
-//       console.log(dataToSent);
-//       return (
-//         <TimeButton />
-//       );
-//     }
-
-//     return (
-//       <View style={styles.container}>
-//         <CalendarPicker
-//           onDateChange={dateChangeHandler}
-//           selectedDayColor = {Colors.primaryColor}
-//         />
-//         <View>
-//           <Text>SELECTED DATE:</Text>
-//         </View>
-//       </View>
-//     );
-//   }
-// }
-
-// const mapStateToProps = (state) => {
-//   return {
-//     token: state.auth.token
-//   }
-// };
-// export default connect(mapStateToProps, null)(Jazdy)
 
 export default JazdyRezervacia;
 const styles = StyleSheet.create({

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 //import * as Font from 'expo-font';
 import { useScreens } from 'react-native-screens';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { AppLoading } from 'expo';
 import Navigacia, { createRootNavigator } from './navigation/Navigacia';
 import Login from './screens/Login';
@@ -52,9 +52,10 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 // const [isLoggedIn, setIsLoggedIn] = useState('false');
 
 export default function App() {
+  useEffect(() => console.log('aj tu funguje'), []);
   return (
     <Provider store={store}>
-      <NavigaciaInstrktor />
+      <Navigacia />
     </Provider>
   );
 }

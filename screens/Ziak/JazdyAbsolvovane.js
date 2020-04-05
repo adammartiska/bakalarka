@@ -1,113 +1,88 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, SafeAreaView, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  SafeAreaView,
+  Image
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
-
+import AbsolvovaneZiak from '../../components/AbsolvovaneZiak';
+import { create } from 'apisauce';
+import moment from 'moment';
 
 const JazdyAbsolvovane = props => {
-   
-    const DATA = [
-        {
-          id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-          title: '12.3.2018',
-        },
-        {
-          id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-          title: '5.4.2018',
-        },
-        {
-          id: '58694a0f-3da1-471f-bd96-145571e29d72',
-          title: '18.4.2018',
-        },
-      ];
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-      const Item = props => {
-        const [showDetails, setShowDetails] = useState(false);
-        return (
-            
-            <TouchableOpacity onPress={() => 
-            {
-                setShowDetails(prevState => !prevState)
-            }}>
-            <View style={styles.screen}>
-            <View style={styles.riadokJazdy}>
-            <View>
-            <InstruktorBar />
-            </View>
-            <View style={styles.item}>
-              <Text style={styles.title}>{props.nazov}</Text>
-            </View>
-            </View>
-            
-            {showDetails && (<View style={styles.vysunute}><DetailJazdy /></View>)}
-            
-            
-            </View>
-            </TouchableOpacity>
-            
-          );
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get('/student/getCompletedRides');
+        setData(res.data);
+        console.log(res.data);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
       }
+    };
+    fetchData();
+  }, []);
 
-
-
-
-
-    return (
-        <SafeAreaView style = {styles.screen}>
-        <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item nazov = {item.title}/>}
-        />      
-        
-        
-        </SafeAreaView>
-
-    );
-
-
-
+  return (
+    <SafeAreaView style={styles.screen}>
+      <FlatList
+        data={data}
+        renderItem={({ item }) => (
+          <AbsolvovaneZiak
+            date={moment(item.date).format('DD.MM.YYYY')}
+            time={item.time}
+            rideState={item.status}
+          />
+        )}
+      />
+    </SafeAreaView>
+  );
 };
 
-
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1, 
-        marginTop: 8,
+  screen: {
+    flex: 1,
+    marginTop: 8
+  },
 
+  vysunute: {
+    backgroundColor: '#fff',
+    marginTop: 0,
+    marginHorizontal: 16
+  },
 
-
-    },
-
-    riadokJazdy: {
-      borderWidth: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#e6ffee',
-        padding: 20,
-        marginTop: 8,
-        marginHorizontal: 16,
-
-    },
-    vysunute: {
-        backgroundColor: '#fff',
-        marginTop: 0,
-        marginHorizontal: 16,
-
-
-    },
-
-      title: {
-        fontSize: 22,
-      },
-      logo: {
-        width: 22,
-        height: 22,
-
-      }
-
+  title: {
+    fontSize: 22
+  },
+  logo: {
+    width: 22,
+    height: 22
+  }
 });
 
 export default JazdyAbsolvovane;

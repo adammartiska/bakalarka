@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { create } from 'apisauce';
+import { useSelector } from 'react-redux';
 
 /*
  * v komponente pouzivam tak :
@@ -8,11 +9,18 @@ import { create } from 'apisauce';
  * a nasledne uz viem pouzivat napriklad payload.ziak, ...
  */
 
-export const useFetchGet = () => {
+export const useFetchGet = url => {
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
   const api = create({
-    baseURL: 'http://147.175.121.250:80'
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
   });
-  const [url, setUrl] = useState('');
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +29,6 @@ export const useFetchGet = () => {
       setIsLoading(true);
       try {
         const res = await api.get(url);
-        // const res = await fetch(`http://147.175.121.250:80/info${endpoint}`);
-        //const json = await res.json();
         setResponse(res);
         console.log('nacitavam skoro?');
         setIsLoading(false);
@@ -32,5 +38,5 @@ export const useFetchGet = () => {
     };
     fetchData();
   }, []);
-  return [{ response, error, isLoading }, setUrl];
+  return { response, error, isLoading };
 };

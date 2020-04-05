@@ -8,13 +8,13 @@ import {
   Image
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from '../components/DetailJazdy';
+import DetailJazdy from './DetailJazdy';
 import { useState } from 'react';
 import Colors from '../constants/Colors';
-import InstruktorBar from '../components/InstruktorBar';
+import InstruktorBar from './InstruktorBar';
 import Icon from 'react-native-vector-icons/Ionicons';
-import RideState from '../components/RideState';
-import CustomButton from '../components/CustomButton';
+import RideState from './RideState';
+import CustomButton from './CustomButton';
 
 const AbsolvovaneInstruktor = props => {
   const [showDetails, setShowDetails] = useState(false);

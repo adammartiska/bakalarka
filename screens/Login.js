@@ -78,7 +78,7 @@ const Login = props => {
 
     try {
       await dispatch(action);
-      props.navigation.navigate('SignedIn');
+      props.navigation.navigate('SignedInInstructor');
     } catch (err) {
       console.log(err);
       setError(err.message);

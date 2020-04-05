@@ -2,6 +2,7 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+import { useSelector } from 'react-redux';
 //import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
 import Domov from '../screens/Domov_legacy';
@@ -24,6 +25,7 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import ProfilSettings from '../screens/Ziak/ProfilSettings';
 import JazdyNadchadzuje from '../screens/Ziak/JazdyNadchadzajuce';
 import TestVseobecne from '../screens/Testy/TestVseobecne';
+import NavigaciaTabInstruktor from './NavigaciaInstruktor';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -195,6 +197,9 @@ const SwitchNavigator = createAnimatedSwitchNavigator(
 
     SignedIn: {
       screen: NavigaciaTab
+    },
+    SignedInInstructor: {
+      screen: NavigaciaTabInstruktor
     }
   },
   {

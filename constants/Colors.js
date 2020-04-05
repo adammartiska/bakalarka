@@ -5,6 +5,7 @@ export default {
     carhartt: '#006f33',
     lightGreen: '#a0ffcc',
     lightRed: '#ffa0a0',
+    darkRed: '#ff0000',
 
 
 };

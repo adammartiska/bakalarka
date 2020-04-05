@@ -11,7 +11,7 @@ import {
 import Colors from '../../constants/Colors';
 import CustomHeaderButton from '../../components/CustomHeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as authActions from '../../store/actions/auth';
 import TimeButton from '../../components/TimeButton';
 import { Card, ListItem } from 'react-native-elements';
@@ -21,22 +21,26 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import CustomButon from '../../components/CustomButton';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import moment from 'moment';
 
 const Profil = props => {
   const dispatch = useDispatch();
   const [progress, setProgress] = useState(0);
+  const userInfo = useSelector(state => state.auth.info);
+  const { email, fullName, phoneNumber, ridesCompleted, startDate } = userInfo;
+  const date = moment(startDate).format('DD/MM/YYYY');
   const [image, setImage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const odjazedene = 10;
   const celkovo = 20;
-  let prog = (odjazedene / celkovo) * 100;
+  let prog = (ridesCompleted / celkovo) * 100;
   let progString = prog.toString() + '%';
   const p = () => {
     return progString;
   };
   let animation = useRef(new Animated.Value(0));
-  _pickImage = async () => {
-    console.log(progString);
+  const pickImage = async () => {
+    console.log(userInfo);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -66,11 +70,11 @@ const Profil = props => {
 
   return (
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => _pickImage()}>
+      <TouchableOpacity onPress={() => pickImage()}>
         <Image style={styles.logo} source={require('../../Images/user.png')} />
       </TouchableOpacity>
       <View style={styles.heading}>
-        <Text style={{ fontSize: 20 }}>Adam Martiska</Text>
+        <Text style={{ fontSize: 20 }}>{fullName}</Text>
       </View>
       <View style={{ marginVertical: 5 }}>
         <Text>Progres</Text>
@@ -85,7 +89,7 @@ const Profil = props => {
       </View>
       <View style={{ marginVertical: 5 }}>
         <Text>
-          {progString} , Odjazdenych {odjazedene} jazd z 20.
+          {progString} , Odjazdenych {ridesCompleted} jazd z 20.
         </Text>
       </View>
       <View style={styles.input}>
@@ -93,7 +97,7 @@ const Profil = props => {
           <Icon name="ios-mail" size={30} />
         </View>
         <View style={{ paddingTop: 5 }}>
-          <Text>thefaston@gmail.com</Text>
+          <Text>{email}</Text>
         </View>
       </View>
       <View style={styles.input}>
@@ -101,7 +105,7 @@ const Profil = props => {
           <Icon name="ios-call" size={30} />
         </View>
         <View style={{ paddingTop: 5 }}>
-          <Text>+421 948 020 147</Text>
+          <Text>{phoneNumber}</Text>
         </View>
       </View>
       <View style={styles.input}>
@@ -109,7 +113,7 @@ const Profil = props => {
           <Icon name="ios-flag" size={30} />
         </View>
         <View style={{ paddingTop: 5 }}>
-          <Text>18.9.2019</Text>
+          <Text>{date}</Text>
         </View>
       </View>
       <View style={{ marginTop: 10 }}>
