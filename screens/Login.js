@@ -16,9 +16,11 @@ import Colors from '../constants/Colors';
 import { KeyboardAvoidingView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Input from '../components/Input';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as authActions from '../store/actions/auth';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+import { create } from 'apisauce';
+
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -42,11 +44,29 @@ const formReducer = (state, action) => {
   }
   return state;
 };
+const mapStateToProps = state => {
+  console.log('zbehnemapstate');
+  return {
+    info: state
+  };
+};
 
 const Login = props => {
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [error, setError] = useState();
+  const info = useSelector(state => state.auth.info);
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -77,8 +97,12 @@ const Login = props => {
     setError(null);
 
     try {
-      await dispatch(action);
-      props.navigation.navigate('SignedInInstructor');
+      const role = await dispatch(action);
+      if (role === 'ROLE_STUDENT') {
+        props.navigation.navigate('SignedInZiak');
+      } else if (role === 'ROLE_INSTRUCTOR') {
+        props.navigation.navigate('SignedInInstructor');
+      }
     } catch (err) {
       console.log(err);
       setError(err.message);

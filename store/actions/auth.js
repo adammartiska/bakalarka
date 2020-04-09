@@ -1,4 +1,6 @@
 import { AsyncStorage } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import * as RootNavigation from '../../RootNavigation.js';
 
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
@@ -54,6 +56,7 @@ export const signup = (fullname, email, phonenumber, password) => {
 };
 
 export const login = (email, password) => {
+  const navigation = useNavigation();
   return async dispatch => {
     const response = await fetch(
       //'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
@@ -85,12 +88,14 @@ export const login = (email, password) => {
     }
     console.log(JSON.stringify(response));
     const resData = await response.json();
+    console.log(navigation);
     console.log(JSON.stringify(resData));
     dispatch({
       type: LOGIN,
       token: resData.jwtToken,
       userId: resData.relationID
     });
+    navigation.navigate('SignedInZiak');
     /*
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
@@ -183,11 +188,14 @@ export const loginmyapp = (email, password) => {
     }
     const resData = await response.json();
     console.log(resData);
+
     dispatch({
       type: LOGINMYAPP,
       token: resData.jwtToken,
       relationId: resData.relationIDd,
       info: resData.info
     });
+    return resData.info.role;
+    // RootNavigation.navigate('SignedInZiak', {});
   };
 };

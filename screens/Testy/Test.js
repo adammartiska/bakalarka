@@ -20,29 +20,34 @@ import Icon from 'react-native-vector-icons/Ionicons';
 let arrnew = [];
 
 export default class Prvy extends Component {
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
   constructor(props) {
     super(props);
     this.Qno = 0;
     this.score = 0;
     const { params } = this.props.navigation.state;
-    const jdata = params.test;
-    // arrnew = Object.keys(jdata).map(function(k) {
-    //   return jdata[k];
-    // });
-    arrnew = jdata;
+    const jdata = params.test.quiz.quiz1;
+    arrnew = Object.keys(jdata).map(function(k) {
+      return jdata[k];
+    });
     console.log(arrnew);
 
     this.state = {
       vyhodnot: false,
       value: 0,
-      question: arrnew.questions[this.Qno].question,
-      options: {
-        option1: 'XML',
-        option2: 'YML',
-        option3: 'HTML',
-        option4: 'JSX'
-      },
-      correct: arrnew.questions[this.Qno].correctAnswer,
+      question: arrnew[this.Qno].question,
+      options: arrnew[this.Qno].options,
+      correct: arrnew[this.Qno].correctoption,
       uhadnute: false,
       neuhadnute: false
     };
@@ -50,7 +55,7 @@ export default class Prvy extends Component {
   next() {
     console.log(this.Qno);
     console.log(this.state.vyhodnot);
-    if (arrnew[this.Qno].correctAnswer === `option${this.state.value + 1}`) {
+    if (arrnew[this.Qno].correctoption === `option${this.state.value + 1}`) {
       this.score = this.score + 1;
     }
     if (this.Qno === arrnew.length - 1) {
@@ -63,14 +68,9 @@ export default class Prvy extends Component {
         neuhadnute: false,
         uhadnute: false,
         value: 0,
-        question: arrnew.questions[this.Qno].question,
-        options: {
-          option1: 'XML',
-          option2: 'YML',
-          option3: 'HTML',
-          option4: 'JSX'
-        },
-        correct: arrnew.questions[this.Qno].correctAnswer
+        question: arrnew[this.Qno].question,
+        options: arrnew[this.Qno].options,
+        correct: arrnew[this.Qno].correctoption
       });
     }
     console.log(this.Qno);
@@ -78,7 +78,7 @@ export default class Prvy extends Component {
   }
 
   check() {
-    if (arrnew[this.Qno].correctAnswer === `option${this.state.value + 1}`) {
+    if (arrnew[this.Qno].correctoption === `option${this.state.value + 1}`) {
       this.setState({
         uhadnute: true
       });

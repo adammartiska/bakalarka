@@ -25,6 +25,8 @@ import { createClient } from 'react-fetching-library';
 import JazdyPending from './screens/Instruktor/JazdyPending';
 import { ClientContextProvider } from 'react-fetching-library';
 import { create } from 'apisauce';
+import { navigationRef, isMountedRef } from './RootNavigation';
+import { NavigationContainer } from '@react-navigation/native';
 
 //useScreens();  //optimalizacia screenov performance
 
@@ -52,7 +54,12 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 // const [isLoggedIn, setIsLoggedIn] = useState('false');
 
 export default function App() {
-  useEffect(() => console.log('aj tu funguje'), []);
+  // useEffect(() => {
+  //   isMountedRef.current = true;
+
+  //   return () => (isMountedRef.current = false);
+  // }, []);
+
   return (
     <Provider store={store}>
       <Navigacia />

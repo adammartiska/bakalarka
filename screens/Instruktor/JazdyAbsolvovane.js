@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   Button,
   Image,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
@@ -82,14 +83,15 @@ const JazdyAbsolvovane = props => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onChange = async (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
     setShow(Platform.OS === 'ios' ? true : false);
-    const dateToSend = moment(currentDate).format('YYYY-MM-DD');
-    const podlaDatumuJazdy = await api.get(
-      `/instructor/getCompletedRides/${dateToSend}`
+    const currentDate = selectedDate || date;
+    const response = await api.get(
+      `/instructor/getCompletedRides/date?=${moment(selectedDate).format(
+        'YYYY-MM-DD'
+      )}`
     );
-    console.log(podlaDatumuJazdy);
+    console.log(response);
+    setDate(currentDate);
   };
 
   const showMode = currentMode => {
@@ -102,9 +104,10 @@ const JazdyAbsolvovane = props => {
   };
 
   const handleRecent = async () => {
-   // const recentJazdy = await api.get('/instructor/getLastRides?count=1');
-    const recentJazdy = await api.get('/instructor/myRides');
-    console.log(recentJazdy);
+    if (!recent) {
+      const recentJazdy = await api.get('/instructor/getLastRides?count=6');
+      console.log(recentJazdy);
+    }
     setRecent(!recent);
   };
   const handlePending = () => {
@@ -150,7 +153,6 @@ const JazdyAbsolvovane = props => {
           iconName="md-time"
           onPress={handleRecent}
         />
-        <Button title="skus" onPress={handleRecent} />
       </View>
 
       {recent &&

@@ -1,16 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Colors from '../constants/Colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const CustomButton = props => {
+const IconButton = props => {
   return (
-    <View style={[styles.customButon, props.style]}>
+    <View style={[styles.customButon, props.styles]}>
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPress}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-          <View>
-            <Icon name={props.iconName} size={30} />
-          </View>
-          <Text style={styles.textInButton}>{props.name}</Text>
+        <View style>
+          <Icon name={props.iconName} size={30} />
         </View>
       </TouchableOpacity>
     </View>
@@ -19,12 +17,13 @@ const CustomButton = props => {
 
 const styles = StyleSheet.create({
   customButon: {
-    paddingVertical: 5,
-    marginVertical: 20,
-    height: 40,
-    width: 180,
+    margin: 5,
+    height: 35,
+    width: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#DDDDDD',
-    borderRadius: 5,
+    borderRadius: 10,
     shadowColor: 'black',
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
@@ -33,11 +32,10 @@ const styles = StyleSheet.create({
   },
   textInButton: {
     fontSize: 20,
-    color: 'black',
-    textAlign: 'center'
+    color: 'black'
     //fontFamily: 'open-sans-bold',
     //textAlign: 'center',
   }
 });
 
-export default CustomButton;
+export default IconButton;

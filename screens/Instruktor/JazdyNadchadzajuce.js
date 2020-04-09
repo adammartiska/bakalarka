@@ -7,68 +7,68 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
 import RezervovanaJazda from '../../components/RezervovanaJazda';
 import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomButton from '../../components/CustomButton';
+import { create } from 'apisauce';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
+import IconButton from '../../components/IconButton';
 
 const JazdyNadchadzajuce = props => {
-  const [DATA, setDATA] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: '12.3.2018',
-      time: '15:00'
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: '5.4.2018',
-      time: '12:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
     }
-  ]);
-  const [date, setDate] = useState(new Date(1598051730000));
+  });
+  const [showPickerArrow, setShowPickerArrow] = useState(false);
+  const [showPickerRides, setShowPickerRides] = useState(false);
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [recent, setRecent] = useState(false);
+  const [data, setData] = useState([]);
+  const [dataPicker, setDataPicker] = useState([]);
   const [pending, setPending] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingRecent, setIsLoadingRecent] = useState(false);
+  const [isLoadingPicker, setIsLoadingPicker] = useState(false);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-    setShow(Platform.OS === 'ios' ? true : false);
-    console.log(date);
+  // useEffect(() => {
+  //   async () => {
+  //     console.log('zbieha useeffect');
+  //     const response = await api.get(
+  //       `/instructor/myRides?date=${moment(date).format('YYYY-MM-DD')}`
+  //     );
+  //     setDataPicker(response.data);
+  //   };
+  // }, []);
+
+  const onChange = async (event, selectedDate) => {
+    setShow(Platform.OS === 'ios');
+    setIsLoadingPicker(true);
+    const response = await api.get(
+      `/instructor/myRides?date=${moment(selectedDate).format('YYYY-MM-DD')}`
+    );
+    setDataPicker(response.data);
+    setDate(selectedDate);
+    setIsLoadingPicker(false);
+    console.log(response);
+    setShowPickerArrow(true);
   };
 
   const showMode = currentMode => {
@@ -79,8 +79,14 @@ const JazdyNadchadzajuce = props => {
   const showDatepicker = () => {
     showMode('date');
   };
-  const handleRecent = () => {
+  const handleRecent = async () => {
+    setIsLoadingRecent(true);
+    const response = await api.get(
+      `/instructor/myRides?date=${moment(new Date()).format('YYYY-MM-DD')}`
+    );
+    setData(response.data);
     setRecent(!recent);
+    setIsLoadingRecent(false);
   };
 
   const zmazHandler = id => {
@@ -102,24 +108,24 @@ const JazdyNadchadzajuce = props => {
           iconName="md-time"
           onPress={handleRecent}
         />
-      </View>
-      {recent &&
-        (isLoading ? (
+        {isLoadingRecent && (
           <ActivityIndicator size="large" color={Colors.primaryColor} />
-        ) : (
-          <SafeAreaView>
-            <FlatList
-              data={DATA}
-              renderItem={({ item }) => (
-                <NadchadzajuceInstruktor
-                  datum={item.title}
-                  cas={item.time}
-                  style={{ marginHorizontal: 2 }}
-                />
-              )}
-            />
-          </SafeAreaView>
-        ))}
+        )}
+      </View>
+      {recent && (
+        <SafeAreaView>
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <NadchadzajuceInstruktor
+                datum={moment(item.date).format('DD.MM.YYYY')}
+                cas={item.time}
+                style={{ marginHorizontal: 2 }}
+              />
+            )}
+          />
+        </SafeAreaView>
+      )}
       <View
         style={{
           borderWidth: 1,
@@ -129,8 +135,8 @@ const JazdyNadchadzajuce = props => {
       ></View>
       <View style={{ alignItems: 'center' }}>
         <Text style={{ textAlign: 'center' }}>
-          Ak by ste si chceli prezriet jazdy z predoslych datumov, staci si
-          zvolit datum
+          Ak by ste si chceli prezriet jazdy, ktore vas cakaju do buducna staci
+          si zvolit datum
         </Text>
         <CustomButton
           name="zvolit datum"
@@ -149,6 +155,31 @@ const JazdyNadchadzajuce = props => {
           onChange={onChange}
         />
       )}
+      {showPickerArrow &&
+        (isLoadingPicker ? (
+          <ActivityIndicator size="large" color={Colors.primaryColor} />
+        ) : (
+          <SafeAreaView>
+            <View style={{ alignItems: 'center' }}>
+              <IconButton
+                iconName={showPickerRides ? 'md-arrow-up' : 'md-arrow-down'}
+                onPress={() => setShowPickerRides(!showPickerRides)}
+              />
+            </View>
+            {showPickerRides && (
+              <FlatList
+                data={dataPicker}
+                renderItem={({ item }) => (
+                  <NadchadzajuceInstruktor
+                    datum={moment(item.date).format('DD.MM.YYYY')}
+                    cas={item.time}
+                    style={{ marginHorizontal: 2 }}
+                  />
+                )}
+              />
+            )}
+          </SafeAreaView>
+        ))}
     </ScrollView>
   );
 };

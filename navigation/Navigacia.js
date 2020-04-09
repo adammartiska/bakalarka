@@ -195,7 +195,7 @@ const SwitchNavigator = createAnimatedSwitchNavigator(
       screen: LoginStack
     },
 
-    SignedIn: {
+    SignedInZiak: {
       screen: NavigaciaTab
     },
     SignedInInstructor: {
