@@ -11,8 +11,8 @@ export default class TabViewExample extends React.Component {
     index: 0,
     routes: [
       { key: 'first', title: 'Rezervovane' },
-      { key: 'second', title: 'Absolvovane' },
-    ],
+      { key: 'second', title: 'Absolvovane' }
+    ]
   };
 
   render() {
@@ -21,18 +21,17 @@ export default class TabViewExample extends React.Component {
         navigationState={this.state}
         renderScene={SceneMap({
           first: JazdyNadchadzajuce,
-          second: JazdyAbsolvovane,
+          second: JazdyAbsolvovane
         })}
-        renderTabBar={props =>
-            <TabBar
-              {...props}
-              indicatorStyle={{ backgroundColor: 'white' }}
-              style={{ backgroundColor: 'white' }}
-              activeColor={Colors.primaryColor}
-        inactiveColor={Colors.carhartt}
-            />
-          }
-        
+        renderTabBar={props => (
+          <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor: 'white' }}
+            style={{ backgroundColor: 'white' }}
+            activeColor={Colors.primaryColor}
+            inactiveColor={Colors.carhartt}
+          />
+        )}
         onIndexChange={index => this.setState({ index })}
         initialLayout={{ width: Dimensions.get('window').width }}
       />
@@ -42,6 +41,6 @@ export default class TabViewExample extends React.Component {
 
 const styles = StyleSheet.create({
   scene: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });

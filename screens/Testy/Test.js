@@ -55,7 +55,7 @@ export default class Prvy extends Component {
   next() {
     console.log(this.Qno);
     console.log(this.state.vyhodnot);
-    if (arrnew[this.Qno].correctoption === `option${this.state.value + 1}`) {
+    if (arrnew[this.Qno].correctoption === `answer_${this.state.value + 1}`) {
       this.score = this.score + 1;
     }
     if (this.Qno === arrnew.length - 1) {

@@ -5,11 +5,12 @@ import {
   StyleSheet,
   FlatList,
   SafeAreaView,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Colors from '../../constants/Colors';
 import InstruktorBar from '../../components/InstruktorBar';
 import RezervovanaJazda from '../../components/RezervovanaJazda';
@@ -17,8 +18,15 @@ import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 import AbsolvovanePending from '../../components/AbsolvovanePending';
 import { create } from 'apisauce';
 import { useSelector } from 'react-redux';
+import { useFetchGet } from '../../hooks/useFetchGet';
+import moment from 'moment';
 
 const JazdyNadchadzajuce = props => {
+  const [rides, setRides] = useState([]);
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const api = create({
     baseURL: 'http://147.175.121.250:80',
     headers: {
@@ -28,45 +36,19 @@ const JazdyNadchadzajuce = props => {
       Relation: relationId
     }
   });
-  const jwt = useSelector(state => state.auth.token);
-  const relationId = useSelector(state => state.auth.relationId);
-  const [DATA, setDATA] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: '12.3.2018',
-      time: '15:00'
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: '5.4.2018',
-      time: '12:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: '18.4.2018',
-      time: '10:00'
-    }
-  ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await api.get('/instructor/getPendingRides');
+        setRides(res.data);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const zmazHandler = id => {
     const newData = DATA.filter(item => item.id !== id);
@@ -74,21 +56,36 @@ const JazdyNadchadzajuce = props => {
   };
 
   const confirmHandler = async id => {
-    const response = await api.post('/instructor/completeRide', id);
+    const response = await api.post('/instructor/completeRide', [{ id: id }]);
+    console.log(response);
+  };
+
+  const declineHandler = async id => {
+    const response = await api.delete(
+      '/instructor/removeRides',
+      {},
+      { data: [{ id: id }] }
+    );
+    console.log(response);
   };
 
   return (
     <SafeAreaView style={styles.screen}>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => (
-          <AbsolvovanePending
-            datum={item.title}
-            cas={item.time}
-            onPressConfirm={confirmHandler(item.id)}
-          />
-        )}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color={Colors.primaryColor} />
+      ) : (
+        <FlatList
+          data={rides}
+          renderItem={({ item }) => (
+            <AbsolvovanePending
+              datum={moment(item.date).format('DD.MM.YYYY')}
+              cas={item.time}
+              onPressConfirm={() => confirmHandler(item.id)}
+              onPressDecline={() => declineHandler(item.id)}
+            />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };

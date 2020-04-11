@@ -36,12 +36,7 @@ export default class Prvy extends Component {
       vyhodnot: false,
       value: 0,
       question: arrnew.questions[this.Qno].question,
-      options: {
-        option1: 'XML',
-        option2: 'YML',
-        option3: 'HTML',
-        option4: 'JSX'
-      },
+      answers: arrnew.questions[this.Qno].answers,
       correct: arrnew.questions[this.Qno].correctAnswer,
       uhadnute: false,
       neuhadnute: false
@@ -50,7 +45,10 @@ export default class Prvy extends Component {
   next() {
     console.log(this.Qno);
     console.log(this.state.vyhodnot);
-    if (arrnew[this.Qno].correctAnswer === `option${this.state.value + 1}`) {
+    if (
+      `answer_${arrnew.questions[this.Qno].correctAnswer}` ===
+      `answer_${this.state.value + 1}`
+    ) {
       this.score = this.score + 1;
     }
     if (this.Qno === arrnew.length - 1) {
@@ -64,12 +62,7 @@ export default class Prvy extends Component {
         uhadnute: false,
         value: 0,
         question: arrnew.questions[this.Qno].question,
-        options: {
-          option1: 'XML',
-          option2: 'YML',
-          option3: 'HTML',
-          option4: 'JSX'
-        },
+        answers: arrnew.questions[this.Qno].answers,
         correct: arrnew.questions[this.Qno].correctAnswer
       });
     }
@@ -78,7 +71,10 @@ export default class Prvy extends Component {
   }
 
   check() {
-    if (arrnew[this.Qno].correctAnswer === `option${this.state.value + 1}`) {
+    if (
+      `answer_${arrnew.questions[this.Qno].correctAnswer}` ===
+      `answer_${this.state.value + 1}`
+    ) {
       this.setState({
         uhadnute: true
       });
@@ -147,10 +143,9 @@ export default class Prvy extends Component {
 
   render() {
     const radio_props = [
-      { label: `${this.state.options.option1}`, value: 1 },
-      { label: `${this.state.options.option2}`, value: 2 },
-      { label: `${this.state.options.option3}`, value: 3 },
-      { label: `${this.state.options.option4}`, value: 4 }
+      { label: `${this.state.answers.answer_1}`, value: 1 },
+      { label: `${this.state.answers.answer_2}`, value: 2 },
+      { label: `${this.state.answers.answer_3}`, value: 3 }
     ];
     return (
       <View style={styles.center}>
@@ -233,7 +228,7 @@ export default class Prvy extends Component {
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    paddingTop: 120,
+    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 50
   },

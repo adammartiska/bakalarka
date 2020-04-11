@@ -20,6 +20,7 @@ import Prvy from './screens/Testy/Prvy';
 import ProfilSettings from './screens/Ziak/ProfilSettings';
 import NavigaciaInstrktor from './navigation/NavigaciaInstruktor';
 import NadchadzajuceInstruktor from './components/NadchadzajuceInstruktor';
+import Vyber from './screens/Vyber';
 import JazdyNadchadzajuce from './screens/Instruktor/JazdyNadchadzajuce';
 import { createClient } from 'react-fetching-library';
 import JazdyPending from './screens/Instruktor/JazdyPending';
@@ -62,7 +63,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <Navigacia />
+      <Vyber />
     </Provider>
   );
 }
