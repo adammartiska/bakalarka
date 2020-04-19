@@ -2,7 +2,6 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import { useSelector } from 'react-redux';
 //import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
 import Domov from '../screens/Domov_legacy';
@@ -25,11 +24,8 @@ import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import ProfilSettings from '../screens/Ziak/ProfilSettings';
 import JazdyNadchadzuje from '../screens/Ziak/JazdyNadchadzajuce';
 import TestVseobecne from '../screens/Testy/TestVseobecne';
-import NavigaciaTabInstruktor from './NavigaciaInstruktor';
-import Vyber from '../screens/Vyber';
+import JazdyRozhranieInstruktor from '../screens/Instruktor/JazdyRozhranieInstruktor';
 import ConfirmScreen from '../screens/Instruktor/ConfirmScreen';
-import VyberScreen from '../screens/VyberScreen';
-import NavigaciaOwner from './NavigaciaOwner';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -38,72 +34,10 @@ const defaultStackNavOptions = {
   headerTintColor: 'white'
 };
 
-const LoginStack = createStackNavigator(
-  {
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        headerTitle: 'Login'
-      }
-    },
-    Registracia: {
-      screen: Registracia,
-      navigationOptions: {
-        headerTitle: 'Registracia'
-      }
-    },
-    ZabudnuteHeslo: {
-      screen: ZabudnuteHeslo,
-      navigationOptions: {
-        headerTitle: 'Zabudnute Heslo'
-      }
-    }
-  },
-  { defaultNavigationOptions: defaultStackNavOptions }
-);
-
-const VyberStack = createStackNavigator(
-  {
-    Vyber: {
-      screen: Vyber,
-      navigationOptions: {
-        headerTitle: 'Prve prihlasenie'
-      }
-    }
-  },
-  { defaultNavigationOptions: defaultStackNavOptions }
-);
-const VyberScreenStack = createStackNavigator(
-  {
-    Vyber: {
-      screen: VyberScreen,
-      navigationOptions: {
-        headerTitle: 'Druhe prihlasenie'
-      }
-    }
-  },
-  { defaultNavigationOptions: defaultStackNavOptions }
-);
-
-const switchik = createAnimatedSwitchNavigator(
-  {
-    PrvyVyber: {
-      screen: VyberStack
-    },
-
-    DruhyVyber: {
-      screen: VyberScreenStack
-    }
-  },
-  {
-    initialRouteName: 'PrvyVyber'
-  }
-);
-
 const DomovStack = createStackNavigator(
   {
     Domov: {
-      screen: Jazdy,
+      screen: JazdyRozhranieInstruktor,
       navigationOptions: {
         headerTitle: 'Domov'
       }
@@ -115,7 +49,7 @@ const DomovStack = createStackNavigator(
 const JazdyStack = createStackNavigator(
   {
     JazdyStack: {
-      screen: JazdyRezervacia,
+      screen: JazdyInstruktor,
       navigationOptions: {
         headerTitle: 'Jazdy'
       }
@@ -124,18 +58,12 @@ const JazdyStack = createStackNavigator(
   { defaultNavigationOptions: defaultStackNavOptions }
 );
 
-const TestyStack = createStackNavigator(
+const ConfirmStack = createStackNavigator(
   {
-    Testy: {
-      screen: Testy,
+    Confirm: {
+      screen: ConfirmScreen,
       navigationOptions: {
-        headerTitle: 'Testy'
-      }
-    },
-    TestVseobecne: {
-      screen: TestVseobecne,
-      navigationOptions: {
-        headerTitle: 'Test'
+        headerTitle: 'Ziadosti'
       }
     }
   },
@@ -160,7 +88,7 @@ const ProfilStack = createStackNavigator(
   { defaultNavigationOptions: defaultStackNavOptions }
 );
 
-const NavigaciaTab = createMaterialBottomTabNavigator(
+const NavigaciaOwner = createMaterialBottomTabNavigator(
   {
     Domov: {
       screen: DomovStack,
@@ -186,8 +114,8 @@ const NavigaciaTab = createMaterialBottomTabNavigator(
       //tabBarColor: Colors.primaryColor,
     },
 
-    Testy: {
-      screen: TestyStack,
+    Confirm: {
+      screen: ConfirmStack,
       navigationOptions: {
         tabBarIcon: tabInfo => {
           return (
@@ -227,36 +155,4 @@ const NavigaciaTab = createMaterialBottomTabNavigator(
   }
 );
 
-const SwitchNavigator = createAnimatedSwitchNavigator(
-  {
-    Processing: {
-      screen: Processing
-    },
-
-    SignedOut: {
-      screen: LoginStack
-    },
-
-    SignedInZiak: {
-      screen: NavigaciaTab
-    },
-    SignedInInstructor: {
-      screen: NavigaciaOwner
-    },
-    SignedInOwner: {
-      screen: NavigaciaOwner
-    },
-    Vyber: {
-      screen: VyberStack
-    },
-    VyberScreen: {
-      screen: VyberScreenStack
-    }
-  },
-  {
-    initialRouteName: 'SignedOut'
-    //transitionConfig: () => fromLeft(),
-  }
-);
-
-export default createAppContainer(SwitchNavigator);
+export default NavigaciaOwner;

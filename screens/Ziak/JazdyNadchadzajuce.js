@@ -95,6 +95,8 @@ const JazdyNadchadzajuce = props => {
         >
           <ActivityIndicator size="large" color="black" />
         </View>
+      ) : data.length < 1 ? (
+        <Text>Zatial nemate ziadne rezervovane jazdy!</Text>
       ) : (
         <FlatList
           data={data}

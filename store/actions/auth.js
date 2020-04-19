@@ -8,6 +8,7 @@ export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 export const FORGOTPASS = 'FORGOTPASS';
 export const LOGINMYAPP = 'LOGINMYAPP';
+export const REDUXDATA = 'REDUXDATA';
 
 export const authenticate = (userId, token) => {
   return { type: AUTHENTICATE, userId: userId, token: token };
@@ -192,10 +193,85 @@ export const loginmyapp = (email, password) => {
     dispatch({
       type: LOGINMYAPP,
       token: resData.jwtToken,
-      relationId: resData.relationIDd,
-      info: resData.info
+      relations: resData.relations
     });
-    return resData.info.role;
+    return {
+      token: resData.jwtToken,
+      relations: resData.relations,
+      schoolCount: resData.schoolCount
+    };
     // RootNavigation.navigate('SignedInZiak', {});
   };
 };
+
+export const reduxdata = (jwt, relationId) => {
+  return async dispatch => {
+    const response = await fetch(
+      'http://147.175.121.250:80/relationship/getRelationInfo',
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+          Relation: relationId
+        }
+      }
+    );
+    if (!response.ok) {
+      const errorResData = await response.json();
+      console.log(errorResData);
+      throw new Error(errorResData);
+    }
+    const resData = await response.json();
+    console.log(resData);
+
+    dispatch({
+      type: REDUXDATA,
+      userInfo: resData,
+      relationId: relationId
+    });
+  };
+};
+
+// export const loginmyapp = (email, password) => {
+//   return async dispatch => {
+//     const response = await fetch(
+//       'http://147.175.121.250:80/authenticate/login',
+//       {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//           email: email,
+//           password: password
+//         })
+//       }
+//     );
+
+//     if (!response.ok) {
+//       const errorResData = await response.json();
+//       console.log(errorResData);
+//       const errorId = errorResData.error.message;
+//       let message = 'Something went wrong!';
+//       if (errorId === 'EMAIL_NOT_FOUND') {
+//         message = 'Entered email not found!';
+//       } else if (errorId === 'INVALID_PASSWORD') {
+//         message = 'Entered password is not valid!';
+//       }
+//       throw new Error(message);
+//     }
+//     const resData = await response.json();
+//     console.log(resData);
+
+//     dispatch({
+//       type: LOGINMYAPP,
+//       token: resData.jwtToken,
+//       relationId: resData.relationIDd,
+//       info: resData.info
+//     });
+//     return resData.info.role;
+//     // RootNavigation.navigate('SignedInZiak', {});
+//   };
+// };

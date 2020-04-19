@@ -4,7 +4,8 @@ import {
   AUTHENTICATE,
   LOGOUT,
   FORGOTPASS,
-  LOGINMYAPP
+  LOGINMYAPP,
+  REDUXDATA
 } from '../actions/auth';
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   ridesCompleted: '',
   startDate: null,
   relationId: null,
+  relations: []
 };
 
 export default (state = initialState, action) => {
@@ -34,8 +36,7 @@ export default (state = initialState, action) => {
     case LOGINMYAPP:
       return {
         token: action.token,
-        relationId: action.relationId,
-        info: action.info
+        relations: action.relations
       };
 
     case SIGNUP:
@@ -46,6 +47,12 @@ export default (state = initialState, action) => {
     case FORGOTPASS:
       return {
         email: action.email
+      };
+    case REDUXDATA:
+      return {
+        ...state,
+        userInfo: action.userInfo,
+        relationId: action.relationId
       };
     default:
       return state;

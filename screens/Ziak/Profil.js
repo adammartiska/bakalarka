@@ -26,7 +26,7 @@ import moment from 'moment';
 const Profil = props => {
   const dispatch = useDispatch();
   const [progress, setProgress] = useState(0);
-  const userInfo = useSelector(state => state.auth.info);
+  const userInfo = useSelector(state => state.auth.userInfo);
   const { email, fullName, phoneNumber, ridesCompleted, startDate } = userInfo;
   const date = moment(startDate).format('DD/MM/YYYY');
   const [image, setImage] = useState(null);

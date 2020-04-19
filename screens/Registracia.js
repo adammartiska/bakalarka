@@ -10,7 +10,8 @@ import {
   Keyboard,
   ActivityIndicator,
   Alert,
-  ScrollView
+  ScrollView,
+  Picker
 } from 'react-native';
 import { TouchableOpacity, Directions } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
@@ -56,8 +57,9 @@ const Registracia = props => {
     }
   });
   const [isLoading, setIsLoading] = useState(false);
-  const keyboardVerticalOffset = 50;
+  const keyboardVerticalOffset = 10;
   const [showAlert, setShowAlert] = useState(false);
+  const [rola, setSelectedRola] = useState('Student');
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -105,7 +107,7 @@ const Registracia = props => {
         matchingPassword,
         password,
         phoneNumber,
-        roles: 'Student'
+        roles: rola
       });
       setIsLoading(false);
       if (response.ok) {
@@ -183,7 +185,20 @@ const Registracia = props => {
               required
               secureTextEntry={true}
             />
-
+            <View style={styles.pickerOut}>
+              <Picker
+                selectedValue={rola}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedRola(itemValue)
+                }
+                itemStyle={{ textAlign: 'center' }}
+              >
+                <Picker.Item label="Student" value="student" />
+                <Picker.Item label="Instruktor" value="instruktor" />
+                <Picker.Item label="Majitel" value="majitel" />
+              </Picker>
+            </View>
             <View style={styles.loginButton}>
               {isLoading ? (
                 <View style={{ paddingTop: 10, textAlign: 'center' }}>
@@ -219,14 +234,11 @@ const Registracia = props => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    marginHorizontal: 30,
-    justifyContent: 'flex-end',
-    paddingBottom: 85
+    marginHorizontal: 20,
+    paddingBottom: 2
   },
   logo: {
-    marginTop: 45,
     width: 100,
     height: 200,
     resizeMode: 'contain'
@@ -237,6 +249,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
     color: '#fff'
+  },
+  picker: {
+    height: 40,
+    width: 200,
+    justifyContent: 'center'
+  },
+  pickerOut: {
+    marginVertical: 5,
+    marginHorizontal: 20,
+    backgroundColor: (255, 255, 255, 0.9),
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    elevation: 2
   },
   loginButton: {
     marginTop: 12,

@@ -28,6 +28,7 @@ import { ClientContextProvider } from 'react-fetching-library';
 import { create } from 'apisauce';
 import { navigationRef, isMountedRef } from './RootNavigation';
 import { NavigationContainer } from '@react-navigation/native';
+import ConfirmScreen from './screens/Instruktor/ConfirmScreen';
 
 //useScreens();  //optimalizacia screenov performance
 
@@ -63,7 +64,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <Vyber />
+      <Navigacia />
     </Provider>
   );
 }

@@ -21,7 +21,6 @@ import * as authActions from '../store/actions/auth';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 import { create } from 'apisauce';
 
-
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
@@ -97,11 +96,25 @@ const Login = props => {
     setError(null);
 
     try {
-      const role = await dispatch(action);
-      if (role === 'ROLE_STUDENT') {
-        props.navigation.navigate('SignedInZiak');
-      } else if (role === 'ROLE_INSTRUCTOR') {
-        props.navigation.navigate('SignedInInstructor');
+      const where = await dispatch(action);
+      const { token, relations, schoolCount } = where;
+      console.log(token, schoolCount);
+      if (relations.length > 0) {
+        if (relations[0].information === 'active' && schoolCount === 1) {
+          await dispatch(authActions.reduxdata(token, relations[0].relationID));
+          if (relations[0].role === 'INSTRUCTOR') {
+            props.navigation.navigate('SignedInInstructor');
+          } else if (relations[0].role === 'STUDENT') {
+            props.navigation.navigate('SignedInZiak');
+          } else if (relations[0].role === 'OWNER') {
+            props.navigation.navigate('SignedInOwner');
+          }
+        }
+        // ZLA LOGIKA PREROBIT
+        // } else if (schoolCount === 1) {
+        //   props.navigation.navigate('VyberScreen');
+        // } else {
+        //   props.navigation.navigate('Vyber');
       }
     } catch (err) {
       console.log(err);
