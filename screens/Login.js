@@ -109,6 +109,8 @@ const Login = props => {
           } else if (relations[0].role === 'OWNER') {
             props.navigation.navigate('SignedInOwner');
           }
+        } else if (relations[0].information === 'completed') {
+          props.navigation.navigate('CompletedZiak');
         }
         // ZLA LOGIKA PREROBIT
         // } else if (schoolCount === 1) {
@@ -168,7 +170,7 @@ const Login = props => {
               </View>
             ) : (
               <TouchableOpacity activeOpacity={0.3} onPress={authHandler}>
-                <Text style={styles.inputLoginText}>Login</Text>
+                <Text style={styles.inputLoginText}>Prihlasit</Text>
               </TouchableOpacity>
             )}
           </View>

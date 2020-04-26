@@ -1,31 +1,13 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-//import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
 import Domov from '../screens/Domov_legacy';
-import JazdyRezervacia from '../screens/Ziak/JazdyRezervacia';
-import Profil from '../screens/Instruktor/Profil';
+import Profil from '../screens/Ziak/Profil';
 import Testy from '../screens/Ziak/Testy';
-import Login from '../screens/Login';
 import JazdyAbsolvovane from '../screens/Ziak/JazdyAbsolvovane';
-import Jazdy from '../screens/Ziak/Jazdy';
-import Registracia from '../screens/Registracia';
-import ZabudnuteHeslo from '../screens/ZabudnuteHeslo';
-import JazdyInstruktor from '../screens/Instruktor/JazdyInstruktor';
-import Processing from '../screens/Processing';
 import { Ionicons } from '@expo/vector-icons';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import { fromLeft } from 'react-navigation-transitions';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import CustomHeaderButton from '../components/CustomHeaderButton';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import ProfilSettings from '../screens/Ziak/ProfilSettings';
-import JazdyNadchadzuje from '../screens/Ziak/JazdyNadchadzajuce';
-import TestVseobecne from '../screens/Testy/TestVseobecne';
-import JazdyRozhranieInstruktor from '../screens/Instruktor/JazdyRozhranieInstruktor';
-import ConfirmScreen from '../screens/Instruktor/ConfirmScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -34,36 +16,24 @@ const defaultStackNavOptions = {
   headerTintColor: 'white'
 };
 
-const DomovStack = createStackNavigator(
-  {
-    Domov: {
-      screen: JazdyRozhranieInstruktor,
-      navigationOptions: {
-        headerTitle: 'Domov'
-      }
-    }
-  },
-  { defaultNavigationOptions: defaultStackNavOptions }
-);
-
-const JazdyStack = createStackNavigator(
+const JazdyAbsolvovaneStack = createStackNavigator(
   {
     JazdyStack: {
-      screen: JazdyInstruktor,
+      screen: JazdyAbsolvovane,
       navigationOptions: {
-        headerTitle: 'Jazdy'
+        headerTitle: 'Absolvovane jazdy'
       }
     }
   },
   { defaultNavigationOptions: defaultStackNavOptions }
 );
 
-const ConfirmStack = createStackNavigator(
+const TestyStack = createStackNavigator(
   {
-    Confirm: {
-      screen: ConfirmScreen,
+    Testy: {
+      screen: Testy,
       navigationOptions: {
-        headerTitle: 'Ziadosti'
+        headerTitle: 'Testy'
       }
     }
   },
@@ -88,22 +58,10 @@ const ProfilStack = createStackNavigator(
   { defaultNavigationOptions: defaultStackNavOptions }
 );
 
-const NavigaciaOwner = createMaterialBottomTabNavigator(
+const NavigaciaCompletedZiak = createMaterialBottomTabNavigator(
   {
-    Domov: {
-      screen: DomovStack,
-      navigationOptions: {
-        tabBarIcon: tabInfo => {
-          return (
-            <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />
-          );
-        }
-      }
-      // tabBarColor: Colors.primaryColor,
-    },
-
     Jazdy: {
-      screen: JazdyStack,
+      screen: JazdyAbsolvovaneStack,
       navigationOptions: {
         tabBarIcon: tabInfo => {
           return (
@@ -114,8 +72,8 @@ const NavigaciaOwner = createMaterialBottomTabNavigator(
       //tabBarColor: Colors.primaryColor,
     },
 
-    Ziadosti: {
-      screen: ConfirmStack,
+    Testy: {
+      screen: TestyStack,
       navigationOptions: {
         tabBarIcon: tabInfo => {
           return (
@@ -155,4 +113,4 @@ const NavigaciaOwner = createMaterialBottomTabNavigator(
   }
 );
 
-export default NavigaciaOwner;
+export default NavigaciaCompletedZiak;

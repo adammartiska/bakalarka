@@ -5,7 +5,8 @@ import {
   StyleSheet,
   FlatList,
   SafeAreaView,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
@@ -50,16 +51,45 @@ const JazdyAbsolvovane = props => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <FlatList
-        data={data}
-        renderItem={({ item }) => (
-          <AbsolvovaneZiak
-            date={moment(item.date).format('DD.MM.YYYY')}
-            time={item.time}
-            rideState={item.status}
-          />
-        )}
-      />
+      {isLoading ? (
+        <View
+          style={{
+            marginTop: 80,
+            alignItems: 'center'
+          }}
+        >
+          <ActivityIndicator size="large" color="black" />
+        </View>
+      ) : data.length < 1 ? (
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 180
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              textAlign: 'center',
+              color: Colors.inActive
+            }}
+          >
+            Nemate ziadne absolvovane jazdy
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <AbsolvovaneZiak
+              date={moment(item.date).format('DD.MM.YYYY')}
+              time={item.time}
+              rideState={item.status}
+            />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -67,7 +97,7 @@ const JazdyAbsolvovane = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop: 8
+    marginBottom: 20
   },
 
   vysunute: {

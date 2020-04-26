@@ -30,6 +30,7 @@ import Vyber from '../screens/Vyber';
 import ConfirmScreen from '../screens/Instruktor/ConfirmScreen';
 import VyberScreen from '../screens/VyberScreen';
 import NavigaciaOwner from './NavigaciaOwner';
+import NavigaciaCompletedZiak from './NavigaciaCompletedZiak';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -251,6 +252,9 @@ const SwitchNavigator = createAnimatedSwitchNavigator(
     },
     VyberScreen: {
       screen: VyberScreenStack
+    },
+    CompletedZiak: {
+      screen: NavigaciaCompletedZiak
     }
   },
   {

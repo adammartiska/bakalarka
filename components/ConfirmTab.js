@@ -10,7 +10,7 @@ const CustomButton = props => {
         <Image style={styles.logo} source={require('../Images/profil.png')} />
       </View>
       <View style={{ marginRight: 110 }}>
-        <Text style={{ fontSize: 18 }}>Adam Martiska</Text>
+        <Text style={{ fontSize: 18 }}>{props.name}</Text>
       </View>
       <TouchableOpacity onPress={props.onPressAccept}>
         <View style={{ marginHorizontal: 15 }}>

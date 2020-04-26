@@ -96,7 +96,23 @@ const JazdyNadchadzajuce = props => {
           <ActivityIndicator size="large" color="black" />
         </View>
       ) : data.length < 1 ? (
-        <Text>Zatial nemate ziadne rezervovane jazdy!</Text>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 180
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              textAlign: 'center',
+              color: Colors.inActive
+            }}
+          >
+            Nemate ziadne nove rezervovane jazdy
+          </Text>
+        </View>
       ) : (
         <FlatList
           data={data}

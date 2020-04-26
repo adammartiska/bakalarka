@@ -21,6 +21,7 @@ import InstruktorBar from '../../components/InstruktorBar';
 import TimeButtonCheck from '../../components/TimeButtonCheck';
 import ObjednajButton from '../../components/ObjednajButton';
 import { create } from 'apisauce';
+import ReservationTab from '../../components/ReservationTab';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 const JazdyRezervacia = props => {
@@ -36,8 +37,6 @@ const JazdyRezervacia = props => {
   const pole = ['8:00', '9:00', '10:00'];
 
   useEffect(() => {
-    console.log('useEffect');
-    console.log(screenWidth);
     scrollViewRef.current.scrollToEnd();
   });
 
@@ -58,14 +57,16 @@ const JazdyRezervacia = props => {
   const [objednal, setObjednal] = useState(false);
   const [selected, setSelected] = useState('');
   const [casy, setCasy] = useState([]);
+  const [unavailableDates, setUnavailableDates] = useState([]);
 
   const fetchniCasy = async date => {
     const resCasy = await api.get(`/student/freeRides/${date}`);
-    console.log(resCasy.data[0].rides);
-    setCasy(resCasy.data[0].rides);
+    setCasy(resCasy.data);
+    //setCasy(resCasy);
   };
 
   const jazdaHandler = item => {
+    console.log(item);
     setTitle({
       ...title,
       cas: item.time
@@ -73,7 +74,6 @@ const JazdyRezervacia = props => {
     setObjednal(true);
     setIdToSend(item.id);
     setSelected(item.time);
-    console.log(item.time);
     // scrollViewRef.current.scrollToEnd();
     // scrollViewRef.current.scrollToEnd();
   };
@@ -125,9 +125,9 @@ const JazdyRezervacia = props => {
       token: token,
       date: upravenyDate
     };
-    console.log(dataToSent);
   };
   const confirmReservation = async () => {
+    console.log(idToSend);
     const response = await api.post(`/student/reserveRide/${idToSend}`);
     console.log(response);
     if (response.ok) {
@@ -137,10 +137,27 @@ const JazdyRezervacia = props => {
   const hideAlert = () => {
     setShowAlert(false);
   };
+  const calculateDisabledDates = () => {
+    const disabledDates = [];
+    const today = new Date();
+    const todayM = moment(todayM).format('YYYY-MM-DD');
+    const trimmed = todayM.slice(0, 8);
+    const startDate = `${trimmed}01`;
+    const startDateM = new Date(startDate);
+    while (startDateM < today) {
+      disabledDates.push(new Date(startDateM));
+      startDateM.setDate(startDateM.getDate() + 1);
+    }
+    setUnavailableDates(disabledDates);
+  };
+  useEffect(() => calculateDisabledDates(), []);
 
   return (
     <ScrollView contentContainerStyle={styles.container} ref={scrollViewRef}>
-      <CalendarPicker onDateChange={dateChangeHandler} />
+      <CalendarPicker
+        onDateChange={dateChangeHandler}
+        disabledDates={unavailableDates}
+      />
       <View>
         {isLoading ? (
           displayText ? (
@@ -153,7 +170,24 @@ const JazdyRezervacia = props => {
             </View>
           )
         ) : (
-          maper(casy)
+          <View>
+            {casy.map(item => (
+              <View
+                style={{
+                  marginHorizontal: 20,
+                  marginBottom: 25,
+                  borderBottomColor: '#CCC',
+                  borderBottomWidth: 1
+                }}
+              >
+                <ReservationTab
+                  instructorName={item.instructorName}
+                  data={item.rides}
+                  onChildClick={jazdaHandler}
+                />
+              </View>
+            ))}
+          </View>
         )}
       </View>
       {objednal && (

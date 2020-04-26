@@ -6,13 +6,16 @@ import {
   AsyncStorage,
   Text,
   Picker,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 
 import { create } from 'apisauce';
 import { useSelector, useDispatch } from 'react-redux';
 //import * as authActions from '../store/actions/auth';
 import ConfirmTab from '../../components/ConfirmTab';
+import Colors from '../../constants/Colors';
+import { Divider } from 'react-native-elements';
 
 const ConfirmScreen = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -30,70 +33,111 @@ const ConfirmScreen = props => {
 
   const [instructors, setInstructors] = useState([]);
   const [students, setStudents] = useState([]);
+  const fetchRequests = async () => {
+    const response = await api.get('/school/getRequests');
+    response.data.map(item => {
+      if (item.role === 'student') {
+        const novePole = [];
+        novePole.push(item);
+        setStudents(novePole);
+      } else if (item.role === 'instructor') {
+        const novePole = [];
+        novePole.push(item);
+        setInstructors(novePole);
+      }
+    });
+    console.log(response.data);
+  };
   useEffect(() => {
     const fetchRequests = async () => {
       const response = await api.get('/school/getRequests');
+      response.data.map(item => {
+        if (item.role === 'student') {
+          const novePole = [];
+          novePole.push(item);
+          setStudents(novePole);
+        } else if (item.role === 'instructor') {
+          const novePole = [];
+          novePole.push(item);
+          setInstructors(novePole);
+        }
+      });
       console.log(response.data);
     };
     fetchRequests();
-  }, []);
+  }, [students, instructors]);
 
   const confirmHandler = async id => {
-    const response = await api.post('/school/confirmUser/}', {
-      confirm: true,
-      userRelationID: id
-    });
-    console.log(response);
+    const response = await api.post(
+      `/school/confirmUser/${id}?confirm=${true}`
+    );
+    if (response.ok) {
+      () => fetchRequests();
+    }
   };
 
   const declineHandler = async id => {
-    const response = await api.post('/school/confirmUser/}', {
-      confirm: false,
-      userRelationID: id
-    });
+    const response = await api.post(
+      `/school/confirmUser/${id}?confirm=${false}`
+    );
     console.log(response);
   };
 
   return (
-    <View style={styles.screen}>
-      <View style={{ marginVertical: 25 }}>
-        <Text style={{ color: 'black', fontSize: 25 }}>Instruktori</Text>
-      </View>
-      {instructors.length > 0 ? (
-        <ConfirmTab />
-      ) : (
-        <View>
-          <Text style={styles.disabledText}>
-            Ziadne nove ziadosti od instruktorov
-          </Text>
+    <ScrollView contentContainerStyle={styles.screen}>
+      <View style={{ alignItems: 'center' }}>
+        <View style={{ marginVertical: 15 }}>
+          <Text style={{ color: 'black', fontSize: 25 }}>Instruktori</Text>
         </View>
-      )}
-      <View style={{ marginVertical: 25 }}>
-        <Text style={styles.textStyle}>Ziaci</Text>
+        {instructors.length > 0 ? (
+          instructors.map(instructor => {
+            return (
+              <ConfirmTab
+                key={instructor.relationID}
+                name={instructor.name}
+                onPressAccept={() => confirmHandler(instructor.relationID)}
+                onPressDecline={() => declineHandler(instructor.relationID)}
+              />
+            );
+          })
+        ) : (
+          <View>
+            <Text style={styles.disabledText}>
+              Ziadne nove ziadosti od instruktorov
+            </Text>
+          </View>
+        )}
       </View>
-      {students.length > 0 ? (
-        <ConfirmTab
-          onPressAccept={confirmHandler}
-          onPressDecline={declineHandler}
-        />
-      ) : (
-        <View>
-          <Text style={styles.disabledText}>
-            Ziadne nove ziadosti od ziakov
-          </Text>
+      <View style={styles.ciara}></View>
+      <View style={{ alignItems: 'center' }}>
+        <View style={{ marginVertical: 15 }}>
+          <Text style={styles.textStyle}>Ziaci</Text>
         </View>
-      )}
-
-      <ConfirmTab />
-      <ConfirmTab />
-    </View>
+        {students.length > 0 ? (
+          students.map(student => {
+            return (
+              <ConfirmTab
+                key={student.relationID}
+                name={student.name}
+                onPressAccept={() => confirmHandler(student.relationID)}
+                onPressDecline={() => declineHandler(student.relationID)}
+              />
+            );
+          })
+        ) : (
+          <View>
+            <Text style={styles.disabledText}>
+              Ziadne nove ziadosti od ziakov
+            </Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    alignItems: 'center',
     marginHorizontal: 20
   },
   textInButton: {
@@ -105,6 +149,12 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 25
+  },
+  ciara: {
+    borderWidth: 1,
+    borderColor: Colors.sedatmava,
+    marginTop: 40,
+    marginBottom: 25
   },
   customButon: {
     height: 50,

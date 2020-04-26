@@ -6,7 +6,7 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import Colors from '../constants/Colors';
 import Domov from '../screens/Domov_legacy';
 import JazdyRezervacia from '../screens/Ziak/JazdyRezervacia';
-import Profil from '../screens/Ziak/Profil';
+import Profil from '../screens/Instruktor/Profil';
 import Testy from '../screens/Ziak/Testy';
 import Login from '../screens/Login';
 import JazdyAbsolvovane from '../screens/Ziak/JazdyAbsolvovane';

@@ -6,7 +6,7 @@ const InstruktorBar = props => {
     <View style={styles.instruktorLayout}>
       <Image style={styles.logo} source={require('../Images/instruktor.jpg')} />
       <View style={styles.menoInstruktora}>
-        <Text style={{ fontSize: 18 }}>Drahomir Januska</Text>
+        <Text style={{ fontSize: 18 }}>{props.name}</Text>
       </View>
     </View>
   );

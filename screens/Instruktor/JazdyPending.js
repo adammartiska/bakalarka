@@ -20,6 +20,7 @@ import { create } from 'apisauce';
 import { useSelector } from 'react-redux';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import moment from 'moment';
+import Icon from 'react-native-vector-icons/Entypo';
 
 const JazdyNadchadzajuce = props => {
   const [rides, setRides] = useState([]);
@@ -73,7 +74,7 @@ const JazdyNadchadzajuce = props => {
     <SafeAreaView style={styles.screen}>
       {isLoading ? (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
-      ) : (
+      ) : rides.length > 0 ? (
         <FlatList
           data={rides}
           renderItem={({ item }) => (
@@ -85,6 +86,22 @@ const JazdyNadchadzajuce = props => {
             />
           )}
         />
+      ) : (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 35
+          }}
+        >
+          <View>
+            <Icon name="thumbs-up" size={50} color="black" />
+          </View>
+          <View style={{ alignItems: 'center', marginVertical: 25 }}>
+            <Text style={{ fontSize: 20 }}>Vsetko je v poriadku,</Text>
+            <Text style={{ fontSize: 20 }}>nemate ziadne nove ziadosti</Text>
+          </View>
+        </View>
       )}
     </SafeAreaView>
   );
