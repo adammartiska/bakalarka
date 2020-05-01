@@ -1,78 +1,146 @@
 import React, { useState, Component, useReducer, useCallback } from 'react';
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import  ToggleSwitch  from '../../components/ToggleSwitch';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native';
+import ToggleSwitch from '../../components/ToggleSwitch';
+import { useSelector } from 'react-redux';
 import CustomButton from '../../components/CustomButton';
 import Colors from '../../constants/Colors';
 import ButtonIcon from '../../components/ButtonIcon';
+import { create } from 'apisauce';
+import AwesomeAlert from 'react-native-awesome-alerts';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
-
 const formReducer = (state, action) => {
-    if(action.type === FORM_INPUT_UPDATE) {
-        const updatedValues = {
-            ...state.inputValues,
-            [action.input]: action.value
-
-        }
-        return {
-            ...state,
-            inputValues: updatedValues
-        }        
-    }
-    return state;
-    }
-
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value
+    };
+    return {
+      ...state,
+      inputValues: updatedValues
+    };
+  }
+  return state;
+};
 
 const ProfilSettings = props => {
-   // const { zmenaHesla, zmenaMailu } = formState.inputValues;
-    const [formState, dispatchFormState] = useReducer(formReducer, {
-        inputValues: {
-            zmenaHesla: false,
-            zmenaMailu: false,
-            stareHeslo: '',
-            noveHeslo: '',
-            noveHesloZnovu: '',
-            novyMail: '',
-            novyMailZnovu: '',
-            switchState: false,
-        }
+  const jwt = useSelector(state => state.auth.token);
+  const relationId = useSelector(state => state.auth.relationId);
+  const [showAlert, setShowAlert] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
+
+  const [dialogMessage, setDialogMessage] = useState('');
+  const changePasswordHandler = async (
+    oldPassword,
+    newPassword,
+    newPasswordAgain
+  ) => {
+    if (newPassword === newPasswordAgain) {
+      const response = await api.post('/user/update/password', {
+        newPassword: newPassword,
+        oldPassword: oldPassword
+      });
+      if (response.ok) {
+        setDialogTitle('Uspesna zmena hesla');
+        setDialogMessage('Heslo bolo uspesne zmenene!');
+        setShowAlert(true);
+      }
+    } else {
+      setDialogTitle('Neuspesna zmena hesla');
+      setDialogMessage('Hesla sa nezhoduju');
+    }
+  };
+
+  const changeEmailHandler = async (newEmail, newEmailAgain) => {
+    if (newEmail === newEmailAgain) {
+      const response = await api.post('/user/update/email', {
+        newEmail: newEmail
+      });
+      console.log(response);
+      if (response.ok) {
+        setDialogTitle('Uspesna zmena emailu');
+        setDialogMessage('Vas email bol uspesne zmeneny!');
+        setShowAlert(true);
+      }
+    } else {
+      setDialogTitle('Emaily sa nezhoduju');
+      setDialogMessage('Emaily sa musia zhodovat!');
+      setShowAlert(true);
+    }
+  };
+  const hideAlert = () => {
+    setShowAlert(false);
+  };
+  // const { zmenaHesla, zmenaMailu } = formState.inputValues;
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      zmenaHesla: false,
+      zmenaMailu: false,
+      stareHeslo: '',
+      noveHeslo: '',
+      noveHesloZnovu: '',
+      novyMail: '',
+      novyMailZnovu: '',
+      switchState: false
+    }
+  });
+
+  const inputChangeHandler = (inputId, inputValue) => {
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      value: inputValue,
+      input: inputId
     });
+  };
 
-    const inputChangeHandler =  (inputId, inputValue) => {
-            dispatchFormState({
-                type: FORM_INPUT_UPDATE,
-                value: inputValue,
-                input: inputId
-            })
-        }
-    
-
-
-    return (
-        <KeyboardAvoidingView style = {{flex: 1}}
-     behavior='padding'
-     enabled>
-    <TouchableWithoutFeedback onPress={
-        () => {Keyboard.dismiss();}}>
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
+      >
         <View style={styles.screen}>
-        <CustomButton name='Zmen heslo' iconName='ios-key' onPress={() => {dispatchFormState({
-            type: FORM_INPUT_UPDATE,
-            value: !formState.inputValues.zmenaHesla,
-            input: 'zmenaHesla'
-        })}}/>
-        {
-            (formState.inputValues.zmenaHesla) && (
-                <View style={styles.obalka}> 
-                <TextInput 
+          <CustomButton
+            name="Zmen heslo"
+            iconName="ios-key"
+            onPress={() => {
+              dispatchFormState({
+                type: FORM_INPUT_UPDATE,
+                value: !formState.inputValues.zmenaHesla,
+                input: 'zmenaHesla'
+              });
+            }}
+          />
+          {formState.inputValues.zmenaHesla && (
+            <View style={styles.obalka}>
+              <TextInput
                 id="stareHeslo"
-                placeholder="stare heslo"                
+                placeholder="stare heslo"
                 value={formState.inputValues.stareHeslo}
                 onChangeText={inputChangeHandler.bind(this, 'stareHeslo')}
                 required
                 secureTextEntry={true}
-                style={[styles.input, {marginTop: 15}]}
-                /> 
-                <TextInput 
+                style={[styles.input, { marginTop: 15 }]}
+              />
+              <TextInput
                 id="noveHeslo"
                 placeholder="nove heslo"
                 value={formState.inputValues.noveHeslo}
@@ -80,115 +148,125 @@ const ProfilSettings = props => {
                 required
                 secureTextEntry={true}
                 style={styles.input}
-                />
-                <TextInput 
+              />
+              <TextInput
                 id="noveHesloZnovu"
                 placeholder="nove heslo znovu"
                 value={formState.inputValues.noveHesloZnovu}
                 onChangeText={inputChangeHandler.bind(this, 'noveHesloZnovu')}
                 required
                 secureTextEntry={true}
-                style={[styles.input, {marginBottom: 0}]}
-                />
-                <ButtonIcon iconName='md-checkmark' onPress={() => {
-                    console.log(formState.inputValues.stareHeslo);
-                    console.log(formState.inputValues.noveHeslo);
-                    console.log(formState.inputValues.noveHesloZnovu);
-                }}/>
-                </View>) 
-                          
-
-        }
-        <CustomButton name='Zmen e-mail' iconName='ios-mail' onPress={() => {dispatchFormState({
-            type: FORM_INPUT_UPDATE,
-            value: !formState.inputValues.zmenaMailu,
-            input: 'zmenaMailu'
-        })}}/>
-        {   (formState.inputValues.zmenaMailu) && (<View style={styles.obalka}>
-                <TextInput 
+                style={[styles.input, { marginBottom: 0 }]}
+              />
+              <ButtonIcon
+                iconName="md-checkmark"
+                onPress={() =>
+                  changePasswordHandler(
+                    formState.inputValues.stareHeslo,
+                    formState.inputValues.noveHeslo,
+                    formState.inputValues.noveHesloZnovu
+                  )
+                }
+              />
+            </View>
+          )}
+          <CustomButton
+            name="Zmen e-mail"
+            iconName="ios-mail"
+            onPress={() => {
+              dispatchFormState({
+                type: FORM_INPUT_UPDATE,
+                value: !formState.inputValues.zmenaMailu,
+                input: 'zmenaMailu'
+              });
+            }}
+          />
+          {formState.inputValues.zmenaMailu && (
+            <View style={styles.obalka}>
+              <TextInput
                 id="novyMail"
                 placeholder="novy mail"
                 value={formState.inputValues.novyMail}
                 onChangeText={inputChangeHandler.bind(this, 'novyMail')}
                 required
                 style={styles.input}
-                />
-                <TextInput 
+              />
+              <TextInput
                 id="novyMailZnovu"
                 placeholder="novy mail znovu"
                 value={formState.inputValues.novyMailZnovu}
                 onChangeText={inputChangeHandler.bind(this, 'novyMailZnovu')}
                 required
-                style={[styles.input, {marginBottom: 0}]}
-                />
-                <ButtonIcon iconName='md-checkmark' onPress={() => {
-                    console.log(formState.inputValues.stareHeslo);
-                    console.log(formState.inputValues.noveHeslo);
-                    console.log(formState.inputValues.noveHesloZnovu);
-                }}/>
-                </View>) 
-
-        }
-        <View>
-       <ToggleSwitch 
-        state={formState.inputValues.switchState}
-        onChange = {(newValue) => {dispatchFormState({
-            type: FORM_INPUT_UPDATE,
-            value: newValue,
-            input: 'switchState'
-        })}}
-        text = 'Push notifikacie ' 
-        />
+                style={[styles.input, { marginBottom: 0 }]}
+              />
+              <ButtonIcon
+                iconName="md-checkmark"
+                onPress={() =>
+                  changeEmailHandler(
+                    formState.inputValues.novyMail,
+                    formState.inputValues.novyMailZnovu
+                  )
+                }
+              />
+            </View>
+          )}
+          <View>
+            <ToggleSwitch
+              state={formState.inputValues.switchState}
+              onChange={newValue => {
+                dispatchFormState({
+                  type: FORM_INPUT_UPDATE,
+                  value: newValue,
+                  input: 'switchState'
+                });
+              }}
+              text="Push notifikacie "
+            />
+          </View>
         </View>
-        
-         
-        
-
-        </View>
-        </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-
-
-    );
-
+      </TouchableWithoutFeedback>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title={dialogTitle}
+        message={dialogMessage}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="Super!"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={hideAlert}
+      />
+    </KeyboardAvoidingView>
+  );
 };
 
-
 const styles = StyleSheet.create({
-    screen: {
-        marginTop: 40,
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    obalka: {
-        width: '80%',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: Colors.sedatmava,
+  screen: {
+    marginTop: 40,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  obalka: {
+    width: '80%',
+    alignItems: 'center'
+  },
+  input: {
+    marginVertical: 12,
+    marginHorizontal: 20,
+    fontSize: 20,
+    textAlign: 'center',
+    justifyContent: 'center',
+    width: 200,
+    height: 40,
+    backgroundColor: (255, 255, 255, 0.9),
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
 
-
-
-    },
-    input: {
-        marginVertical: 12,
-        marginHorizontal: 20,
-        fontSize: 20,
-        textAlign: 'center',
-        justifyContent: 'center',
-        width: 200,
-        height: 40,
-        backgroundColor: (255,255,255,0.9),
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        
-        
-        elevation: 2,
-
-
-    },
-
-
+    elevation: 2
+  }
 });
 export default ProfilSettings;

@@ -42,6 +42,7 @@ const JazdyNadchadzajuce = props => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [recent, setRecent] = useState(false);
+  const [upper, setUper] = useState(true);
   const [data, setData] = useState([]);
   const [dataPicker, setDataPicker] = useState([]);
   const [pending, setPending] = useState(false);
@@ -79,6 +80,10 @@ const JazdyNadchadzajuce = props => {
   const showDatepicker = () => {
     showMode('date');
   };
+  const iconButtonHandler = (statePicker, stateUpper) => {
+    setShowPickerRides(statePicker);
+    setUper(stateUpper);
+  }
   const handleRecent = async () => {
     setIsLoadingRecent(true);
     const response = await api.get(
@@ -96,35 +101,55 @@ const JazdyNadchadzajuce = props => {
 
   return (
     <ScrollView contentContainerStyle={styles.screen}>
-      <View style={{ alignItems: 'center' }}>
-        <Text style={{ fontSize: 23 }}>Vitaje Adam Martiska</Text>
-        <View style={{ marginVertical: 15, alignItems: 'center' }}>
-          <Text style={{ textAlign: 'center' }}>
-            Pozrite si zoznam jazd na dnes
-          </Text>
-        </View>
-        <CustomButton
-          name={recent ? 'skryt jazdy' : 'zobrazit jazdy'}
-          iconName="md-time"
-          onPress={handleRecent}
-        />
-        {isLoadingRecent && (
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
-        )}
-      </View>
-      {recent && (
-        <SafeAreaView>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <NadchadzajuceInstruktor
-                datum={moment(item.date).format('DD.MM.YYYY')}
-                cas={item.time}
-                style={{ marginHorizontal: 2 }}
-              />
+      {upper && (
+        <View>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 23 }}>Vitaje Adam Martiska</Text>
+            <View style={{ marginVertical: 15, alignItems: 'center' }}>
+              <Text style={{ textAlign: 'center' }}>
+                Pozrite si zoznam jazd na dnes
+              </Text>
+            </View>
+            <CustomButton
+              name={recent ? 'skryt jazdy' : 'zobrazit jazdy'}
+              iconName="md-time"
+              onPress={handleRecent}
+            />
+            {isLoadingRecent && (
+              <ActivityIndicator size="large" color={Colors.primaryColor} />
             )}
-          />
-        </SafeAreaView>
+          </View>
+          {recent &&
+            (data.length > 0 ? (
+              <SafeAreaView>
+                <FlatList
+                  data={data}
+                  renderItem={({ item }) => (
+                    <NadchadzajuceInstruktor
+                      datum={moment(item.date).format('DD.MM.YYYY')}
+                      cas={item.time}
+                      style={{ marginHorizontal: 2 }}
+                    />
+                  )}
+                />
+              </SafeAreaView>
+            ) : (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginVertical: 120
+                }}
+              >
+                <Text style={{ fontSize: 20, color: Colors.inActive }}>
+                  Na dnes nemate ziadne
+                </Text>
+                <Text style={{ fontSize: 20, color: Colors.inActive }}>
+                  rezervovane jazdy
+                </Text>
+              </View>
+            ))}
+        </View>
       )}
       <View
         style={{
@@ -163,21 +188,40 @@ const JazdyNadchadzajuce = props => {
             <View style={{ alignItems: 'center' }}>
               <IconButton
                 iconName={showPickerRides ? 'md-arrow-up' : 'md-arrow-down'}
-                onPress={() => setShowPickerRides(!showPickerRides)}
+                onPress={() => iconButtonHandler(!showPickerRides, !upper)}
               />
             </View>
-            {showPickerRides && (
-              <FlatList
-                data={dataPicker}
-                renderItem={({ item }) => (
-                  <NadchadzajuceInstruktor
-                    datum={moment(item.date).format('DD.MM.YYYY')}
-                    cas={item.time}
-                    style={{ marginHorizontal: 2 }}
-                  />
-                )}
-              />
-            )}
+            {showPickerRides &&
+              (dataPicker.length > 0 ? (
+                <FlatList
+                  data={dataPicker}
+                  renderItem={({ item }) => (
+                    <NadchadzajuceInstruktor
+                      datum={moment(item.date).format('DD.MM.YYYY')}
+                      cas={item.time}
+                      style={{ marginHorizontal: 2 }}
+                    />
+                  )}
+                />
+              ) : (
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginVertical: 20
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: Colors.inActive,
+                      textAlign: 'center'
+                    }}
+                  >
+                    K danemu datumu nemate ziadne rezervovane jazdy.
+                  </Text>
+                </View>
+              ))}
           </SafeAreaView>
         ))}
     </ScrollView>

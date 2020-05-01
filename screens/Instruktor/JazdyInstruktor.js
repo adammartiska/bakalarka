@@ -20,7 +20,7 @@ import { useFetchGet } from '../../hooks/useFetchGet';
 import { useFetchPost } from '../../hooks/useFetchPost';
 import { create } from 'apisauce';
 import { isEmpty } from 'ramda';
-
+import AwesomeAlert from 'react-native-awesome-alerts';
 const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
   useEffect(() => {
@@ -37,6 +37,7 @@ const JazdyInstruktor = props => {
   const [initialTimes, setInitialTimes] = useState([]);
   const [bigData, setBigData] = useState([]);
   const [unavailableDates, setUnavailableDates] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
 
   const api = create({
     baseURL: 'http://147.175.121.250:80',
@@ -147,6 +148,9 @@ const JazdyInstruktor = props => {
       console.log('BIG DATA POD TYMTO');
       console.log(bigData);
       const poslane = await api.post('/instructor/addRides', bigData);
+      if (poslane.ok) {
+        setShowAlert(true);
+      }
       console.log(poslane);
     }
   };
@@ -209,6 +213,9 @@ const JazdyInstruktor = props => {
     setInitialTimes(resCasy.data.body);
     setCasy(resCasy.data.body);
   };
+  const hideAlert = () => {
+    setShowAlert(false);
+  };
 
   const calculateDisabledDates = () => {
     const disabledDates = [];
@@ -264,6 +271,21 @@ const JazdyInstruktor = props => {
           maper(casy)
         )}
       </View>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Uspesne ponuknutie"
+        message="Ponuknutie jazd prebehlo uspesne"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        contentContainerStyle={{ width: '75%', height: '25%' }}
+        showConfirmButton={true}
+        confirmText="Skusit znova"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={hideAlert}
+        onConfirmPressed={hideAlert}
+      />
     </ScrollView>
   );
 };

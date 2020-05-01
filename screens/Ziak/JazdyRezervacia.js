@@ -93,6 +93,7 @@ const JazdyRezervacia = props => {
                     elevation: 15
                   }
                 }
+                key={item.time}
                 name={item.time}
                 onPress={() => jazdaHandler(item)}
               />
@@ -181,6 +182,7 @@ const JazdyRezervacia = props => {
                 }}
               >
                 <ReservationTab
+                  key={item.instructoName}
                   instructorName={item.instructorName}
                   data={item.rides}
                   onChildClick={jazdaHandler}

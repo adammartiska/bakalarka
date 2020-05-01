@@ -26,6 +26,7 @@ import JazdyNadchadzuje from '../screens/Ziak/JazdyNadchadzajuce';
 import TestVseobecne from '../screens/Testy/TestVseobecne';
 import JazdyRozhranieInstruktor from '../screens/Instruktor/JazdyRozhranieInstruktor';
 import ConfirmScreen from '../screens/Instruktor/ConfirmScreen';
+import Rozhranie from '../screens/Instruktor/Rozhranie';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -58,10 +59,10 @@ const JazdyStack = createStackNavigator(
   { defaultNavigationOptions: defaultStackNavOptions }
 );
 
-const ConfirmStack = createStackNavigator(
+const RozhranieStack = createStackNavigator(
   {
-    Confirm: {
-      screen: ConfirmScreen,
+    Rozhranie: {
+      screen: Rozhranie,
       navigationOptions: {
         headerTitle: 'Ziadosti'
       }
@@ -115,7 +116,7 @@ const NavigaciaOwner = createMaterialBottomTabNavigator(
     },
 
     Ziadosti: {
-      screen: ConfirmStack,
+      screen: RozhranieStack,
       navigationOptions: {
         tabBarIcon: tabInfo => {
           return (

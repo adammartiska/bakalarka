@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as RootNavigation from '../../RootNavigation.js';
-
+import errorHandler from '../../screens/errorHandler.js';
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const AUTHENTICATE = 'AUTHENTICATE';
@@ -36,14 +36,8 @@ export const signup = (fullname, email, phonenumber, password) => {
 
     if (!response.ok) {
       const errorResData = await response.json();
-      errorId = errorResData.error.message;
-      console.log(errorResData);
-      console.log(errorId);
-      let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_EXISTS') {
-        message = 'Entered email already exists!';
-      }
-      throw new Error(message);
+      const errorMessage = errorHandler(errorResData.message);
+      throw new Error(errorMessage);
     }
 
     const resData = await response.json();
@@ -178,14 +172,9 @@ export const loginmyapp = (email, password) => {
     if (!response.ok) {
       const errorResData = await response.json();
       console.log(errorResData);
-      const errorId = errorResData.error.message;
-      let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_NOT_FOUND') {
-        message = 'Entered email not found!';
-      } else if (errorId === 'INVALID_PASSWORD') {
-        message = 'Entered password is not valid!';
-      }
-      throw new Error(message);
+      const errorMessage = errorHandler(errorResData.message)
+      console.log(errorMessage);
+      throw new Error(errorMessage);
     }
     const resData = await response.json();
     console.log(resData);

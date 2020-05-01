@@ -60,6 +60,7 @@ const Registracia = props => {
   const keyboardVerticalOffset = 10;
   const [showAlert, setShowAlert] = useState(false);
   const [rola, setSelectedRola] = useState('Student');
+  const [errors, setErrors] = useState([]);
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -85,7 +86,7 @@ const Registracia = props => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert('Nastala chyba!', error, [{ text: 'Okay' }]);
+      setShowAlert(true);
     }
   }, [error]);
 
@@ -112,6 +113,10 @@ const Registracia = props => {
       setIsLoading(false);
       if (response.ok) {
         setShowAlert(true);
+      } else {
+        setErrors(response.data.subErrors);
+        setError(errors[0].message);        
+        console.log(errors[0].message);
       }
       setShowAlert(true);
       console.log(response);
@@ -215,7 +220,7 @@ const Registracia = props => {
         <AwesomeAlert
           show={showAlert}
           title="Uspesna registracia"
-          message="Registracia prebehla uspesne. Teraz sa mozete prihlasit"
+          message={error}
           cancelText="Zrusit"
           confirmText="Prihlasit ma"
           showProgress={false}

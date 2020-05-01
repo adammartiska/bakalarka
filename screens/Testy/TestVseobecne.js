@@ -43,15 +43,14 @@ export default class Prvy extends Component {
     };
   }
   next() {
-    console.log(this.Qno);
-    console.log(this.state.vyhodnot);
+    console.log(arrnew.questions.length);
     if (
       `answer_${arrnew.questions[this.Qno].correctAnswer}` ===
       `answer_${this.state.value + 1}`
     ) {
       this.score = this.score + 1;
     }
-    if (this.Qno === arrnew.length - 1) {
+    if (this.Qno === arrnew.questions.length - 1) {
       this.setState({
         vyhodnot: true
       });
@@ -93,7 +92,7 @@ export default class Prvy extends Component {
           </View>
           <View style={{ marginVertical: 5 }}>
             <Text>
-              Dosiahol si {this.score} z {arrnew.length} moznych bodov
+              Dosiahol si {this.score} z {arrnew.questions.length} moznych bodov
             </Text>
           </View>
         </View>
@@ -135,10 +134,11 @@ export default class Prvy extends Component {
   }
 
   nextButtonHandler() {
-    if (this.Qno === arrnew.length - 1) {
-      return <Text style={styles.textInButton}>VYHODNOT</Text>;
-    }
-    return <Text style={styles.textInButton}>NEXT</Text>;
+    //TODO MOZNO ZOBRAZIT INU IKONU NA VYHODNOTENIE
+    // if (this.Qno === arrnew.questions.length - 1) {
+    //   return <Text style={styles.textInButton}>Vyhodnot</Text>;
+    // }
+    return <Icon name="ios-arrow-dropright" size={30} />;
   }
 
   render() {
@@ -188,6 +188,13 @@ export default class Prvy extends Component {
                 <RadioButtonLabel
                   obj={obj}
                   index={i}
+                  onPress={() => {
+                    this.setState({
+                      neuhadnute: false,
+                      uhadnute: false,
+                      value: i
+                    });
+                  }}
                   labelHorizontal={true}
                   labelStyle={{ fontSize: 15 }}
                   labelWrapStyle={{}}
@@ -197,14 +204,24 @@ export default class Prvy extends Component {
           </RadioForm>
         </View>
         {this.zobrazVysledok()}
-        <View style={{ flexDirection: 'row' }}>
-          <View
-            style={
-              this.Qno === arrnew.length - 1
-                ? [styles.customButon, { width: '50%' }]
-                : styles.customButon
-            }
-          >
+        <View
+          style={{
+            flexDirection: 'row',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 10,
+            top: 0,
+            justifyContent: 'center',
+            alignItems: 'flex-end'
+          }}
+        >
+          <View style={styles.customButon}>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.check()}>
+              <Icon name="md-search" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.customButon}>
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={
@@ -212,11 +229,6 @@ export default class Prvy extends Component {
               }
             >
               {this.nextButtonHandler()}
-            </TouchableOpacity>
-          </View>
-          <View style={styles.customButon}>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.check()}>
-              <Text style={styles.textInButton}>Check</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -241,13 +253,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20
   },
   radio: {
-    marginBottom: 40
+    marginBottom: 20
   },
   customButon: {
     margin: 5,
     height: 35,
     width: '28%',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#DDDDDD',
     borderRadius: 5,
     shadowColor: 'black',

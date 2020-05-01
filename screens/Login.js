@@ -20,6 +20,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as authActions from '../store/actions/auth';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 import { create } from 'apisauce';
+import { errorHandler } from './errorHandler';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -65,6 +67,7 @@ const Login = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [error, setError] = useState();
+  const [showAlert, setShowAlert] = useState(false);
   const info = useSelector(state => state.auth.info);
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -81,7 +84,8 @@ const Login = props => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert('Nastala chyba!', error, [{ text: 'Okay' }]);
+      setShowAlert(true);
+      console.log(error);
     }
   }, [error]);
 
@@ -119,8 +123,8 @@ const Login = props => {
         //   props.navigation.navigate('Vyber');
       }
     } catch (err) {
-      console.log(err);
       setError(err.message);
+      console.log(err.message);
       setIsLoading(false);
     }
   };
@@ -136,6 +140,9 @@ const Login = props => {
     },
     [dispatchFormState]
   );
+  const hideAlert = () => {
+    setShowAlert(false);
+  };
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
@@ -222,6 +229,21 @@ const Login = props => {
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Nastala chyba"
+        message={`${error}`}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        contentContainerStyle={{ width: '75%', height: '25%' }}
+        showConfirmButton={true}
+        confirmText="Skusit znova"
+        confirmButtonColor="#DD6B55"
+        onCancelPressed={hideAlert}
+        onConfirmPressed={hideAlert}
+      />
     </KeyboardAvoidingView>
   );
 };
