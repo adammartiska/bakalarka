@@ -86,6 +86,7 @@ const JazdyAbsolvovane = props => {
               date={moment(item.date).format('DD.MM.YYYY')}
               time={item.time}
               rideState={item.status}
+              instructorName={item.instructor}
             />
           )}
         />

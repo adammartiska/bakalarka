@@ -61,12 +61,9 @@ const Profil = props => {
   }, [dispatch]);
 
   useEffect(() => {
-    props.navigation.setParams({ odhlas: () => setShowAlert(true) });
+    props.navigation.setParams({ odhlas: () => logoutHandler() });
   }, [logoutHandler]);
 
-  const hideAlert = () => {
-    setShowAlert(false);
-  };
 
   return (
     <View style={styles.screen}>
@@ -123,21 +120,6 @@ const Profil = props => {
           onPress={() => props.navigation.navigate('ProfilSettings')}
         />
       </View>
-      <AwesomeAlert
-        show={showAlert}
-        showProgress={false}
-        title="Prajete si zavazne odhlasit?"
-        message="Pred tym nez sa odhlasite, skontrolujte prosim ci mate potvrdene vsetky jazdy pre dnesny den"
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showCancelButton={true}
-        showConfirmButton={true}
-        cancelText="Nie, skontrolovat jazdy"
-        confirmText="Odhlasit ma!"
-        confirmButtonColor="#DD6B55"
-        onCancelPressed={hideAlert}
-        onConfirmPressed={logoutHandler}
-      />
     </View>
   );
 };

@@ -27,7 +27,7 @@ const AbsolvovaneZiak = props => {
       <View style={styles.screen}>
         <View style={[styles.riadokJazdy, calculateColor(props.rideState)]}>
           <View>
-            <InstruktorBar />
+            <InstruktorBar name={props.instructorName} />
           </View>
           <View style={styles.item}>
             <Text style={styles.title}>{props.date}</Text>

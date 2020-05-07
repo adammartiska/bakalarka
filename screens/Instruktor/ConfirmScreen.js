@@ -51,17 +51,19 @@ const ConfirmScreen = props => {
   useEffect(() => {
     const fetchRequests = async () => {
       const response = await api.get('/school/getRequests');
-      response.data.map(item => {
-        if (item.role === 'student') {
-          const novePole = [];
-          novePole.push(item);
-          setStudents(novePole);
-        } else if (item.role === 'instructor') {
-          const novePole = [];
-          novePole.push(item);
-          setInstructors(novePole);
-        }
-      });
+      if (response.ok) {
+        response.data.map(item => {
+          if (item.role === 'student') {
+            const novePole = [];
+            novePole.push(item);
+            setStudents(novePole);
+          } else if (item.role === 'instructor') {
+            const novePole = [];
+            novePole.push(item);
+            setInstructors(novePole);
+          }
+        });
+      }
       console.log(response.data);
     };
     fetchRequests();

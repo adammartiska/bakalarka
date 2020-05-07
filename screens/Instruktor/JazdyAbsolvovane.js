@@ -8,7 +8,8 @@ import {
   Button,
   Image,
   ScrollView,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from '../../components/DetailJazdy';
@@ -22,6 +23,7 @@ import TimeButton from '../../components/TimeButton';
 import AbsolvovaneInstruktor from '../../components/AbsolvovaneInstruktor';
 import AbsolvovanePending from '../../components/AbsolvovanePending';
 import { create } from 'apisauce';
+import IconButton from '../../components/IconButton';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 
@@ -76,22 +78,32 @@ const JazdyAbsolvovane = props => {
   ];
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
+  const [recentRides, setRecentRides] = useState([]);
   const [show, setShow] = useState(false);
   const [recent, setRecent] = useState(false);
   const [pending, setPending] = useState(false);
-  const [dateRides, setDateRides] = useState(false);
+  const [dateRides, setDateRides] = useState([]);
+  const [showDateRides, setShowDateRides] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPickerArrow, setShowPickerArrow] = useState(false);
+  const [isLoadingPicker, setIsLoadingPicker] = useState(false);
+  const [showPickerRides, setShowPickerRides] = useState(false);
 
   const onChange = async (event, selectedDate) => {
     setShow(Platform.OS === 'ios' ? true : false);
     const currentDate = selectedDate || date;
+    setIsLoadingPicker(true);
     const response = await api.get(
       `/instructor/getCompletedRides/date?=${moment(selectedDate).format(
         'YYYY-MM-DD'
       )}`
     );
-    console.log(response);
+    if (response.ok) {
+      setDateRides(response.data);
+    }
+    setIsLoadingPicker(false);
     setDate(currentDate);
+    setShowPickerArrow(true);
   };
 
   const showMode = currentMode => {
@@ -104,83 +116,168 @@ const JazdyAbsolvovane = props => {
   };
 
   const handleRecent = async () => {
-    if (!recent) {
-      const recentJazdy = await api.get('/instructor/getLastRides?count=6');
-      console.log(recentJazdy);
-    }
     setRecent(!recent);
+    if (recent === false) {
+      setIsLoading(true);
+      const response = await api.get('/instructor/getLastRides?count=6');
+      if (response.ok) {
+        setRecentRides(response.data);
+      }
+      setIsLoading(false);
+      console.log(response);
+    }
   };
   const handlePending = () => {
     setPending(!pending);
     console.log('som tu');
   };
+  const iconButtonHandler = (statePicker, stateUpper) => {
+    setShowPickerRides(statePicker);
+    setShowDateRides(!stateUpper);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.screen}>
-      {!recent && (
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ textAlign: 'center' }}>
-            Ak by ste si chceli prezriet jazdy z predoslych datumov, staci si
-            zvolit datum
-          </Text>
-
-          <CustomButton
-            name="zvolit datum"
-            iconName="md-calendar"
-            onPress={showDatepicker}
-          />
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              timeZoneOffsetInMinutes={0}
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
-          )}
-          <View style={{ marginVertical: 15, alignItems: 'center' }}>
-            <Text style={{ textAlign: 'center' }}>
-              ... alebo si mozte len zobrazit nedavne jazdy
+      {showDateRides && (
+        <View>
+          <View style={{ marginVertical: 8, alignItems: 'center' }}>
+            <Text style={{ textAlign: 'center', fontSize: 16 }}>
+              Tu si mozte pozriet vase posledne absolvovane jazdy
             </Text>
           </View>
+          <View style={{ alignItems: 'center' }}>
+            <CustomButton
+              name={recent ? 'skry jazdy' : 'zobraz jazdy'}
+              iconName="md-time"
+              onPress={handleRecent}
+            />
+          </View>
+          {recent &&
+            (isLoading ? (
+              <View>
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              </View>
+            ) : (
+              <View style={{ marginBottom: 20 }}>
+                {recentRides.length > 0 ? (
+                  recentRides.map(item => (
+                    <AbsolvovaneInstruktor
+                      state="absolvovana"
+                      key={item.time}
+                      key={item.title}
+                      datum={item.title}
+                      cas={item.time}
+                      style={{ marginHorizontal: 2 }}
+                    />
+                  ))
+                ) : (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginVertical: 130
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        textAlign: 'center',
+                        color: Colors.inActive
+                      }}
+                    >
+                      Nemate ziadne absolvovane jazdy
+                    </Text>
+                  </View>
+                )}
+              </View>
+            ))}
         </View>
       )}
-      <View style={{ alignItems: 'center' }}>
-        <CustomButton
-          name={recent ? 'skry jazdy' : 'zobraz jazdy'}
-          iconName="md-time"
-          onPress={handleRecent}
-        />
-      </View>
+      <View
+        style={{
+          borderWidth: 1,
+          borderColor: Colors.sedatmava,
+          marginVertical: 20
+        }}
+      ></View>
 
-      {recent &&
-        (isLoading ? (
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
-        ) : (
-          <SafeAreaView>
-            <FlatList
-              data={DATA}
-              renderItem={({ item }) => (
-                <AbsolvovaneInstruktor
-                  state="absolvovana"
-                  key={item.title}
-                  datum={item.title}
-                  cas={item.time}
-                  style={{ marginHorizontal: 2 }}
+      <View style={{ alignItems: 'center' }}>
+        <Text style={{ textAlign: 'center', fontSize: 16 }}>
+          Ak by ste si chceli prezriet jazdy z predoslych datumov, staci si
+          zvolit datum
+        </Text>
+
+        <CustomButton
+          name="zvolit datum"
+          iconName="md-calendar"
+          onPress={showDatepicker}
+        />
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            timeZoneOffsetInMinutes={0}
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+        {showPickerArrow &&
+          (isLoadingPicker ? (
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
+          ) : (
+            <SafeAreaView>
+              <View style={{ alignItems: 'center' }}>
+                <IconButton
+                  iconName={showPickerRides ? 'md-arrow-up' : 'md-arrow-down'}
+                  onPress={() =>
+                    iconButtonHandler(!showPickerRides, showDateRides)
+                  }
                 />
-              )}
-            />
-          </SafeAreaView>
-        ))}
+              </View>
+              {showPickerRides &&
+                (dateRides.length > 0 ? (
+                  <FlatList
+                    data={dateRides}
+                    renderItem={({ item }) => (
+                      <AbsolvovaneInstruktor
+                        state="absolvovana"
+                        key={item.time}
+                        datum={item.title}
+                        cas={item.time}
+                      />
+                    )}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginVertical: 20
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: Colors.inActive,
+                        textAlign: 'center'
+                      }}
+                    >
+                      K danemu datumu nemate ziadne rezervovane jazdy.
+                    </Text>
+                  </View>
+                ))}
+            </SafeAreaView>
+          ))}
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    flexGrow: 1,
     marginTop: 13,
     marginHorizontal: 20
   },

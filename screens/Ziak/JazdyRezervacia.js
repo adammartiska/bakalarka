@@ -56,6 +56,8 @@ const JazdyRezervacia = props => {
   const [showAlert, setShowAlert] = useState(false);
   const [objednal, setObjednal] = useState(false);
   const [selected, setSelected] = useState('');
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogMessage, setDialogMessage] = useState('');
   const [casy, setCasy] = useState([]);
   const [unavailableDates, setUnavailableDates] = useState([]);
 
@@ -132,7 +134,14 @@ const JazdyRezervacia = props => {
     const response = await api.post(`/student/reserveRide/${idToSend}`);
     console.log(response);
     if (response.ok) {
+      setDialogTitle('Uspesne rezervacia')
+      setDialogMessage(response.data.message)
       setShowAlert(true);
+    }
+    else {
+      setDialogTitle('Pri rezervacii nastala chyba')
+      setDialogMessage(response.data.message)
+      setShowAlert(true)
     }
   };
   const hideAlert = () => {
@@ -211,8 +220,8 @@ const JazdyRezervacia = props => {
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
-        title="Uspesna rezervacia"
-        message={`Vasa rezervacia jazdy na termin ${title.datum} o ${title.cas} bola uspesne vykonana`}
+        title={dialogTitle}
+        message={dialogMessage}
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={false}
