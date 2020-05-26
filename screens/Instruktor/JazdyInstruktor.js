@@ -20,6 +20,7 @@ import { useFetchGet } from '../../hooks/useFetchGet';
 import { useFetchPost } from '../../hooks/useFetchPost';
 import { create } from 'apisauce';
 import { isEmpty } from 'ramda';
+import PonukniButton from '../../components/PonukniButton';
 import AwesomeAlert from 'react-native-awesome-alerts';
 const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
@@ -31,7 +32,7 @@ const JazdyInstruktor = props => {
   const [casy, setCasy] = useState([]);
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [displayText, setDisplayText] = useState(true);
   const [dateToSent, setDateToSent] = useState('');
   const [initialTimes, setInitialTimes] = useState([]);
@@ -196,12 +197,9 @@ const JazdyInstruktor = props => {
               <ActivityIndicator size="small" color="white" />
             </View>
           ) : (
-            <TouchableOpacity
-              activeOpacity={0.5}
-              onPress={() => zhromazdiData(casy)}
-            >
-              <Text style={{ fontSize: 20 }}>Posli</Text>
-            </TouchableOpacity>
+            <View style={{ marginTop: 15 }}>
+              <PonukniButton onPress={() => zhromazdiData(data)} />
+            </View>
           )}
         </View>
       </View>
@@ -212,9 +210,7 @@ const JazdyInstruktor = props => {
     const resCasy = await api.get(`/instructor/showTimes/${date}`);
     setInitialTimes(resCasy.data.body);
     setCasy(resCasy.data.body);
-  };
-  const hideAlert = () => {
-    setShowAlert(false);
+    setIsLoading(false);
   };
 
   const calculateDisabledDates = () => {
@@ -235,6 +231,7 @@ const JazdyInstruktor = props => {
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = async date => {
+    setIsLoading(false);
     console.log(date);
     setDateToSent(moment(date).format('YYYY-MM-DD'));
 
@@ -255,37 +252,26 @@ const JazdyInstruktor = props => {
       <CalendarPicker
         onDateChange={dateChangeHandler}
         disabledDates={unavailableDates}
+        selectedDayColor={Colors.lightGreen}
       />
       <View>
-        {isLoading ? (
-          displayText ? (
-            <View style={styles.centered}>
-              <Text>Pre zobrazenie volnych terminov si vyberte datum</Text>
-            </View>
-          ) : (
+        {displayText ? (
+          isLoading ? (
             <View style={{ paddingTop: 10, textAlign: 'center' }}>
               <ActivityIndicator size="large" color={Colors.primaryColor} />
+            </View>
+          ) : (
+            <View style={styles.centered}>
+              <Text style={{ textAlign: 'center' }}>
+                Ak chcete ponuknut studentom jazdy kliknite na datum a vyberte,
+                v akych casoch chcete jazdy ponukat
+              </Text>
             </View>
           )
         ) : (
           maper(casy)
         )}
       </View>
-      <AwesomeAlert
-        show={showAlert}
-        showProgress={false}
-        title="Uspesne ponuknutie"
-        message="Ponuknutie jazd prebehlo uspesne"
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showCancelButton={false}
-        contentContainerStyle={{ width: '75%', height: '25%' }}
-        showConfirmButton={true}
-        confirmText="Skusit znova"
-        confirmButtonColor="#DD6B55"
-        onCancelPressed={hideAlert}
-        onConfirmPressed={hideAlert}
-      />
     </ScrollView>
   );
 };
@@ -297,22 +283,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginTop: 20
   },
-  confirmButton: {
-    margin: 5,
-    height: 30,
-    width: '22%',
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3
-  },
   centered: {
+    marginTop: 30,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginHorizontal: 30
   },
   center: {
     flexDirection: 'column',

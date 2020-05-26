@@ -113,14 +113,15 @@ const Login = props => {
           } else if (relations[0].role === 'OWNER') {
             props.navigation.navigate('SignedInOwner');
           }
-        } else if (relations[0].information === 'completed') {
-          props.navigation.navigate('CompletedZiak');
         }
         // ZLA LOGIKA PREROBIT
-        // } else if (schoolCount === 1) {
-        //   props.navigation.navigate('VyberScreen');
-        // } else {
-        //   props.navigation.navigate('Vyber');
+        else if (schoolCount >= 1) {
+          props.navigation.navigate('VyberScreen');
+        } else if (relations.map(item => item.information !== 'active')) {
+          props.navigation.navigate('VyberScreen');
+        }
+      } else {
+        props.navigation.navigate('Vyber');
       }
     } catch (err) {
       setError(err.message);
@@ -145,7 +146,7 @@ const Login = props => {
   };
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
@@ -219,9 +220,7 @@ const Login = props => {
                 height: 30,
                 borderRadius: 10,
                 backgroundColor: Colors.sedatmava,
-                elevation: 5,
-                marginHorizontal: 10,
-                elevation: 6
+                marginHorizontal: 10
               }}
             >
               <Text style={styles.inputLoginTextBlack}>Zabudnute heslo</Text>
@@ -240,8 +239,7 @@ const Login = props => {
         contentContainerStyle={{ width: '75%', height: '25%' }}
         showConfirmButton={true}
         confirmText="Skusit znova"
-        confirmButtonColor="#DD6B55"
-        onCancelPressed={hideAlert}
+        confirmButtonColor={'#7a7a7a'}
         onConfirmPressed={hideAlert}
       />
     </KeyboardAvoidingView>
@@ -256,7 +254,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30
   },
   logo: {
-    marginVertical: 30,
+    marginBottom: 30,
     width: 200,
     height: 100
   },

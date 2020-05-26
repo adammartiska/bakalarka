@@ -18,6 +18,18 @@ const AbsolvovaneZiak = props => {
         return { backgroundColor: '#ffe6e6' };
     }
   };
+
+  const prelozStav = stav => {
+    switch (stav) {
+      case 'FINISHED':
+        return 'Uspesne ukoncena';
+      case 'PENDING':
+        return 'Caka sa na potvrdenie';
+      case 'CANCELLED':
+        return 'Zrusena';
+    }
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -36,7 +48,10 @@ const AbsolvovaneZiak = props => {
 
         {showDetails && (
           <View style={styles.vysunute}>
-            <DetailJazdy time={props.time} rideState={props.rideState} />
+            <DetailJazdy
+              time={props.time}
+              rideState={prelozStav(props.rideState)}
+            />
           </View>
         )}
       </View>

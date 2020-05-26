@@ -65,14 +65,16 @@ const ConfirmScreen = props => {
         });
       }
       console.log(response.data);
+      console.log(students)
     };
     fetchRequests();
-  }, [students, instructors]);
+  }, []);
 
   const confirmHandler = async id => {
     const response = await api.post(
       `/school/confirmUser/${id}?confirm=${true}`
     );
+    console.log(response);
     if (response.ok) {
       () => fetchRequests();
     }

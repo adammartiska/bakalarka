@@ -106,7 +106,7 @@ const JazdyNadchadzajuce = props => {
           <View style={{ alignItems: 'center' }}>
             <Text style={{ fontSize: 23 }}>Vitaje Adam Martiska</Text>
             <View style={{ marginVertical: 15, alignItems: 'center' }}>
-              <Text style={{ textAlign: 'center' }}>
+              <Text style={{ textAlign: 'center', fontSize: 16 }}>
                 Pozrite si zoznam jazd na dnes
               </Text>
             </View>
@@ -159,7 +159,7 @@ const JazdyNadchadzajuce = props => {
         }}
       ></View>
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ textAlign: 'center' }}>
+        <Text style={{ textAlign: 'center', fontSize: 16 }}>
           Ak by ste si chceli prezriet jazdy, ktore vas cakaju do buducna staci
           si zvolit datum
         </Text>

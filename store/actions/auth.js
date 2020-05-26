@@ -9,6 +9,7 @@ export const LOGOUT = 'LOGOUT';
 export const FORGOTPASS = 'FORGOTPASS';
 export const LOGINMYAPP = 'LOGINMYAPP';
 export const REDUXDATA = 'REDUXDATA';
+export const UPDATERELATIONID = 'UPDATERELATIONID';
 
 export const authenticate = (userId, token) => {
   return { type: AUTHENTICATE, userId: userId, token: token };
@@ -172,7 +173,7 @@ export const loginmyapp = (email, password) => {
     if (!response.ok) {
       const errorResData = await response.json();
       console.log(errorResData);
-      const errorMessage = errorHandler(errorResData.message)
+      const errorMessage = errorHandler(errorResData.message);
       console.log(errorMessage);
       throw new Error(errorMessage);
     }
@@ -220,6 +221,13 @@ export const reduxdata = (jwt, relationId) => {
       userInfo: resData,
       relationId: relationId
     });
+  };
+};
+
+export const headerData = relationId => {
+  return {
+    type: UPDATERELATIONID,
+    relationId: relationId
   };
 };
 

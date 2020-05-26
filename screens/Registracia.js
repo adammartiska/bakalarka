@@ -24,6 +24,7 @@ const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 import { create } from 'apisauce';
 import CustomAlert from '../components/CustomAlert';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -61,6 +62,7 @@ const Registracia = props => {
   const [showAlert, setShowAlert] = useState(false);
   const [rola, setSelectedRola] = useState('Student');
   const [errors, setErrors] = useState([]);
+  const [alertTitle, setAlertTitle] = useState('');
   const [error, setError] = useState();
   const dispatch = useDispatch();
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -90,6 +92,24 @@ const Registracia = props => {
     }
   }, [error]);
 
+  const allAreFormsFilled = (
+    fullName,
+    email,
+    phoneNumber,
+    password,
+    matchingPassword
+  ) => {
+    if (
+      fullName === '' ||
+      email === '' ||
+      phoneNumber === '' ||
+      password.length === '' ||
+      matchingPassword.length === ''
+    ) {
+      return true;
+    }
+    return false;
+  };
   const authHandler = async () => {
     const {
       fullName,
@@ -111,12 +131,25 @@ const Registracia = props => {
         roles: rola
       });
       setIsLoading(false);
+      console.log(response);
       if (response.ok) {
+        setAlertTitle('Uspesna registracia');
         setShowAlert(true);
       } else {
-        setErrors(response.data.subErrors);
-        setError(errors[0].message);        
-        console.log(errors[0].message);
+        setAlertTitle('Nastala chyba');
+        if (
+          allAreFormsFilled(
+            formState.inputValues.fullName,
+            formState.inputValues.email,
+            formState.inputValues.phoneNumber,
+            formState.inputValues.password,
+            formState.inputValues.matchingPassword
+          )
+        ) {
+          setError('Vyplne prosim vsetky polia formularov');
+        } else if (response.status === 400) {
+          setError(response.data.subErrors[0].message);
+        }
       }
       setShowAlert(true);
       console.log(response);
@@ -139,106 +172,94 @@ const Registracia = props => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      keyboardVerticalOffset={keyboardVerticalOffset}
-      behavior="padding"
-      enabled
-    >
-      <SafeAreaView style={{ flex: 1 }}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}
-        >
-          <View style={styles.container}>
-            <Image style={styles.logo} source={require('../Images/form.png')} />
-            <Input
-              id="fullName"
-              placeholder="meno a priezvisko"
-              required
-              fullName
-              onInputChange={inputChangeHandler}
-            />
-            <Input
-              id="email"
-              placeholder="e-mail"
-              keyboardType={'email-address'}
-              required
-              email
-              onInputChange={inputChangeHandler}
-            />
-            <Input
-              id="phoneNumber"
-              placeholder="telefonne cislo"
-              keyboardType={'numeric'}
-              required
-              phoneNumber
-              onInputChange={inputChangeHandler}
-            />
-            <Input
-              id="password"
-              placeholder="heslo"
-              onInputChange={inputChangeHandler}
-              required
-              secureTextEntry={true}
-            />
-            <Input
-              id="matchingPassword"
-              placeholder="heslo znovu"
-              onInputChange={inputChangeHandler}
-              required
-              secureTextEntry={true}
-            />
-            <View style={styles.pickerOut}>
-              <Picker
-                selectedValue={rola}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedRola(itemValue)
-                }
-                itemStyle={{ textAlign: 'center' }}
-              >
-                <Picker.Item label="Student" value="student" />
-                <Picker.Item label="Instruktor" value="instruktor" />
-                <Picker.Item label="Majitel" value="majitel" />
-              </Picker>
+    <KeyboardAwareScrollView extraScrollHeight={50} extraHeight={30}>
+      <View style={styles.container}>
+        <Image style={styles.logo} source={require('../Images/form.png')} />
+        <Input
+          id="fullName"
+          placeholder="meno a priezvisko"
+          required
+          fullName
+          onInputChange={inputChangeHandler}
+        />
+        <Input
+          id="email"
+          placeholder="e-mail"
+          keyboardType={'email-address'}
+          required
+          email
+          onInputChange={inputChangeHandler}
+        />
+        <Input
+          id="phoneNumber"
+          placeholder="telefonne cislo"
+          keyboardType={'numeric'}
+          required
+          phoneNumber
+          onInputChange={inputChangeHandler}
+        />
+        <Input
+          id="password"
+          placeholder="heslo"
+          onInputChange={inputChangeHandler}
+          required
+          secureTextEntry={true}
+        />
+        <Input
+          id="matchingPassword"
+          placeholder="heslo znovu"
+          onInputChange={inputChangeHandler}
+          required
+          secureTextEntry={true}
+        />
+        <View style={styles.pickerOut}>
+          <Picker
+            selectedValue={rola}
+            style={styles.picker}
+            onValueChange={(itemValue, itemIndex) => setSelectedRola(itemValue)}
+            itemStyle={{ textAlign: 'center' }}
+          >
+            <Picker.Item label="Student" value="student" />
+            <Picker.Item label="Instruktor" value="instructor" />
+            <Picker.Item label="Majitel" value="owner" />
+          </Picker>
+        </View>
+        <View style={styles.loginButton}>
+          {isLoading ? (
+            <View style={{ paddingTop: 10, textAlign: 'center' }}>
+              <ActivityIndicator size="small" color="white" />
             </View>
-            <View style={styles.loginButton}>
-              {isLoading ? (
-                <View style={{ paddingTop: 10, textAlign: 'center' }}>
-                  <ActivityIndicator size="small" color="white" />
-                </View>
-              ) : (
-                <TouchableOpacity activeOpacity={0.3} onPress={authHandler}>
-                  <Text style={styles.inputLoginText}>Odosli</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
+          ) : (
+            <TouchableOpacity activeOpacity={0.3} onPress={authHandler}>
+              <Text style={styles.inputLoginText}>Odosli</Text>
+            </TouchableOpacity>
+          )}
+        </View>
         <AwesomeAlert
+          overlayStyle={{ flex: 2 }}
           show={showAlert}
-          title="Uspesna registracia"
+          title={alertTitle}
           message={error}
-          cancelText="Zrusit"
+          cancelText="Spat"
           confirmText="Prihlasit ma"
           showProgress={false}
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
-          showConfirmButton={true}
-          confirmButtonColor="#DD6B55"
+          showConfirmButton={error === null}
+          cancelButtonColor={'#7a7a7a'}
+          confirmButtonColor={Colors.carhartt}
           onCancelPressed={hideAlert}
           onConfirmPressed={() => props.navigation.navigate('Login')}
         />
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     marginHorizontal: 20,
     paddingBottom: 2
@@ -264,10 +285,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 20,
     backgroundColor: (255, 255, 255, 0.9),
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#ccc',
-    borderRadius: 5,
-    elevation: 2
+    borderRadius: 5
   },
   loginButton: {
     marginTop: 12,

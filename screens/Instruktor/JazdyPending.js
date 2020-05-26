@@ -42,6 +42,7 @@ const JazdyNadchadzajuce = props => {
       setIsLoading(true);
       try {
         const res = await api.get('/instructor/getPendingRides');
+        console.log(res);
         setRides(res.data);
         setIsLoading(false);
       } catch (error) {
@@ -57,7 +58,7 @@ const JazdyNadchadzajuce = props => {
   };
 
   const confirmHandler = async id => {
-    const response = await api.post('/instructor/completeRide', [{ id: id }]);
+    const response = await api.post('/instructor/completeRide', { id: id });
     console.log(response);
   };
 
@@ -83,6 +84,7 @@ const JazdyNadchadzajuce = props => {
               cas={item.time}
               onPressConfirm={() => confirmHandler(item.id)}
               onPressDecline={() => declineHandler(item.id)}
+              name={item.student}
             />
           )}
         />

@@ -29,6 +29,7 @@ const Vyber = props => {
   const [autoskola, setSelectedAutoskola] = useState('');
   const registerHandler = async () => {
     const response = await api.post(`/relationship/enterSchool/${autoskola}`);
+    console.log(response);
     if (response.ok) {
       props.navigation.navigate('VyberScreen');
     }
@@ -44,10 +45,10 @@ const Vyber = props => {
   return (
     <View style={styles.screen}>
       <View style={{ marginBottom: 15 }}>
-        <Text style={{ fontSize: 22 }}>Vitajte</Text>
+        <Text style={{ fontSize: 25 }}>Vitajte</Text>
       </View>
       <View style={{ marginBottom: 30 }}>
-        <Text style={{ textAlign: 'center' }}>
+        <Text style={{ textAlign: 'center', fontSize: 20 }}>
           Pre prve prihlasenie si prosim zvolte jednu z nasledujucich autoskol
         </Text>
       </View>

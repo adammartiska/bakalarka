@@ -2,28 +2,16 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
 
-const ObjednajButton = props => {
+const PonukniButton = props => {
   return (
     <View style={[styles.customButon, props.styles]}>
       <TouchableOpacity activeOpacity={0.5} onPress={props.onPress}>
         <View
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginHorizontal: 2,
-            marginVertical: 3
+            marginTop: 6
           }}
         >
-          <Text style={styles.textInButton}>{props.name}</Text>
-        </View>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginHorizontal: 2
-          }}
-        >
-          <Text style={styles.textInButtonMaly}>{props.datum}</Text>
+          <Text style={styles.textInButton}>Ponukni jazdy</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -33,9 +21,9 @@ const ObjednajButton = props => {
 const styles = StyleSheet.create({
   customButon: {
     alignItems: 'center',
-    width: 220,
+    width: 185,
     margin: 0,
-    height: 55,
+    height: 42,
     backgroundColor: Colors.primaryColor,
     borderWidth: 1,
     borderColor: Colors.sedatmava,
@@ -49,11 +37,11 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   textInButtonMaly: {
-    fontSize: 12,
+    fontSize: 8,
     color: 'white',
     //fontFamily: 'open-sans-bold',
     textAlign: 'center'
   }
 });
 
-export default ObjednajButton;
+export default PonukniButton;

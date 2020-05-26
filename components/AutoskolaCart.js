@@ -12,11 +12,13 @@ import {
 const AutoskolaCart = props => {
   const calculateColor = state => {
     switch (state) {
-      case 'ACCEPTED':
+      case 'Aktivny':
         return { backgroundColor: '#e6ffee' };
-      case 'PENDING':
+      case 'Uspesne ukonceny':
+        return { backgroundColor: '#e6ffee' };
+      case 'Caka sa na potvrdenie':
         return { backgroundColor: '#feffc9' };
-      case 'CANCELLED':
+      case 'Zamietnuty':
         return { backgroundColor: '#ffe6e6' };
     }
   };
@@ -48,7 +50,10 @@ const AutoskolaCart = props => {
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={props.onPress}
-            disabled={props.state === 'PENDING' || props.state === 'CANCELLED'}
+            disabled={
+              props.state === 'Zamietnuty' ||
+              props.state === 'Caka sa na potvrdenie'
+            }
           >
             <Text
               style={
@@ -77,6 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#404040',
     marginHorizontal: 20,
+    marginTop: 20
   },
   textInButton: {
     fontSize: 20,

@@ -63,7 +63,8 @@ const KickScreen = props => {
         showConfirmButton={true}
         confirmText="Ano"
         cancelText="Nie"
-        confirmButtonColor="#DD6B55"
+        confirmButtonColor={Colors.carhartt}
+        cancelButtonColor="#7a7a7a"
         onCancelPressed={hideAlert}
         onConfirmPressed={hideAlert}
       />

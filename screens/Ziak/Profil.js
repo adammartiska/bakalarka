@@ -64,7 +64,6 @@ const Profil = props => {
     props.navigation.setParams({ odhlas: () => logoutHandler() });
   }, [logoutHandler]);
 
-
   return (
     <View style={styles.screen}>
       <TouchableOpacity onPress={() => pickImage()}>
@@ -80,7 +79,7 @@ const Profil = props => {
         <Animated.View
           style={
             ([StyleSheet.absoluteFill],
-            { backgroundColor: '#8BED4F', width: p() })
+            { backgroundColor: Colors.lightGreen, width: p() })
           }
         />
       </View>

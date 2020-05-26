@@ -63,8 +63,8 @@ const JazdyRezervacia = props => {
 
   const fetchniCasy = async date => {
     const resCasy = await api.get(`/student/freeRides/${date}`);
+    console.log(resCasy);
     setCasy(resCasy.data);
-    //setCasy(resCasy);
   };
 
   const jazdaHandler = item => {
@@ -116,6 +116,8 @@ const JazdyRezervacia = props => {
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = date => {
+    setSelected('');
+    setObjednal(false);
     fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
@@ -134,14 +136,13 @@ const JazdyRezervacia = props => {
     const response = await api.post(`/student/reserveRide/${idToSend}`);
     console.log(response);
     if (response.ok) {
-      setDialogTitle('Uspesne rezervacia')
-      setDialogMessage(response.data.message)
+      setDialogTitle('Uspesne rezervacia');
+      setDialogMessage(response.data.message);
       setShowAlert(true);
-    }
-    else {
-      setDialogTitle('Pri rezervacii nastala chyba')
-      setDialogMessage(response.data.message)
-      setShowAlert(true)
+    } else {
+      setDialogTitle('Pri rezervacii nastala chyba');
+      setDialogMessage(response.data.message);
+      setShowAlert(true);
     }
   };
   const hideAlert = () => {
@@ -167,6 +168,7 @@ const JazdyRezervacia = props => {
       <CalendarPicker
         onDateChange={dateChangeHandler}
         disabledDates={unavailableDates}
+        selectedDayColor={Colors.lightGreen}
       />
       <View>
         {isLoading ? (
@@ -179,7 +181,7 @@ const JazdyRezervacia = props => {
               <ActivityIndicator size="large" color={Colors.primaryColor} />
             </View>
           )
-        ) : (
+        ) : casy.length > 0 ? (
           <View>
             {casy.map(item => (
               <View
@@ -199,6 +201,24 @@ const JazdyRezervacia = props => {
               </View>
             ))}
           </View>
+        ) : (
+          <View
+            style={{
+              marginTop: 30,
+              marginHorizontal: 20,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                textAlign: 'center'
+              }}
+            >
+              V zadany termin nikto z instruktorov uz neponuka jazdy
+            </Text>
+          </View>
         )}
       </View>
       {objednal && (
@@ -211,7 +231,7 @@ const JazdyRezervacia = props => {
           }}
         >
           <ObjednajButton
-            datum={`${title.datum}      -      ${title.cas}`}
+            datum={`${title.datum}    ${title.cas}`}
             name="Rezervovat"
             onPress={confirmReservation}
           />
@@ -226,9 +246,8 @@ const JazdyRezervacia = props => {
         closeOnHardwareBackPress={false}
         showCancelButton={false}
         showConfirmButton={true}
-        cancelText=""
         confirmText="Super!"
-        confirmButtonColor="#DD6B55"
+        confirmButtonColor={Colors.carhartt}
         onCancelPressed={hideAlert}
         onConfirmPressed={hideAlert}
       />

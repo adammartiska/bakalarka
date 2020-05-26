@@ -1,10 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import Colors from '../constants/Colors';
-import Domov from '../screens/Domov_legacy';
 import Profil from '../screens/Ziak/Profil';
 import Testy from '../screens/Ziak/Testy';
-import JazdyAbsolvovane from '../screens/Ziak/JazdyAbsolvovane';
+import UkoncenyZiak from '../screens/Ziak/UkoncenyZiak';
 import { Ionicons } from '@expo/vector-icons';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import ProfilSettings from '../screens/Ziak/ProfilSettings';
@@ -19,7 +18,7 @@ const defaultStackNavOptions = {
 const JazdyAbsolvovaneStack = createStackNavigator(
   {
     JazdyStack: {
-      screen: JazdyAbsolvovane,
+      screen: UkoncenyZiak,
       navigationOptions: {
         headerTitle: 'Absolvovane jazdy'
       }

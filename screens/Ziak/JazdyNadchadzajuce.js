@@ -142,7 +142,8 @@ const JazdyNadchadzajuce = props => {
         showConfirmButton={true}
         cancelText="Nie"
         confirmText="Ano, zrusit jazdu"
-        confirmButtonColor="#DD6B55"
+        confirmButtonColor="#000"
+        cancelButtonColor={'#7a7a7a'}
         onCancelPressed={hideAlert}
         onConfirmPressed={() => zmazHandler(zvolenaCancel.id)}
       />

@@ -37,7 +37,7 @@ const AbsolvovanePending = props => {
         </View>
       </View>
       <View style={{ marginTop: 7, alignItems: 'center' }}>
-        <InstruktorBar />
+        <InstruktorBar name={props.name} />
       </View>
       <View
         style={{

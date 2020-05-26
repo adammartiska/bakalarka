@@ -4,7 +4,6 @@ import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 //import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
-import Domov from '../screens/Domov_legacy';
 import JazdyRezervacia from '../screens/Ziak/JazdyRezervacia';
 import Profil from '../screens/Instruktor/Profil';
 import Testy from '../screens/Ziak/Testy';
@@ -81,23 +80,6 @@ const JazdyStack = createStackNavigator(
   { defaultNavigationOptions: defaultStackNavOptions }
 );
 
-const TestyStack = createStackNavigator(
-  {
-    Testy: {
-      screen: Testy,
-      navigationOptions: {
-        headerTitle: 'Testy'
-      }
-    },
-    TestVseobecne: {
-      screen: TestVseobecne,
-      navigationOptions: {
-        headerTitle: 'Test'
-      }
-    }
-  },
-  { defaultNavigationOptions: defaultStackNavOptions }
-);
 
 const ProfilStack = createStackNavigator(
   {
@@ -143,17 +125,6 @@ const NavigaciaTabInstruktor = createMaterialBottomTabNavigator(
       //tabBarColor: Colors.primaryColor,
     },
 
-    Testy: {
-      screen: TestyStack,
-      navigationOptions: {
-        tabBarIcon: tabInfo => {
-          return (
-            <Ionicons name="ios-book" size={25} color={tabInfo.tintColor} />
-          );
-        }
-      }
-      //tabBarColor: Colors.secondaryColor,
-    },
 
     Profil: {
       screen: ProfilStack,

@@ -4,7 +4,6 @@ import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 //import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
-import Domov from '../screens/Domov_legacy';
 import JazdyRezervacia from '../screens/Ziak/JazdyRezervacia';
 import Profil from '../screens/Instruktor/Profil';
 import Testy from '../screens/Ziak/Testy';
@@ -27,6 +26,7 @@ import TestVseobecne from '../screens/Testy/TestVseobecne';
 import JazdyRozhranieInstruktor from '../screens/Instruktor/JazdyRozhranieInstruktor';
 import ConfirmScreen from '../screens/Instruktor/ConfirmScreen';
 import Rozhranie from '../screens/Instruktor/Rozhranie';
+import { Octicons } from '@expo/vector-icons';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -119,9 +119,7 @@ const NavigaciaOwner = createMaterialBottomTabNavigator(
       screen: RozhranieStack,
       navigationOptions: {
         tabBarIcon: tabInfo => {
-          return (
-            <Ionicons name="ios-book" size={25} color={tabInfo.tintColor} />
-          );
+          return <Octicons name="request-changes" size={24} color={tabInfo.tintColor} />;
         }
       }
       //tabBarColor: Colors.secondaryColor,

@@ -39,16 +39,12 @@ const Testy = props => {
   const [zvoleny, setZvoleny] = useState('Prvy');
 
   /* tuto informaciu loadnem zo serveru hned */
-  const testy = [
-    { label: 'Prvy test', value: 'Prvy' },
-    { label: 'Druhy test', value: 'Druhy' },
-    { label: 'Treti test', value: 'Treti' },
-    { label: 'Stvrty test', value: 'Stvrty' }
-  ];
+  const [testy, setTesty] = useState([]);
   let button = 'zobraz testy';
   const zobrazHandler = async () => {
-    const response = await api.get('/tests/3');
-    console.log(response.data.questions);
+    const response = await api.get('/tests/');
+    setTesty(response.data);
+    console.log(response.data);
     zobraz === 'zobraz testy'
       ? setZobraz('skry testy')
       : setZobraz('zobraz testy');
@@ -56,7 +52,7 @@ const Testy = props => {
   };
 
   const navigujHandler = async testId => {
-    const response = await api.get('/tests/3');
+    const response = await api.get(`/tests/${testId}`);
     props.navigation.navigate('TestVseobecne', {
       test: response.data //tu priradim data z fetchu ako jsonData
     });
@@ -73,22 +69,25 @@ const Testy = props => {
       {/*<PickerTesty 
         selectedValue = {zvoleny}
         onValueChange={(value) => setZvoleny(value)}/> */}
-      <TimeButton
-        name={zobraz}
-        styles={styles.mainButton}
-        onPress={zobrazHandler}
-      />
+      <View style={{ marginBottom: 20 }}>
+        <TimeButton
+          name={zobraz}
+          styles={styles.mainButton}
+          onPress={zobrazHandler}
+          styles={{ width: 150, height: 40 }}
+        />
+      </View>
       <ScrollView>
         {stav &&
           testy.map(test => {
             return (
               <TimeButton
-                key={test.value}
-                testId={test.value}
-                name={test.label}
+                key={test}
+                testId={test}
+                name={`${test}. test`}
                 styles={styles.testButton}
                 onPress={() => {
-                  navigujHandler(test.value);
+                  navigujHandler(test);
                 }}
               />
             );

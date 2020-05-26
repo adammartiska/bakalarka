@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
@@ -84,11 +85,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
     backgroundColor: (255, 255, 255, 0.9),
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderWidth: 2,
+    borderColor: '#CCC',
     borderRadius: 5,
-
-    elevation: 2
   }
 });
 

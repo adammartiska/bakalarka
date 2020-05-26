@@ -121,7 +121,8 @@ const Profil = props => {
         showConfirmButton={true}
         cancelText="Nie, skontrolovat jazdy"
         confirmText="Odhlasit ma!"
-        confirmButtonColor="#DD6B55"
+        confirmButtonColor={Colors.carhartt}
+        cancelButtonCOlor={'#7a7a7a'}
         onCancelPressed={hideAlert}
         onConfirmPressed={logoutHandler}
       />

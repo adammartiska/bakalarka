@@ -14,6 +14,7 @@ const TimeButton = props => {
 
 const styles = StyleSheet.create({
   customButon: {
+    justifyContent: 'center',
     margin: 5,
     height: 30,
     width: '22%',

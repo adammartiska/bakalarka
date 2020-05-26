@@ -5,7 +5,8 @@ import {
   LOGOUT,
   FORGOTPASS,
   LOGINMYAPP,
-  REDUXDATA
+  REDUXDATA,
+  UPDATERELATIONID
 } from '../actions/auth';
 
 const initialState = {
@@ -52,6 +53,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userInfo: action.userInfo,
+        relationId: action.relationId
+      };
+    case UPDATERELATIONID:
+      return {
+        ...state,
         relationId: action.relationId
       };
     default:

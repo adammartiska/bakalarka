@@ -5,7 +5,6 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import { useSelector } from 'react-redux';
 //import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
-import Domov from '../screens/Domov_legacy';
 import JazdyRezervacia from '../screens/Ziak/JazdyRezervacia';
 import Profil from '../screens/Ziak/Profil';
 import Testy from '../screens/Ziak/Testy';
@@ -79,11 +78,33 @@ const VyberScreenStack = createStackNavigator(
     Vyber: {
       screen: VyberScreen,
       navigationOptions: {
-        headerTitle: 'Druhe prihlasenie'
+        headerTitle: 'Vyber autoskoly'
       }
     }
   },
   { defaultNavigationOptions: defaultStackNavOptions }
+);
+
+const VyberSwitch = createSwitchNavigator(
+  {
+    VstupAutoskoly: {
+      screen: VyberStack,
+      navigationOptions: {
+        headerTitle: 'Prve prihlasenie'
+      }
+    },
+    VyberScreen: {
+      screen: VyberScreenStack,
+      navigationOptions: {
+        headerTitle: 'Vyber autoskoly'
+      }
+    }
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions,
+    initialRouteName: 'VyberScreen'
+    //transitionConfig: () => fromLeft(),
+  }
 );
 
 const switchik = createAnimatedSwitchNavigator(
@@ -242,7 +263,7 @@ const SwitchNavigator = createAnimatedSwitchNavigator(
       screen: NavigaciaTab
     },
     SignedInInstructor: {
-      screen: NavigaciaOwner
+      screen: NavigaciaTabInstruktor
     },
     SignedInOwner: {
       screen: NavigaciaOwner
@@ -251,7 +272,7 @@ const SwitchNavigator = createAnimatedSwitchNavigator(
       screen: VyberStack
     },
     VyberScreen: {
-      screen: VyberScreenStack
+      screen: VyberSwitch
     },
     CompletedZiak: {
       screen: NavigaciaCompletedZiak

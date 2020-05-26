@@ -210,19 +210,6 @@ const ProfilSettings = props => {
               />
             </View>
           )}
-          <View>
-            <ToggleSwitch
-              state={formState.inputValues.switchState}
-              onChange={newValue => {
-                dispatchFormState({
-                  type: FORM_INPUT_UPDATE,
-                  value: newValue,
-                  input: 'switchState'
-                });
-              }}
-              text="Push notifikacie "
-            />
-          </View>
         </View>
       </TouchableWithoutFeedback>
       <AwesomeAlert
@@ -235,7 +222,7 @@ const ProfilSettings = props => {
         showCancelButton={false}
         showConfirmButton={true}
         confirmText="Super!"
-        confirmButtonColor="#DD6B55"
+        confirmButtonColor={Colors.carhartt}
         onConfirmPressed={hideAlert}
       />
     </KeyboardAvoidingView>

@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  AsyncStorage,
-  Text,
-  Picker,
-  TouchableOpacity
-} from 'react-native';
-import TimeButton from '../components/TimeButton';
-import Colors from '../constants/Colors';
-import { Button } from 'react-native-elements';
-import AutoskolaCart from '../components/AutoskolaCart';
 import { create } from 'apisauce';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch, useSelector } from 'react-redux';
+import AutoskolaCart from '../components/AutoskolaCart';
+import CustomHeaderButton from '../components/CustomHeaderButton';
+import Colors from '../constants/Colors';
 import * as authActions from '../store/actions/auth';
 
 const VyberScreen = props => {
   const jwt = useSelector(state => state.auth.token);
   const dispatch = useDispatch();
-  const relations = useSelector(state => state.auth.relations);
+  const [relations, setRelations] = useState(
+    useSelector(state => state.auth.relations)
+  );
   const api = create({
     baseURL: 'http://147.175.121.250:80',
     headers: {
@@ -31,7 +31,19 @@ const VyberScreen = props => {
   const [autoskola, setSelectedAutoskola] = useState('');
   const [rola, setSelectedRola] = useState('');
 
-  const enterHandler = async (relationId, role) => {
+  useEffect(() => {
+    const fetchRelations = async () => {
+      const response = await api.get('/user/viewRelations');
+      console.log(response);
+      setRelations(response.data);
+    };
+    fetchRelations();
+  }, []);
+  const enterHandler = async (relationId, role, information) => {
+    if (information === 'completed') {
+      await dispatch(authActions.headerData(relationId));
+      props.navigation.navigate('CompletedZiak');
+    }
     const response = await dispatch(authActions.reduxdata(jwt, relationId));
     console.log(response);
     if (response.ok) {
@@ -44,9 +56,33 @@ const VyberScreen = props => {
       }
     }
   };
+
+  const prelozStav = stav => {
+    switch (stav) {
+      case 'waiting':
+        return 'Caka sa na potvrdenie';
+      case 'active':
+        return 'Aktivny';
+      case 'completed':
+        return 'Uspesne ukonceny';
+      case 'rejected':
+        return 'Zamietnuty';
+      default:
+        return 'Neznamy';
+    }
+  };
+
+  const logoutHandler = useCallback(() => {
+    dispatch(authActions.logout());
+    props.navigation.navigate('SignedOut');
+  }, [dispatch]);
+
+  useEffect(() => {
+    props.navigation.setParams({ odhlas: () => logoutHandler() });
+  }, [logoutHandler]);
   return (
-    <View style={styles.screen}>
-      <View style={{ alignItems: 'center', marginBottom: 20 }}>
+    <ScrollView contentContainerStyle={styles.screen}>
+      <View style={{ alignItems: 'center', marginBottom: 10 }}>
         <Text style={styles.centered}>
           Vyberte si autoskolu, do ktorej sa chcete prihlasit
         </Text>
@@ -54,15 +90,21 @@ const VyberScreen = props => {
       {relations.map(item => {
         return (
           <AutoskolaCart
-            state={item.information}
+            state={prelozStav(item.information)}
             role={item.role}
             key={item.relationID}
             autoskola={item.school}
-            onPress={() => enterHandler(item.relationID, item.role)}
+            onPress={() =>
+              enterHandler(item.relationID, item.role, item.information)
+            }
+            disabled={
+              prelozStav(item.information) === 'Zamietnuty' ||
+              prelozStav(item.information) === 'Caka sa na potvrdenie'
+            }
           />
         );
       })}
-      <View style={{ marginTop: 25 }}>
+      <View style={{ marginTop: 25, marginBottom: 0 }}>
         <Text style={styles.centered}>
           Pokial sa chcete registrovat do novej autoskoly, musite si zalozit
           nove konto
@@ -71,21 +113,29 @@ const VyberScreen = props => {
       <View style={styles.customButon}>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('Vyber')}
+          onPress={() => props.navigation.navigate('VstupAutoskoly')}
         >
-          <Text style={styles.textInButton}>Nove konto</Text>
+          <Text style={styles.textInButton}>Nove Konto</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
-
+VyberScreen.navigationOptions = navData => {
+  const odhlasSa = navData.navigation.getParam('odhlas');
+  return {
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item title="Logout" iconName="ios-log-out" onPress={odhlasSa} />
+      </HeaderButtons>
+    )
+  };
+};
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
     alignItems: 'center',
     marginHorizontal: 20,
-    marginTop: 25
+    marginTop: 10
   },
   textInButton: {
     fontSize: 20,
@@ -94,12 +144,12 @@ const styles = StyleSheet.create({
   customButon: {
     height: 50,
     width: '40%',
-    backgroundColor: '#000',
+    // backgroundColor: '#000',
     borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
+    // shadowColor: 'black',
+    // shadowOpacity: 0.3,
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowRadius: 10,
     elevation: 3
   },
   centered: {
@@ -141,10 +191,12 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   customButon: {
-    marginTop: 70,
-    padding: 5,
+    marginTop: 20,
+    marginBottom: 40,
+    justifyContent: 'center',
+    margin: 5,
     height: 40,
-    width: '35%',
+    width: '40%',
     alignItems: 'center',
     backgroundColor: '#000',
     borderRadius: 5,
