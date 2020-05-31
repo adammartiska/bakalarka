@@ -1,34 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-//import * as Font from 'expo-font';
-import { useScreens } from 'react-native-screens';
-import { Provider, useSelector } from 'react-redux';
-import { AppLoading } from 'expo';
-import Navigacia, { createRootNavigator } from './navigation/Navigacia';
-import Login from './screens/Login';
-import { isSignedIn } from './components/Auth';
-import Testy from './screens/Ziak/Testy';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import ReduxThunk from 'redux-thunk';
+import Navigacia from './navigation/Navigacia';
 import authReducer from './store/reducers/auth';
 import orderReducer from './store/reducers/orders';
-import JazdyAbsolvovane from './screens/Instruktor/JazdyAbsolvovane';
-import Profil from './screens/Ziak/Profil';
-import JazdyRezervacia from './screens/Ziak/JazdyRezervacia';
-import JazdyInstruktor from './screens/Instruktor/JazdyInstruktor';
-import Prvy from './screens/Testy/Prvy';
-import ProfilSettings from './screens/Ziak/ProfilSettings';
-import NavigaciaInstrktor from './navigation/NavigaciaInstruktor';
-import NadchadzajuceInstruktor from './components/NadchadzajuceInstruktor';
-import Vyber from './screens/Vyber';
-import JazdyNadchadzajuce from './screens/Instruktor/JazdyNadchadzajuce';
-import { createClient } from 'react-fetching-library';
-import JazdyPending from './screens/Instruktor/JazdyPending';
-import { ClientContextProvider } from 'react-fetching-library';
-import { create } from 'apisauce';
-import { navigationRef, isMountedRef } from './RootNavigation';
-import { NavigationContainer } from '@react-navigation/native';
-import ConfirmScreen from './screens/Instruktor/ConfirmScreen';
 
 //useScreens();  //optimalizacia screenov performance
 
@@ -53,15 +30,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 // };
 
-// const [isLoggedIn, setIsLoggedIn] = useState('false');
-
 export default function App() {
-  // useEffect(() => {
-  //   isMountedRef.current = true;
-
-  //   return () => (isMountedRef.current = false);
-  // }, []);
-
   return (
     <Provider store={store}>
       <Navigacia />
@@ -77,16 +46,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-
-// {
-//   const { checkedSignIn, signedIn } = this.state;
-//   if(!checkedSignIn) {
-//     return null;
-//   }
-//   if(!signedIn){
-//     return <Login />;
-//   }
-//   if(signedIn) {
-//     return (<View style={styles.container}><Text> si prihlaseny</Text></View>)
-//   }
-// }

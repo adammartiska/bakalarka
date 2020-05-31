@@ -48,6 +48,7 @@ const JazdyNadchadzajuce = props => {
       setIsLoading(true);
       try {
         const res = await api.get('/student/getReservedRides');
+        console.log(res);
         setData(res.data);
         setIsLoading(false);
       } catch (error) {
@@ -119,6 +120,7 @@ const JazdyNadchadzajuce = props => {
           renderItem={({ item }) => (
             <RezervovanaJazda
               datum={moment(item.date).format('DD.MM.YYYY')}
+              name={item.instructor}
               cas={item.time}
               id={item.id}
               onPress={() => showAlertfunction(item)}
@@ -156,31 +158,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     flex: 1,
     marginTop: 8
-  },
-
-  riadokJazdy: {
-    borderWidth: 2,
-    borderColor: '#000',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    //backgroundColor: Colors.sedatmava,
-    padding: 10,
-    marginTop: 8,
-    width: '60%',
-    marginHorizontal: 15
-  },
-  vysunute: {
-    backgroundColor: '#fff',
-    marginTop: 0,
-    marginHorizontal: 16
-  },
-
-  title: {
-    fontSize: 22
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 

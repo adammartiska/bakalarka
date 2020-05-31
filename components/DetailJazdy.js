@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { StyleSheet, Text, View } from 'react-native';
 
 const DetailJazdy = props => {
   return (

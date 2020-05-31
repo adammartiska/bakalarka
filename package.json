@@ -18,6 +18,7 @@
     "expo-linear-gradient": "~8.0.0",
     "linear-gradient": "^1.0.6",
     "moment": "^2.24.0",
+    "purgecss": "^2.2.1",
     "ramda": "^0.27.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",
@@ -53,6 +54,8 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-native": "^3.8.1",
     "prettier": "^1.19.1"
   },
   "private": true

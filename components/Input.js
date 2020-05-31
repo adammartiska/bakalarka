@@ -1,6 +1,5 @@
-import React, { useReducer, useEffect } from 'react';
-import { TextInput, StyleSheet } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import React, { useEffect, useReducer } from 'react';
+import { StyleSheet, TextInput } from 'react-native';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
@@ -32,9 +31,7 @@ const Input = props => {
 
   const { onInputChange, id } = props;
   useEffect(() => {
-    if (inputState.touched) {
-      onInputChange(id, inputState.value, inputState.isValid);
-    }
+    onInputChange(id, inputState.value, inputState.isValid);
   }, [inputState, onInputChange, id]);
 
   const textChangeHandler = text => {
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: (255, 255, 255, 0.9),
     borderWidth: 2,
     borderColor: '#CCC',
-    borderRadius: 5,
+    borderRadius: 5
   }
 });
 

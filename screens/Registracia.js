@@ -1,30 +1,20 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  TextInput,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-  Keyboard,
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-  Picker
-} from 'react-native';
-import { TouchableOpacity, Directions } from 'react-native-gesture-handler';
-import Colors from '../constants/Colors';
-import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import Input from '../components/Input';
-import { useDispatch } from 'react-redux';
-import * as authActions from '../store/actions/authenticate';
-const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 import { create } from 'apisauce';
-import CustomAlert from '../components/CustomAlert';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  Picker,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch } from 'react-redux';
+import Input from '../components/Input';
+import Colors from '../constants/Colors';
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -61,7 +51,6 @@ const Registracia = props => {
   const keyboardVerticalOffset = 10;
   const [showAlert, setShowAlert] = useState(false);
   const [rola, setSelectedRola] = useState('Student');
-  const [errors, setErrors] = useState([]);
   const [alertTitle, setAlertTitle] = useState('');
   const [error, setError] = useState();
   const dispatch = useDispatch();
@@ -301,23 +290,3 @@ const styles = StyleSheet.create({
 });
 
 export default Registracia;
-
-//  const odosli = () => {
-//     fetch("https://cc50f32d-6fac-4f8e-9785-490f1aa516e6.mock.pstmn.io/skuslogin", {
-//     method: "POST",
-//     headers: {
-//         Accept: 'application/json',
-//         'Content-Type': 'application/json',
-//       },
-//     body:  JSON.stringify(mojedata)
-//  })
-//  .then(function(response){
-//   return response.json();
-//  })
-//  .then(function(data){
-//  console.log(data)
-//  });
-//  };
-
-//poznamka prvotny login nejde kvoli tomu, ze potvrdenie inputu mam zatial
-//nastavene na onblur cize ked stratim focus z daneho textinputu

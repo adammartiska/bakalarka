@@ -8,11 +8,13 @@ import {
   StyleSheet,
   View
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import AbsolvovaneZiak from '../../components/AbsolvovaneZiak';
+import * as authActions from '../../store/actions/auth';
 
 const UkoncenyZiak = props => {
   const jwt = useSelector(state => state.auth.token);
+  const dispatch = useDispatch();
   const relationId = useSelector(state => state.auth.relationId);
   const api = create({
     baseURL: 'http://147.175.121.250:80',
@@ -32,9 +34,20 @@ const UkoncenyZiak = props => {
       setIsLoading(true);
       try {
         const res = await api.get('/relationship/completedRelationship');
-        console.log(res);
-        setData(res.data.body.rides);
-        console.log(res.data.body.rides);
+        if (res.ok) {
+          const { email, endDate, fullName, phoneNumber } = res.data.body;
+          await dispatch(
+            authActions.userInfo({
+              email: email,
+              fullName: fullName,
+              phoneNumber: phoneNumber,
+              ridesCompleted: 15,
+              startDate: endDate
+            })
+          );
+          setData(res.data.body.rides);
+          console.log(res.data.body.rides);
+        }
         setIsLoading(false);
       } catch (error) {
         setError(error);
@@ -75,20 +88,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     marginBottom: 20
-  },
-
-  vysunute: {
-    backgroundColor: '#fff',
-    marginTop: 0,
-    marginHorizontal: 16
-  },
-
-  title: {
-    fontSize: 22
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 

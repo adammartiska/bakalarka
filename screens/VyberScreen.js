@@ -11,7 +11,6 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import AutoskolaCart from '../components/AutoskolaCart';
 import CustomHeaderButton from '../components/CustomHeaderButton';
-import Colors from '../constants/Colors';
 import * as authActions from '../store/actions/auth';
 
 const VyberScreen = props => {
@@ -52,7 +51,7 @@ const VyberScreen = props => {
       } else if (role === 'INSTRUCTOR') {
         props.navigation.navigate('SignedInInstructor');
       } else if (role === 'OWNER') {
-        //tu budem navigovat na screen owenra
+        props.navigation.navigate('SignedInOwner');
       }
     }
   };
@@ -156,25 +155,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center'
   },
-  riadokJazdy: {
-    borderWidth: 1.5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    marginTop: 8,
-    marginHorizontal: 16
-  },
-  picker: {
-    height: 50,
-    width: 200,
-    justifyContent: 'center'
-  },
-  outer: {
-    width: '85%',
-    borderWidth: 1,
-    borderColor: Colors.sedatmava
-  },
   innerText: {
     fontSize: 16
   },
@@ -182,14 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'white'
   },
-  disabledTextInButton: {
-    fontSize: 20,
-    color: '#4d4d4d'
-  },
 
-  innerText: {
-    fontSize: 16
-  },
   customButon: {
     marginTop: 20,
     marginBottom: 40,
@@ -205,32 +178,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
     elevation: 3
-  },
-  customButtonDisabled: {
-    marginTop: 70,
-    padding: 5,
-    height: 40,
-    width: '35%',
-    alignItems: 'center',
-    backgroundColor: '#EEEEEE',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 2
-  },
-  bunky: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-    marginVertical: 5,
-    paddingHorizontal: 25
-  },
-  skusim: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 50
   }
 });
 

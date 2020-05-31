@@ -1,21 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  AsyncStorage,
-  Text,
-  Picker,
-  TouchableOpacity,
-  ScrollView
-} from 'react-native';
-
 import { create } from 'apisauce';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 //import * as authActions from '../store/actions/auth';
 import ConfirmTab from '../../components/ConfirmTab';
 import Colors from '../../constants/Colors';
-import { Divider } from 'react-native-elements';
 
 const ConfirmScreen = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -33,58 +22,54 @@ const ConfirmScreen = props => {
 
   const [instructors, setInstructors] = useState([]);
   const [students, setStudents] = useState([]);
-  const fetchRequests = async () => {
-    const response = await api.get('/school/getRequests');
-    response.data.map(item => {
-      if (item.role === 'student') {
-        const novePole = [];
-        novePole.push(item);
-        setStudents(novePole);
-      } else if (item.role === 'instructor') {
-        const novePole = [];
-        novePole.push(item);
-        setInstructors(novePole);
-      }
-    });
-    console.log(response.data);
-  };
+
   useEffect(() => {
     const fetchRequests = async () => {
       const response = await api.get('/school/getRequests');
       if (response.ok) {
         response.data.map(item => {
           if (item.role === 'student') {
-            const novePole = [];
-            novePole.push(item);
-            setStudents(novePole);
+            setStudents(oldState => [...oldState, item]);
           } else if (item.role === 'instructor') {
-            const novePole = [];
-            novePole.push(item);
-            setInstructors(novePole);
+            setInstructors(oldState => [...oldState, item]);
           }
         });
       }
-      console.log(response.data);
-      console.log(students)
     };
     fetchRequests();
   }, []);
 
-  const confirmHandler = async id => {
+  const confirmHandler = async (id, role) => {
     const response = await api.post(
       `/school/confirmUser/${id}?confirm=${true}`
     );
-    console.log(response);
     if (response.ok) {
-      () => fetchRequests();
+      if (role === 'student') {
+        setStudents(students.filter(student => student.relationID !== id));
+      }
+      if (role === 'instructor') {
+        setInstructors(
+          instructors.filter(instructor => instructor.relationID !== id)
+        );
+      }
     }
   };
 
-  const declineHandler = async id => {
+  const declineHandler = async (id, role) => {
     const response = await api.post(
       `/school/confirmUser/${id}?confirm=${false}`
     );
-    console.log(response);
+    if (response.ok) {
+      if (role === 'student') {
+        setStudents(students.filter(student => student.relationID !== id));
+      }
+      if (role === 'instructor') {
+        setInstructors(
+          instructors.filter(instructor => instructor.relationID !== id)
+        );
+      }
+    }
+    //setStudents(students.filter(student => student.relationID !== id));
   };
 
   return (
@@ -99,8 +84,12 @@ const ConfirmScreen = props => {
               <ConfirmTab
                 key={instructor.relationID}
                 name={instructor.name}
-                onPressAccept={() => confirmHandler(instructor.relationID)}
-                onPressDecline={() => declineHandler(instructor.relationID)}
+                onPressAccept={() =>
+                  confirmHandler(instructor.relationID, 'instructor')
+                }
+                onPressDecline={() =>
+                  declineHandler(instructor.relationID, 'instructor')
+                }
               />
             );
           })
@@ -123,8 +112,12 @@ const ConfirmScreen = props => {
               <ConfirmTab
                 key={student.relationID}
                 name={student.name}
-                onPressAccept={() => confirmHandler(student.relationID)}
-                onPressDecline={() => declineHandler(student.relationID)}
+                onPressAccept={() =>
+                  confirmHandler(student.relationID, 'student')
+                }
+                onPressDecline={() =>
+                  declineHandler(student.relationID, 'student')
+                }
               />
             );
           })
@@ -171,78 +164,8 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 3
   },
-  centered: {
-    fontSize: 18,
-    textAlign: 'center'
-  },
-  riadokJazdy: {
-    borderWidth: 1.5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    marginTop: 8,
-    marginHorizontal: 16
-  },
-  picker: {
-    height: 50,
-    width: 200,
-    justifyContent: 'center'
-  },
   innerText: {
     fontSize: 16
-  },
-  textInButton: {
-    fontSize: 20,
-    color: 'white'
-  },
-  disabledTextInButton: {
-    fontSize: 20,
-    color: '#4d4d4d'
-  },
-
-  innerText: {
-    fontSize: 16
-  },
-  customButon: {
-    marginTop: 70,
-    padding: 5,
-    height: 40,
-    width: '35%',
-    alignItems: 'center',
-    backgroundColor: '#000',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3
-  },
-  customButtonDisabled: {
-    marginTop: 70,
-    padding: 5,
-    height: 40,
-    width: '35%',
-    alignItems: 'center',
-    backgroundColor: '#EEEEEE',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 2
-  },
-  bunky: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-    marginVertical: 5,
-    paddingHorizontal: 25
-  },
-  skusim: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 50
   }
 });
 

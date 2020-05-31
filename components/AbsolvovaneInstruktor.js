@@ -1,20 +1,9 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-  Image
-} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from './DetailJazdy';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 import InstruktorBar from './InstruktorBar';
-import Icon from 'react-native-vector-icons/Ionicons';
 import RideState from './RideState';
-import CustomButton from './CustomButton';
 
 const AbsolvovaneInstruktor = props => {
   const [showDetails, setShowDetails] = useState(false);
@@ -37,7 +26,7 @@ const AbsolvovaneInstruktor = props => {
         </View>
       </View>
       <View style={{ marginTop: 7, alignItems: 'center' }}>
-        <InstruktorBar />
+        <InstruktorBar name={props.name}/>
       </View>
       <View style={{ alignItems: 'center' }}>
         <RideState state={props.state} />
@@ -47,17 +36,6 @@ const AbsolvovaneInstruktor = props => {
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flexDirection: 'row',
-    flex: 1,
-    marginTop: 8,
-    borderWidth: 2,
-    borderColor: Colors.carhartt,
-    backgroundColor: '#eeeeee',
-    padding: 10,
-    marginTop: 8,
-    marginHorizontal: 15
-  },
   default: {
     elevation: 1,
     justifyContent: 'center',
@@ -66,39 +44,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.sedatmava,
     padding: 8
   },
-  item: {
-    marginLeft: 25,
-    marginRight: 20
-  },
   velky: {
     textAlign: 'center',
     fontSize: 18
-  },
-
-  riadokJazdy: {
-    borderWidth: 2,
-    borderColor: '#000',
-    //backgroundColor: Colors.sedatmava,
-    padding: 10,
-    marginTop: 8,
-    width: '100%',
-    marginHorizontal: 15
-  },
-  vysunute: {
-    borderWidth: 1,
-    marginTop: 0,
-    marginHorizontal: 16,
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginVertical: 15
-  },
-
-  title: {
-    fontSize: 20
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 

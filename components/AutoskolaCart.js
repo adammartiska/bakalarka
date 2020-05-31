@@ -1,13 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  AsyncStorage,
-  Text,
-  Picker,
-  TouchableOpacity
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const AutoskolaCart = props => {
   const calculateColor = state => {
@@ -72,11 +64,6 @@ const AutoskolaCart = props => {
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    marginTop: 50,
-    alignItems: 'center'
-  },
   outer: {
     width: '85%',
     borderWidth: 1,
@@ -128,11 +115,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     marginVertical: 5,
     paddingHorizontal: 25
-  },
-  skusim: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 50
   }
 });
 

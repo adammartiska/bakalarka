@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 const CustomAlert = props => {

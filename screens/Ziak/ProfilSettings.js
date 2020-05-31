@@ -1,20 +1,18 @@
-import React, { useState, Component, useReducer, useCallback } from 'react';
+import { create } from 'apisauce';
+import React, { useReducer, useState } from 'react';
 import {
-  View,
-  Text,
+  Keyboard,
+  KeyboardAvoidingView,
   StyleSheet,
   TextInput,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Keyboard
+  View
 } from 'react-native';
-import ToggleSwitch from '../../components/ToggleSwitch';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import { useSelector } from 'react-redux';
+import ButtonIcon from '../../components/ButtonIcon';
 import CustomButton from '../../components/CustomButton';
 import Colors from '../../constants/Colors';
-import ButtonIcon from '../../components/ButtonIcon';
-import { create } from 'apisauce';
-import AwesomeAlert from 'react-native-awesome-alerts';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {

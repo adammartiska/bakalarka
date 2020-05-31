@@ -1,27 +1,20 @@
-import React, { Component, useEffect, useState } from 'react';
+import { create } from 'apisauce';
+import moment from 'moment';
+import { isEmpty } from 'ramda';
+import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  Button,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView
+  View
 } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
-//import { Colors } from 'react-native-paper';
-import Colors from '../../constants/Colors';
-import moment from 'moment';
-import { useSelector, connect, useDispatch } from 'react-redux';
-import TimeButtonCheck from '../../components/TimeButtonCheck';
-import TimeButton from '../../components/TimeButton';
-import * as authActions from '../../store/actions/auth';
-import { useFetchGet } from '../../hooks/useFetchGet';
-import { useFetchPost } from '../../hooks/useFetchPost';
-import { create } from 'apisauce';
-import { isEmpty } from 'ramda';
+import { useSelector } from 'react-redux';
 import PonukniButton from '../../components/PonukniButton';
-import AwesomeAlert from 'react-native-awesome-alerts';
+import TimeButtonCheck from '../../components/TimeButtonCheck';
+import Colors from '../../constants/Colors';
+
 const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
   useEffect(() => {
@@ -174,8 +167,14 @@ const JazdyInstruktor = props => {
     return (
       <View style={styles.center}>
         {isLoading ? (
-          <View style={{ paddingTop: 10, textAlign: 'center' }}>
-            <ActivityIndicator size="small" color="white" />
+          <View
+            style={{
+              marginTop: 20,
+              paddingTop: 10,
+              textAlign: 'center'
+            }}
+          >
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
           </View>
         ) : (
           <View style={{ marginHorizontal: 18 }}>
@@ -231,11 +230,11 @@ const JazdyInstruktor = props => {
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = async date => {
-    setIsLoading(false);
+    setIsLoading(true);
     console.log(date);
     setDateToSent(moment(date).format('YYYY-MM-DD'));
 
-    fetchniCasy(moment(date).format('YYYY-MM-DD'));
+    await fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
 
@@ -291,7 +290,6 @@ const styles = StyleSheet.create({
   },
   center: {
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center'
   },
   screen: {
@@ -300,39 +298,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     flexWrap: 'wrap'
-  },
-
-  restoreCenter: {
-    width: '30%',
-    marginVertical: 60
-  },
-
-  instruktor: {
-    marginLeft: 8,
-    marginBottom: 10
-  },
-  customButon: {
-    margin: 5,
-    height: 30,
-    width: '21%',
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3
-  },
-  posli: {
-    marginTop: 20,
-    justifyContent: 'center'
-  },
-
-  textInButton: {
-    fontSize: 20,
-    color: 'black'
-    //fontFamily: 'open-sans-bold',
-    //textAlign: 'center',
   }
 });

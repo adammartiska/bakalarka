@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import JazdyAbsolvovane from '../Instruktor/JazdyAbsolvovane';
 import JazdyNadchadzajuce from '../Instruktor/JazdyNadchadzajuce';
@@ -41,9 +41,3 @@ export default class TabViewExample extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  scene: {
-    flex: 1
-  }
-});

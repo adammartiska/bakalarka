@@ -101,19 +101,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
 
-  vysunute: {
-    backgroundColor: '#fff',
-    marginTop: 0,
-    marginHorizontal: 16
-  },
 
-  title: {
-    fontSize: 22
-  },
-  logo: {
-    width: 22,
-    height: 22
-  }
 });
 
 export default JazdyAbsolvovane;

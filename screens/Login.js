@@ -1,27 +1,22 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import { create } from 'apisauce';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
-  View,
-  Text,
-  Button,
-  TextInput,
-  StyleSheet,
-  Image,
-  TouchableWithoutFeedback,
-  Keyboard,
   ActivityIndicator,
-  Alert
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
-import { TouchableOpacity, Directions } from 'react-native-gesture-handler';
-import Colors from '../constants/Colors';
-import { KeyboardAvoidingView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import Input from '../components/Input';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
+import Input from '../components/Input';
+import Colors from '../constants/Colors';
 import * as authActions from '../store/actions/auth';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
-import { create } from 'apisauce';
-import { errorHandler } from './errorHandler';
-import AwesomeAlert from 'react-native-awesome-alerts';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -67,6 +62,8 @@ const Login = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [error, setError] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const info = useSelector(state => state.auth.info);
   const dispatch = useDispatch();
@@ -90,7 +87,10 @@ const Login = props => {
   }, [error]);
 
   const authHandler = async () => {
+    Keyboard.dismiss();
     let action;
+    console.log('Pod tymto email');
+    console.log(formState.inputValues.password);
     action = authActions.loginmyapp(
       formState.inputValues.email,
       formState.inputValues.password
@@ -104,20 +104,27 @@ const Login = props => {
       const { token, relations, schoolCount } = where;
       console.log(token, schoolCount);
       if (relations.length > 0) {
+        if (schoolCount === 1 && relations[0].information === 'completed') {
+          await dispatch(authActions.headerData(relations[0].relationID));
+          props.navigation.navigate('CompletedZiak');
+        }
         if (relations[0].information === 'active' && schoolCount === 1) {
           await dispatch(authActions.reduxdata(token, relations[0].relationID));
           if (relations[0].role === 'INSTRUCTOR') {
             props.navigation.navigate('SignedInInstructor');
           } else if (relations[0].role === 'STUDENT') {
+            console.log('naviguje ziak');
             props.navigation.navigate('SignedInZiak');
           } else if (relations[0].role === 'OWNER') {
+            console.log('navigujem owner');
             props.navigation.navigate('SignedInOwner');
           }
         }
-        // ZLA LOGIKA PREROBIT
-        else if (schoolCount >= 1) {
-          props.navigation.navigate('VyberScreen');
-        } else if (relations.map(item => item.information !== 'active')) {
+        if (
+          schoolCount > 1 &&
+          relations.map(item => item.information !== 'active')
+        ) {
+          console.log('preco som tu');
           props.navigation.navigate('VyberScreen');
         }
       } else {
@@ -283,23 +290,3 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
-
-//  const odosli = () => {
-//     fetch("https://cc50f32d-6fac-4f8e-9785-490f1aa516e6.mock.pstmn.io/skuslogin", {
-//     method: "POST",
-//     headers: {
-//         Accept: 'application/json',
-//         'Content-Type': 'application/json',
-//       },
-//     body:  JSON.stringify(mojedata)
-//  })
-//  .then(function(response){
-//   return response.json();
-//  })
-//  .then(function(data){
-//  console.log(data)
-//  });
-//  };
-
-//poznamka prvotny login nejde kvoli tomu, ze potvrdenie inputu mam zatial
-//nastavene na onblur cize ked stratim focus z daneho textinputu

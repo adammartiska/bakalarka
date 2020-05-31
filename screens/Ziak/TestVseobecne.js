@@ -1,64 +1,47 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  Picker,
-  Button,
-  TouchableOpacity
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
   RadioButtonLabel
 } from 'react-native-simple-radio-button';
-import Colors from '../../constants/Colors';
-import TimeButton from '../../components/TimeButton';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../../constants/Colors';
 
 let arrnew = [];
 
 export default class Prvy extends Component {
-  const jwt = useSelector(state => state.auth.token);
-  const relationId = useSelector(state => state.auth.relationId);
-  const api = create({
-    baseURL: 'http://147.175.121.250:80',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`,
-      Relation: relationId
-    }
-  });
   constructor(props) {
     super(props);
     this.Qno = 0;
     this.score = 0;
     const { params } = this.props.navigation.state;
-    const jdata = params.test.quiz.quiz1;
-    arrnew = Object.keys(jdata).map(function(k) {
-      return jdata[k];
-    });
+    const jdata = params.test;
+    // arrnew = Object.keys(jdata).map(function(k) {
+    //   return jdata[k];
+    // });
+    arrnew = jdata;
     console.log(arrnew);
 
     this.state = {
       vyhodnot: false,
       value: 0,
-      question: arrnew[this.Qno].question,
-      options: arrnew[this.Qno].options,
-      correct: arrnew[this.Qno].correctoption,
+      question: arrnew.questions[this.Qno].question,
+      answers: arrnew.questions[this.Qno].answers,
+      correct: arrnew.questions[this.Qno].correctAnswer,
       uhadnute: false,
       neuhadnute: false
     };
   }
   next() {
-    console.log(this.Qno);
-    console.log(this.state.vyhodnot);
-    if (arrnew[this.Qno].correctoption === `answer_${this.state.value + 1}`) {
+    console.log(arrnew.questions.length);
+    if (
+      `answer_${arrnew.questions[this.Qno].correctAnswer}` ===
+      `answer_${this.state.value + 1}`
+    ) {
       this.score = this.score + 1;
     }
-    if (this.Qno === arrnew.length - 1) {
+    if (this.Qno === arrnew.questions.length - 1) {
       this.setState({
         vyhodnot: true
       });
@@ -68,9 +51,9 @@ export default class Prvy extends Component {
         neuhadnute: false,
         uhadnute: false,
         value: 0,
-        question: arrnew[this.Qno].question,
-        options: arrnew[this.Qno].options,
-        correct: arrnew[this.Qno].correctoption
+        question: arrnew.questions[this.Qno].question,
+        answers: arrnew.questions[this.Qno].answers,
+        correct: arrnew.questions[this.Qno].correctAnswer
       });
     }
     console.log(this.Qno);
@@ -78,7 +61,10 @@ export default class Prvy extends Component {
   }
 
   check() {
-    if (arrnew[this.Qno].correctoption === `option${this.state.value + 1}`) {
+    if (
+      `answer_${arrnew.questions[this.Qno].correctAnswer}` ===
+      `answer_${this.state.value + 1}`
+    ) {
       this.setState({
         uhadnute: true
       });
@@ -97,7 +83,7 @@ export default class Prvy extends Component {
           </View>
           <View style={{ marginVertical: 5 }}>
             <Text>
-              Dosiahol si {this.score} z {arrnew.length} moznych bodov
+              Dosiahol si {this.score} z {arrnew.questions.length} moznych bodov
             </Text>
           </View>
         </View>
@@ -139,18 +125,18 @@ export default class Prvy extends Component {
   }
 
   nextButtonHandler() {
-    if (this.Qno === arrnew.length - 1) {
-      return <Text style={styles.textInButton}>VYHODNOT</Text>;
-    }
-    return <Text style={styles.textInButton}>NEXT</Text>;
+    //TODO MOZNO ZOBRAZIT INU IKONU NA VYHODNOTENIE
+    // if (this.Qno === arrnew.questions.length - 1) {
+    //   return <Text style={styles.textInButton}>Vyhodnot</Text>;
+    // }
+    return <Icon name="ios-arrow-dropright" size={30} />;
   }
 
   render() {
     const radio_props = [
-      { label: `${this.state.options.option1}`, value: 1 },
-      { label: `${this.state.options.option2}`, value: 2 },
-      { label: `${this.state.options.option3}`, value: 3 },
-      { label: `${this.state.options.option4}`, value: 4 }
+      { label: `${this.state.answers.answer_1}`, value: 1 },
+      { label: `${this.state.answers.answer_2}`, value: 2 },
+      { label: `${this.state.answers.answer_3}`, value: 3 }
     ];
     return (
       <View style={styles.center}>
@@ -193,6 +179,13 @@ export default class Prvy extends Component {
                 <RadioButtonLabel
                   obj={obj}
                   index={i}
+                  onPress={() => {
+                    this.setState({
+                      neuhadnute: false,
+                      uhadnute: false,
+                      value: i
+                    });
+                  }}
                   labelHorizontal={true}
                   labelStyle={{ fontSize: 15 }}
                   labelWrapStyle={{}}
@@ -202,14 +195,24 @@ export default class Prvy extends Component {
           </RadioForm>
         </View>
         {this.zobrazVysledok()}
-        <View style={{ flexDirection: 'row' }}>
-          <View
-            style={
-              this.Qno === arrnew.length - 1
-                ? [styles.customButon, { width: '50%' }]
-                : styles.customButon
-            }
-          >
+        <View
+          style={{
+            flexDirection: 'row',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 10,
+            top: 0,
+            justifyContent: 'center',
+            alignItems: 'flex-end'
+          }}
+        >
+          <View style={styles.customButon}>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => this.check()}>
+              <Icon name="md-search" size={30} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.customButon}>
             <TouchableOpacity
               activeOpacity={0.5}
               onPress={
@@ -217,11 +220,6 @@ export default class Prvy extends Component {
               }
             >
               {this.nextButtonHandler()}
-            </TouchableOpacity>
-          </View>
-          <View style={styles.customButon}>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.check()}>
-              <Text style={styles.textInButton}>Check</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -233,7 +231,7 @@ export default class Prvy extends Component {
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    paddingTop: 120,
+    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 50
   },
@@ -246,13 +244,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20
   },
   radio: {
-    marginBottom: 40
+    marginBottom: 20
   },
   customButon: {
     margin: 5,
     height: 35,
     width: '28%',
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#DDDDDD',
     borderRadius: 5,
     shadowColor: 'black',
@@ -260,9 +259,5 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
     elevation: 3
-  },
-  textInButton: {
-    fontSize: 22,
-    color: 'black'
   }
 });

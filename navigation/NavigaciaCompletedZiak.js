@@ -1,12 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import Colors from '../constants/Colors';
 import Profil from '../screens/Ziak/Profil';
+import ProfilSettings from '../screens/Ziak/ProfilSettings';
+import TestVseobecne from '../screens/Ziak/TestVseobecne';
 import Testy from '../screens/Ziak/Testy';
 import UkoncenyZiak from '../screens/Ziak/UkoncenyZiak';
-import { Ionicons } from '@expo/vector-icons';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import ProfilSettings from '../screens/Ziak/ProfilSettings';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -33,6 +34,12 @@ const TestyStack = createStackNavigator(
       screen: Testy,
       navigationOptions: {
         headerTitle: 'Testy'
+      }
+    },
+    TestVseobecne: {
+      screen: TestVseobecne,
+      navigationOptions: {
+        headerTitle: 'Test'
       }
     }
   },

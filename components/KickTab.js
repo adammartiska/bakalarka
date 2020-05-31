@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 
@@ -38,13 +38,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 20,
     height: 20
-  },
-  textInButton: {
-    fontSize: 20,
-    color: 'black',
-    textAlign: 'center'
-    //fontFamily: 'open-sans-bold',
-    //textAlign: 'center',
   }
 });
 

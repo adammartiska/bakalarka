@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Colors from '../constants/Colors';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const IconButton = props => {
@@ -29,12 +28,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
     elevation: 3
-  },
-  textInButton: {
-    fontSize: 20,
-    color: 'black'
-    //fontFamily: 'open-sans-bold',
-    //textAlign: 'center',
   }
 });
 

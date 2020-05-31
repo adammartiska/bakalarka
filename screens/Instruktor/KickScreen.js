@@ -1,33 +1,50 @@
-import React, { useEffect, useCallback, useState, useRef } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-  Image,
-  Animated
-} from 'react-native';
-import Colors from '../../constants/Colors';
-import CustomHeaderButton from '../../components/CustomHeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useDispatch, useSelector } from 'react-redux';
-import * as authActions from '../../store/actions/auth';
-import TimeButton from '../../components/TimeButton';
-import { Card, ListItem } from 'react-native-elements';
-//import Icon from 'react-native-ionicons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
-import CustomButon from '../../components/CustomButton';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import moment from 'moment';
+import { create } from 'apisauce';
 import KickTab from '../../components/KickTab';
+import Colors from '../../constants/Colors';
 
 const KickScreen = props => {
   const [showAlert, setShowAlert] = useState(false);
+  const jwt = useSelector(state => state.auth.token);
+  const [inactiveUsers, setInactiveUsers] = useState([]);
+  const [kickId, setKickId] = useState(0);
+  const relationId = useSelector(state => state.auth.relationId);
   const hideAlert = () => {
     setShowAlert(false);
+  };
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${jwt}`,
+      Relation: relationId
+    }
+  });
+  useEffect(() => {
+    const fetchRequests = async () => {
+      const response = await api.get('/school/getInactiveUsers');
+      if (response.ok) {
+        console.log(response);
+        setInactiveUsers(response.data);
+      }
+    };
+    fetchRequests();
+  }, []);
+
+  const kickHandler = async id => {
+    const reponse = await api.post(`/school/kickUser/${id}`);
+    console.log(reponse);
+    if (response.ok) {
+      setInactiveUsers(inactiveUsers.filter(user => user.relationID !== id));
+    }
+  };
+  const askAboutKick = id => {
+    setKickId(id);
+    setShowAlert(true);
   };
   return (
     <View style={styles.screen}>
@@ -48,10 +65,32 @@ const KickScreen = props => {
           Po kliknuti na ikonu bude dany ziak z vasej autoskoly vyhodeny
         </Text>
       </View>
-      <KickTab
-        name="Ivana Bihariova"
-        onPressDecline={() => setShowAlert(true)}
-      />
+      {inactiveUsers.length > 0 ? (
+        inactiveUsers.map(user => (
+          <KickTab
+            key={user.name}
+            name={user.name}
+            onPressDecline={() => askAboutKick(user.relationID)}
+          />
+        ))
+      ) : (
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 50
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              textAlign: 'center',
+            }}
+          >
+            Vo vasej autoskole nie su ziadni neaktivni ziaci
+          </Text>
+        </View>
+      )}
       <AwesomeAlert
         show={showAlert}
         showProgress={false}
@@ -66,7 +105,7 @@ const KickScreen = props => {
         confirmButtonColor={Colors.carhartt}
         cancelButtonColor="#7a7a7a"
         onCancelPressed={hideAlert}
-        onConfirmPressed={hideAlert}
+        onConfirmPressed={() => kickHandler(kickId)}
       />
     </View>
   );
@@ -76,58 +115,6 @@ const styles = StyleSheet.create({
   screen: {
     marginHorizontal: 20,
     flex: 1
-  },
-
-  logo: {
-    marginTop: 20,
-    height: 100,
-    width: 100
-  },
-  ciara: {
-    borderWidth: 1,
-    borderColor: Colors.sedatmava,
-    marginVertical: 15
-  },
-  heading: {
-    marginVertical: 20
-  },
-  progressBar: {
-    flexDirection: 'row',
-    height: 20,
-    width: 300,
-    backgroundColor: 'white',
-    borderColor: '#000',
-    borderWidth: 2,
-    borderRadius: 5,
-    marginBottom: 20
-  },
-
-  customButon: {
-    margin: 5,
-    height: 30,
-    width: '20%',
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3
-  },
-  text: {
-    fontSize: 20,
-    color: 'black'
-    //textAlign: 'center',
-  },
-  input: {
-    flexDirection: 'row',
-    marginVertical: 10,
-    width: '85%',
-    height: 30,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 2,
-    justifyContent: 'space-between'
   }
 });
 

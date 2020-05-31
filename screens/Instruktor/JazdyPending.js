@@ -1,26 +1,18 @@
-import React from 'react';
+import { create } from 'apisauce';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
+  ActivityIndicator,
   FlatList,
   SafeAreaView,
-  Image,
-  ActivityIndicator
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from '../../components/DetailJazdy';
-import { useState, useEffect } from 'react';
-import Colors from '../../constants/Colors';
-import InstruktorBar from '../../components/InstruktorBar';
-import RezervovanaJazda from '../../components/RezervovanaJazda';
-import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
-import AbsolvovanePending from '../../components/AbsolvovanePending';
-import { create } from 'apisauce';
-import { useSelector } from 'react-redux';
-import { useFetchGet } from '../../hooks/useFetchGet';
-import moment from 'moment';
 import Icon from 'react-native-vector-icons/Entypo';
+import { useSelector } from 'react-redux';
+import AbsolvovanePending from '../../components/AbsolvovanePending';
+import Colors from '../../constants/Colors';
 
 const JazdyNadchadzajuce = props => {
   const [rides, setRides] = useState([]);
@@ -60,15 +52,21 @@ const JazdyNadchadzajuce = props => {
   const confirmHandler = async id => {
     const response = await api.post('/instructor/completeRide', { id: id });
     console.log(response);
+    if (response.ok) {
+      setRides(rides.filter(ride => ride.id !== id));
+    }
   };
 
-  const declineHandler = async id => {
+  const declineHandler = async (date, time, id) => {
     const response = await api.delete(
       '/instructor/removeRides',
       {},
-      { data: [{ id: id }] }
+      { data: [{ date: date, time: time }] }
     );
     console.log(response);
+    if (response.ok) {
+      setRides(rides.filter(ride => ride.id !== id));
+    }
   };
 
   return (
@@ -83,7 +81,13 @@ const JazdyNadchadzajuce = props => {
               datum={moment(item.date).format('DD.MM.YYYY')}
               cas={item.time}
               onPressConfirm={() => confirmHandler(item.id)}
-              onPressDecline={() => declineHandler(item.id)}
+              onPressDecline={() =>
+                declineHandler(
+                  moment(item.date).format('YYYY-MM-DD'),
+                  item.time,
+                  item.id
+                )
+              }
               name={item.student}
             />
           )}
@@ -114,31 +118,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     flex: 1,
     marginTop: 8
-  },
-
-  riadokJazdy: {
-    borderWidth: 2,
-    borderColor: '#000',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    //backgroundColor: Colors.sedatmava,
-    padding: 10,
-    marginTop: 8,
-    width: '60%',
-    marginHorizontal: 15
-  },
-  vysunute: {
-    backgroundColor: '#fff',
-    marginTop: 0,
-    marginHorizontal: 16
-  },
-
-  title: {
-    fontSize: 22
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 

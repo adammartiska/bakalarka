@@ -1,28 +1,22 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-  Image,
-  ScrollView,
-  ActivityIndicator,
-  Platform
-} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from '../../components/DetailJazdy';
-import { useState, useEffect } from 'react';
-import Colors from '../../constants/Colors';
-import InstruktorBar from '../../components/InstruktorBar';
-import RezervovanaJazda from '../../components/RezervovanaJazda';
-import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomButton from '../../components/CustomButton';
 import { create } from 'apisauce';
 import moment from 'moment';
+import React, { useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 import { useSelector } from 'react-redux';
+import CustomButton from '../../components/CustomButton';
 import IconButton from '../../components/IconButton';
+import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
+import Colors from '../../constants/Colors';
 
 const JazdyNadchadzajuce = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -45,19 +39,8 @@ const JazdyNadchadzajuce = props => {
   const [upper, setUper] = useState(true);
   const [data, setData] = useState([]);
   const [dataPicker, setDataPicker] = useState([]);
-  const [pending, setPending] = useState(false);
   const [isLoadingRecent, setIsLoadingRecent] = useState(false);
   const [isLoadingPicker, setIsLoadingPicker] = useState(false);
-
-  // useEffect(() => {
-  //   async () => {
-  //     console.log('zbieha useeffect');
-  //     const response = await api.get(
-  //       `/instructor/myRides?date=${moment(date).format('YYYY-MM-DD')}`
-  //     );
-  //     setDataPicker(response.data);
-  //   };
-  // }, []);
 
   const onChange = async (event, selectedDate) => {
     setShow(Platform.OS === 'ios');
@@ -83,7 +66,7 @@ const JazdyNadchadzajuce = props => {
   const iconButtonHandler = (statePicker, stateUpper) => {
     setShowPickerRides(statePicker);
     setUper(stateUpper);
-  }
+  };
   const handleRecent = async () => {
     setIsLoadingRecent(true);
     const response = await api.get(
@@ -122,16 +105,15 @@ const JazdyNadchadzajuce = props => {
           {recent &&
             (data.length > 0 ? (
               <SafeAreaView>
-                <FlatList
-                  data={data}
-                  renderItem={({ item }) => (
-                    <NadchadzajuceInstruktor
-                      datum={moment(item.date).format('DD.MM.YYYY')}
-                      cas={item.time}
-                      style={{ marginHorizontal: 2 }}
-                    />
-                  )}
-                />
+                {data.map(item => (
+                  <NadchadzajuceInstruktor
+                    key={item.time}
+                    datum={moment(item.date).format('DD.MM.YYYY')}
+                    cas={item.time}
+                    style={{ marginHorizontal: 2 }}
+                    name={item.student}
+                  />
+                ))}
               </SafeAreaView>
             ) : (
               <View
@@ -171,6 +153,7 @@ const JazdyNadchadzajuce = props => {
       </View>
       {show && (
         <DateTimePicker
+          minimumDate={new Date()}
           testID="dateTimePicker"
           timeZoneOffsetInMinutes={0}
           value={date}
@@ -193,16 +176,17 @@ const JazdyNadchadzajuce = props => {
             </View>
             {showPickerRides &&
               (dataPicker.length > 0 ? (
-                <FlatList
-                  data={dataPicker}
-                  renderItem={({ item }) => (
+                <SafeAreaView>
+                  {data.map(item => (
                     <NadchadzajuceInstruktor
+                      key={item.time}
                       datum={moment(item.date).format('DD.MM.YYYY')}
                       cas={item.time}
                       style={{ marginHorizontal: 2 }}
+                      name={item.student}
                     />
-                  )}
-                />
+                  ))}
+                </SafeAreaView>
               ) : (
                 <View
                   style={{
@@ -232,38 +216,6 @@ const styles = StyleSheet.create({
   screen: {
     marginHorizontal: 12,
     marginTop: 15
-  },
-  default: {
-    marginHorizontal: 12,
-    flex: 1,
-    marginTop: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  riadokJazdy: {
-    borderWidth: 2,
-    borderColor: '#000',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    //backgroundColor: Colors.sedatmava,
-    padding: 10,
-    marginTop: 8,
-    width: '60%',
-    marginHorizontal: 15
-  },
-  vysunute: {
-    backgroundColor: '#fff',
-    marginTop: 0,
-    marginHorizontal: 16
-  },
-
-  title: {
-    fontSize: 22
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 

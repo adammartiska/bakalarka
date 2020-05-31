@@ -1,43 +1,31 @@
-import React, { useEffect, useCallback, useState, useRef } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import moment from 'moment';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
+  Animated,
   Image,
-  Animated
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import Colors from '../../constants/Colors';
-import CustomHeaderButton from '../../components/CustomHeaderButton';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import * as authActions from '../../store/actions/auth';
-import TimeButton from '../../components/TimeButton';
-import { Card, ListItem } from 'react-native-elements';
-//import Icon from 'react-native-ionicons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
 import CustomButon from '../../components/CustomButton';
-import AwesomeAlert from 'react-native-awesome-alerts';
-import moment from 'moment';
+import CustomHeaderButton from '../../components/CustomHeaderButton';
+import Colors from '../../constants/Colors';
+import * as authActions from '../../store/actions/auth';
 
 const Profil = props => {
   const dispatch = useDispatch();
-  const [progress, setProgress] = useState(0);
   const userInfo = useSelector(state => state.auth.userInfo);
   const { email, fullName, phoneNumber, ridesCompleted, startDate } = userInfo;
   const date = moment(startDate).format('DD/MM/YYYY');
   const [image, setImage] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
-  const odjazedene = 10;
-  const celkovo = 20;
-  let prog = (ridesCompleted / celkovo) * 100;
-  let progString = prog.toString() + '%';
-  const p = () => {
-    return progString;
-  };
+
   let animation = useRef(new Animated.Value(0));
   const pickImage = async () => {
     console.log(userInfo);
@@ -157,35 +145,7 @@ const styles = StyleSheet.create({
   heading: {
     marginVertical: 20
   },
-  progressBar: {
-    flexDirection: 'row',
-    height: 20,
-    width: 300,
-    backgroundColor: 'white',
-    borderColor: '#000',
-    borderWidth: 2,
-    borderRadius: 5,
-    marginBottom: 20
-  },
 
-  customButon: {
-    margin: 5,
-    height: 30,
-    width: '20%',
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3
-  },
-  text: {
-    fontSize: 20,
-    color: 'black'
-    //textAlign: 'center',
-  },
   input: {
     flexDirection: 'row',
     marginVertical: 10,

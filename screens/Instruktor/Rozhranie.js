@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { Dimensions } from 'react-native';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+import Colors from '../../constants/Colors';
 import ConfirmScreen from '../Instruktor/ConfirmScreen';
 import KickScreen from '../Instruktor/KickScreen';
-import Colors from '../../constants/Colors';
-import { TabBar } from 'react-native-tab-view';
 
 export default class TabViewExample extends React.Component {
   state = {
@@ -38,9 +37,3 @@ export default class TabViewExample extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  scene: {
-    flex: 1
-  }
-});

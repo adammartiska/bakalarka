@@ -10,6 +10,7 @@ export const FORGOTPASS = 'FORGOTPASS';
 export const LOGINMYAPP = 'LOGINMYAPP';
 export const REDUXDATA = 'REDUXDATA';
 export const UPDATERELATIONID = 'UPDATERELATIONID';
+export const USERINFO = 'USERINFO';
 
 export const authenticate = (userId, token) => {
   return { type: AUTHENTICATE, userId: userId, token: token };
@@ -228,6 +229,13 @@ export const headerData = relationId => {
   return {
     type: UPDATERELATIONID,
     relationId: relationId
+  };
+};
+
+export const userInfo = userInfo => {
+  return {
+    type: USERINFO,
+    userInfo: userInfo
   };
 };
 

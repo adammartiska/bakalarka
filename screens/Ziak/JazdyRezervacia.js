@@ -278,24 +278,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 10
   },
-  customButon: {
-    margin: 5,
-    height: 30,
-    width: '21%',
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    borderRadius: 5,
-    shadowColor: 'black',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 10,
-    elevation: 3
-  },
 
-  textInButton: {
-    fontSize: 20,
-    color: 'black'
-    //fontFamily: 'open-sans-bold',
-    //textAlign: 'center',
-  }
 });

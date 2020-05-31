@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 const InstruktorBar = props => {
   return (
@@ -13,12 +13,6 @@ const InstruktorBar = props => {
 };
 
 const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    paddingTop: 120,
-    alignItems: 'center'
-  },
-
   instruktorLayout: {
     flexDirection: 'row'
   },

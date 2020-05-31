@@ -1,21 +1,9 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-  Image,
-  Alert
-} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ProgressViewIOSComponent } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from '../components/DetailJazdy';
-import { useState } from 'react';
-import Colors from '../constants/Colors';
-import InstruktorBar from '../components/InstruktorBar';
 import Icon from 'react-native-vector-icons/Ionicons';
-import TimeButton from './TimeButton';
-import AwesomeAlert from 'react-native-awesome-alerts';
+import InstruktorBar from '../components/InstruktorBar';
+import Colors from '../constants/Colors';
 
 const RezervovanaJazda = props => {
   const [showDetails, setShowDetails] = useState(false);
@@ -30,11 +18,11 @@ const RezervovanaJazda = props => {
   };
 
   return (
-    <View style={{ elevation: 50, marginBottom: 12, }} id={props.id}>
+    <View style={{ elevation: 50, marginBottom: 12 }} id={props.id}>
       <View style={styles.screen}>
         <View style={{ width: '60%', flexDirection: 'column' }}>
           <View style={{ marginBottom: 5 }}>
-            <InstruktorBar />
+            <InstruktorBar name={props.name} />
           </View>
 
           <View style={{ flexDirection: 'row' }}>
@@ -80,30 +68,8 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
 
-  riadokJazdy: {
-    borderWidth: 2,
-    borderColor: '#000',
-    //backgroundColor: Colors.sedatmava,
-    padding: 10,
-    marginTop: 8,
-    width: '100%',
-    marginHorizontal: 15
-  },
-  vysunute: {
-    borderWidth: 1,
-    marginTop: 0,
-    marginHorizontal: 16,
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginVertical: 15
-  },
-
   title: {
     fontSize: 18
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 

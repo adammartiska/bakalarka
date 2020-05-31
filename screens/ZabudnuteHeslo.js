@@ -144,25 +144,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 30
   },
-  logo: {
-    marginVertical: 30,
-    width: 200,
-    height: 100
-  },
-  zarovnaj: {
-    alignItems: 'flex-start'
-  },
 
   inputLoginText: {
     paddingVertical: 3,
     textAlign: 'center',
     fontSize: 22,
     color: '#fff'
-  },
-  inputLoginTextBlack: {
-    paddingVertical: 3,
-    textAlign: 'center',
-    fontSize: 22
   },
   sprava: {
     marginVertical: 10

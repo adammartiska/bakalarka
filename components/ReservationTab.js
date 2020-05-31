@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
-import TimeButton from './TimeButton';
+import { StyleSheet, View } from 'react-native';
 import InstruktorBar from './InstruktorBar';
+import TimeButton from './TimeButton';
 
 const ReservationTab = props => {
   const [selected, setSelected] = useState('');
@@ -34,11 +34,6 @@ const ReservationTab = props => {
 };
 
 const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    paddingTop: 120,
-    alignItems: 'center'
-  },
   screen: {
     //flex: 1,
     flexDirection: 'row',
@@ -50,20 +45,6 @@ const styles = StyleSheet.create({
   instruktor: {
     marginLeft: 8,
     marginBottom: 10
-  },
-
-  instruktorLayout: {
-    flexDirection: 'row'
-  },
-  logo: {
-    borderColor: 'black',
-    borderRadius: 10,
-    width: 35,
-    height: 35
-  },
-  menoInstruktora: {
-    marginLeft: 15,
-    paddingVertical: 5
   }
 });
 

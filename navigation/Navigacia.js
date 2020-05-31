@@ -1,35 +1,25 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
-import { useSelector } from 'react-redux';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 //import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Colors from '../constants/Colors';
+import Login from '../screens/Login';
+import Registracia from '../screens/Registracia';
+import Vyber from '../screens/Vyber';
+import VyberScreen from '../screens/VyberScreen';
+import ZabudnuteHeslo from '../screens/ZabudnuteHeslo';
+import Jazdy from '../screens/Ziak/Jazdy';
 import JazdyRezervacia from '../screens/Ziak/JazdyRezervacia';
 import Profil from '../screens/Ziak/Profil';
-import Testy from '../screens/Ziak/Testy';
-import Login from '../screens/Login';
-import JazdyAbsolvovane from '../screens/Ziak/JazdyAbsolvovane';
-import Jazdy from '../screens/Ziak/Jazdy';
-import Registracia from '../screens/Registracia';
-import ZabudnuteHeslo from '../screens/ZabudnuteHeslo';
-import JazdyInstruktor from '../screens/Instruktor/JazdyInstruktor';
-import Processing from '../screens/Processing';
-import { Ionicons } from '@expo/vector-icons';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-import { fromLeft } from 'react-navigation-transitions';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import CustomHeaderButton from '../components/CustomHeaderButton';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import ProfilSettings from '../screens/Ziak/ProfilSettings';
-import JazdyNadchadzuje from '../screens/Ziak/JazdyNadchadzajuce';
-import TestVseobecne from '../screens/Testy/TestVseobecne';
-import NavigaciaTabInstruktor from './NavigaciaInstruktor';
-import Vyber from '../screens/Vyber';
-import ConfirmScreen from '../screens/Instruktor/ConfirmScreen';
-import VyberScreen from '../screens/VyberScreen';
-import NavigaciaOwner from './NavigaciaOwner';
+import TestVseobecne from '../screens/Ziak/TestVseobecne';
+import Testy from '../screens/Ziak/Testy';
 import NavigaciaCompletedZiak from './NavigaciaCompletedZiak';
+import NavigaciaTabInstruktor from './NavigaciaInstruktor';
+import NavigaciaOwner from './NavigaciaOwner';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -251,10 +241,6 @@ const NavigaciaTab = createMaterialBottomTabNavigator(
 
 const SwitchNavigator = createAnimatedSwitchNavigator(
   {
-    Processing: {
-      screen: Processing
-    },
-
     SignedOut: {
       screen: LoginStack
     },

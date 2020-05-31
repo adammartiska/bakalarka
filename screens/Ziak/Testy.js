@@ -1,26 +1,8 @@
-import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  Picker,
-  Button,
-  ScrollView
-} from 'react-native';
-import ToggleSwitch from '../../components/ToggleSwitch';
-import InstruktorBar from '../../components/InstruktorBar';
-import TimeButtonCheck from '../../components/TimeButtonCheck';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button';
-import { useSelector } from 'react-redux';
-import PickerTesty from '../../components/PickerTesty';
-import TimeButton from '../../components/TimeButton';
-import jsonData from '../../constants/Test';
 import { create } from 'apisauce';
+import React, { useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import TimeButton from '../../components/TimeButton';
 
 const Testy = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -36,7 +18,6 @@ const Testy = props => {
   });
   const [zobraz, setZobraz] = useState('zobraz testy');
   const [stav, setStav] = useState(false);
-  const [zvoleny, setZvoleny] = useState('Prvy');
 
   /* tuto informaciu loadnem zo serveru hned */
   const [testy, setTesty] = useState([]);
@@ -66,9 +47,6 @@ const Testy = props => {
       <View>
         <Image style={styles.logo} source={require('../../Images/test.png')} />
       </View>
-      {/*<PickerTesty 
-        selectedValue = {zvoleny}
-        onValueChange={(value) => setZvoleny(value)}/> */}
       <View style={{ marginBottom: 20 }}>
         <TimeButton
           name={zobraz}
@@ -104,11 +82,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 50
   },
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   mainButton: {
     width: 160,
     marginVertical: 20
@@ -117,17 +90,10 @@ const styles = StyleSheet.create({
     width: 150,
     marginVertical: 10
   },
-  instruktorLayout: {
-    flexDirection: 'row'
-  },
   logo: {
     marginVertical: 30,
     width: 90,
     height: 130
-  },
-  menoInstruktora: {
-    marginLeft: 20,
-    paddingVertical: 15
   }
 });
 

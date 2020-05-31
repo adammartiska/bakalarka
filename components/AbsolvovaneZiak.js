@@ -1,9 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from './DetailJazdy';
-import { useState } from 'react';
-import Colors from '../constants/Colors';
 import InstruktorBar from './InstruktorBar';
 
 const AbsolvovaneZiak = props => {
@@ -82,10 +80,6 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 18
-  },
-  logo: {
-    width: 22,
-    height: 22
   }
 });
 
