@@ -40,7 +40,6 @@ const JazdyAbsolvovane = props => {
       try {
         const res = await api.get('/student/getCompletedRides');
         setData(res.data);
-        console.log(res.data);
         setIsLoading(false);
       } catch (error) {
         setError(error);
@@ -99,9 +98,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     marginBottom: 20
-  },
-
-
+  }
 });
 
 export default JazdyAbsolvovane;

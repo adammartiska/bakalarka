@@ -17,10 +17,15 @@ import CustomButton from '../../components/CustomButton';
 import IconButton from '../../components/IconButton';
 import NadchadzajuceInstruktor from '../../components/NadchadzajuceInstruktor';
 import Colors from '../../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyNadchadzajuce = props => {
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
+  const userInfo = useSelector(state => state.auth.userInfo);
   const api = create({
     baseURL: 'http://147.175.121.250:80',
     headers: {
@@ -51,7 +56,6 @@ const JazdyNadchadzajuce = props => {
     setDataPicker(response.data);
     setDate(selectedDate);
     setIsLoadingPicker(false);
-    console.log(response);
     setShowPickerArrow(true);
   };
 
@@ -87,7 +91,7 @@ const JazdyNadchadzajuce = props => {
       {upper && (
         <View>
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ fontSize: 23 }}>Vitaje Adam Martiska</Text>
+            <Text style={{ fontSize: 23 }}>Vitaje {userInfo.fullName}</Text>
             <View style={{ marginVertical: 15, alignItems: 'center' }}>
               <Text style={{ textAlign: 'center', fontSize: 16 }}>
                 Pozrite si zoznam jazd na dnes
@@ -214,8 +218,8 @@ const JazdyNadchadzajuce = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    marginHorizontal: 12,
-    marginTop: 15
+    marginHorizontal: wp('4%'),
+    marginTop: hp('2.75%')
   }
 });
 

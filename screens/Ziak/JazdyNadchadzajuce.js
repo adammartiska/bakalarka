@@ -48,7 +48,6 @@ const JazdyNadchadzajuce = props => {
       setIsLoading(true);
       try {
         const res = await api.get('/student/getReservedRides');
-        console.log(res);
         setData(res.data);
         setIsLoading(false);
       } catch (error) {
@@ -60,7 +59,6 @@ const JazdyNadchadzajuce = props => {
 
   const zmazHandler = async id => {
     const response = await api.post(`/student/cancelRide/${id}`);
-    console.log(response);
     if (response.ok) {
       setGotResponse(true);
     }
@@ -77,7 +75,6 @@ const JazdyNadchadzajuce = props => {
       id: id
     });
     setShowAlert(true);
-    console.log(zvolenaCancel);
   };
 
   const hideAlert = () => {

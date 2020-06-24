@@ -5,12 +5,10 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import Navigacia from './navigation/Navigacia';
 import authReducer from './store/reducers/auth';
-import orderReducer from './store/reducers/orders';
 
 //useScreens();  //optimalizacia screenov performance
 
 const rootReducer = combineReducers({
-  orders: orderReducer,
   auth: authReducer
 });
 
@@ -37,12 +35,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});

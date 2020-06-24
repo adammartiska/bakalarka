@@ -33,7 +33,6 @@ const VyberScreen = props => {
   useEffect(() => {
     const fetchRelations = async () => {
       const response = await api.get('/user/viewRelations');
-      console.log(response);
       setRelations(response.data);
     };
     fetchRelations();
@@ -44,7 +43,6 @@ const VyberScreen = props => {
       props.navigation.navigate('CompletedZiak');
     }
     const response = await dispatch(authActions.reduxdata(jwt, relationId));
-    console.log(response);
     if (response.ok) {
       if (role === 'STUDENT') {
         props.navigation.navigate('SignedInZiak');

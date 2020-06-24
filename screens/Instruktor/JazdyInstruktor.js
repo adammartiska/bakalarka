@@ -17,11 +17,8 @@ import Colors from '../../constants/Colors';
 
 const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
-  useEffect(() => {
-    console.log('useEffect');
-    calculateDisabledDates();
-  }, []);
   const selectedStartDate = null;
+  const minDate = new Date();
   const [casy, setCasy] = useState([]);
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
@@ -30,7 +27,6 @@ const JazdyInstruktor = props => {
   const [dateToSent, setDateToSent] = useState('');
   const [initialTimes, setInitialTimes] = useState([]);
   const [bigData, setBigData] = useState([]);
-  const [unavailableDates, setUnavailableDates] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
 
   const api = create({
@@ -42,21 +38,6 @@ const JazdyInstruktor = props => {
       Relation: relationId
     }
   });
-
-  const list = [
-    { value: '1100', label: '11:00' },
-    { value: '1200', label: '12:00' },
-    { value: '1300', label: '13:00' },
-    { value: '1400', label: '14:00' },
-    { value: '1500', label: '15:00' },
-    { value: '1600', label: '16:00' }
-  ];
-  const [data, setData] = useState(() =>
-    list.map(item => ({
-      ...item,
-      isChecked: true
-    }))
-  );
 
   const getChanges = (oldArray, newArray) => {
     const checkedChanged = [];
@@ -78,13 +59,13 @@ const JazdyInstruktor = props => {
           date: dateToSent,
           time: item.label
         });
-        console.log('posielam neceknute');
+        ('posielam neceknute');
       } else if (item.isChecked) {
         checkedChanged.push({
           date: dateToSent,
           time: item.label
         });
-        console.log('posielam ceknute');
+        ('posielam ceknute');
       }
     });
     return { checkedChanged, unCheckedChanged };
@@ -100,7 +81,6 @@ const JazdyInstruktor = props => {
         isChecked: item.isChecked
       });
     });
-    console.log(pole);
     if (initialTimes.some(item => item.isChecked === false)) {
       const { checkedChanged, unCheckedChanged } = getChanges(
         initialTimes,
@@ -114,7 +94,6 @@ const JazdyInstruktor = props => {
           { data: unCheckedChanged }
         );
         setIsLoading(false);
-        console.log(poslaneUnchecked);
       }
       if (!isEmpty(checkedChanged)) {
         const temp = [];
@@ -127,7 +106,6 @@ const JazdyInstruktor = props => {
         setIsLoading(true);
         const poslaneChecked = await api.post('/instructor/addRides', temp);
         setIsLoading(false);
-        console.log(poslaneChecked);
       }
     } else {
       pole.map(item => {
@@ -138,14 +116,10 @@ const JazdyInstruktor = props => {
           });
         }
       });
-
-      console.log('BIG DATA POD TYMTO');
-      console.log(bigData);
       const poslane = await api.post('/instructor/addRides', bigData);
       if (poslane.ok) {
         setShowAlert(true);
       }
-      console.log(poslane);
     }
   };
 
@@ -212,26 +186,11 @@ const JazdyInstruktor = props => {
     setIsLoading(false);
   };
 
-  const calculateDisabledDates = () => {
-    const disabledDates = [];
-    const today = new Date();
-    const todayM = moment(todayM).format('YYYY-MM-DD');
-    const trimmed = todayM.slice(0, 8);
-    const startDate = `${trimmed}01`;
-    const startDateM = new Date(startDate);
-    while (startDateM <= today) {
-      disabledDates.push(new Date(startDateM));
-      startDateM.setDate(startDateM.getDate() + 1);
-    }
-    setUnavailableDates(disabledDates);
-  };
-
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = async date => {
     setIsLoading(true);
-    console.log(date);
     setDateToSent(moment(date).format('YYYY-MM-DD'));
 
     await fetchniCasy(moment(date).format('YYYY-MM-DD'));
@@ -243,14 +202,13 @@ const JazdyInstruktor = props => {
       token: token,
       date: upravenyDate
     };
-    console.log(dataToSent);
   };
 
   return (
     <ScrollView contentContainerstyle={styles.container}>
       <CalendarPicker
+        minDate={minDate}
         onDateChange={dateChangeHandler}
-        disabledDates={unavailableDates}
         selectedDayColor={Colors.lightGreen}
       />
       <View>

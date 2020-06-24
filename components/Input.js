@@ -1,5 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
 const INPUT_BLUR = 'INPUT_BLUR';
@@ -74,13 +78,13 @@ const Input = props => {
 
 const styles = StyleSheet.create({
   input: {
-    marginVertical: 5,
+    marginBottom: hp('2.5%'),
     marginHorizontal: 20,
-    fontSize: 20,
+    fontSize: hp('3%'),
     textAlign: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 40,
+    height: hp('6%'),
     backgroundColor: (255, 255, 255, 0.9),
     borderWidth: 2,
     borderColor: '#CCC',

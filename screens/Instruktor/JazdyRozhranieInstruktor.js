@@ -6,6 +6,10 @@ import JazdyNadchadzajuce from '../Instruktor/JazdyNadchadzajuce';
 import Colors from '../../constants/Colors';
 import { TabBar } from 'react-native-tab-view';
 import JazdyPending from '../Instruktor/JazdyPending';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 export default class TabViewExample extends React.Component {
   state = {
@@ -20,6 +24,7 @@ export default class TabViewExample extends React.Component {
   render() {
     return (
       <TabView
+        lazy
         navigationState={this.state}
         renderScene={SceneMap({
           first: JazdyNadchadzajuce,
@@ -33,6 +38,7 @@ export default class TabViewExample extends React.Component {
             style={{ backgroundColor: 'white' }}
             activeColor={Colors.primaryColor}
             inactiveColor={'black'}
+            labelStyle={{ fontSize: wp('3.5%') }}
           />
         )}
         onIndexChange={index => this.setState({ index })}

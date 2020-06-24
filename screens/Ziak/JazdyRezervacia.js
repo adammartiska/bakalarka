@@ -27,6 +27,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 const JazdyRezervacia = props => {
   const screenWidth = Math.round(Dimensions.get('window').width);
   const scrollViewRef = useRef();
+  const minDate = new Date();
   const [idToSend, setIdToSend] = useState('');
   const jwt = useSelector(state => state.auth.token);
   const relationId = useSelector(state => state.auth.relationId);
@@ -59,16 +60,13 @@ const JazdyRezervacia = props => {
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogMessage, setDialogMessage] = useState('');
   const [casy, setCasy] = useState([]);
-  const [unavailableDates, setUnavailableDates] = useState([]);
 
   const fetchniCasy = async date => {
     const resCasy = await api.get(`/student/freeRides/${date}`);
-    console.log(resCasy);
     setCasy(resCasy.data);
   };
 
   const jazdaHandler = item => {
-    console.log(item);
     setTitle({
       ...title,
       cas: item.time
@@ -118,6 +116,7 @@ const JazdyRezervacia = props => {
   const dateChangeHandler = date => {
     setSelected('');
     setObjednal(false);
+    setIsLoading(true);
     fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
@@ -132,9 +131,7 @@ const JazdyRezervacia = props => {
     };
   };
   const confirmReservation = async () => {
-    console.log(idToSend);
     const response = await api.post(`/student/reserveRide/${idToSend}`);
-    console.log(response);
     if (response.ok) {
       setDialogTitle('Uspesne rezervacia');
       setDialogMessage(response.data.message);
@@ -148,26 +145,12 @@ const JazdyRezervacia = props => {
   const hideAlert = () => {
     setShowAlert(false);
   };
-  const calculateDisabledDates = () => {
-    const disabledDates = [];
-    const today = new Date();
-    const todayM = moment(todayM).format('YYYY-MM-DD');
-    const trimmed = todayM.slice(0, 8);
-    const startDate = `${trimmed}01`;
-    const startDateM = new Date(startDate);
-    while (startDateM < today) {
-      disabledDates.push(new Date(startDateM));
-      startDateM.setDate(startDateM.getDate() + 1);
-    }
-    setUnavailableDates(disabledDates);
-  };
-  useEffect(() => calculateDisabledDates(), []);
 
   return (
     <ScrollView contentContainerStyle={styles.container} ref={scrollViewRef}>
       <CalendarPicker
+        minDate={minDate}
         onDateChange={dateChangeHandler}
-        disabledDates={unavailableDates}
         selectedDayColor={Colors.lightGreen}
       />
       <View>
@@ -200,6 +183,10 @@ const JazdyRezervacia = props => {
                 />
               </View>
             ))}
+          </View>
+        ) : isLoading ? (
+          <View style={{ paddingTop: 10, textAlign: 'center' }}>
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
           </View>
         ) : (
           <View
@@ -277,6 +264,5 @@ const styles = StyleSheet.create({
   instruktor: {
     marginLeft: 8,
     marginBottom: 10
-  },
-
+  }
 });

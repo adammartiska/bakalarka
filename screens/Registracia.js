@@ -13,8 +13,13 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
+import AuthButton from '../components/AuthButton';
 import Colors from '../constants/Colors';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -120,7 +125,6 @@ const Registracia = props => {
         roles: rola
       });
       setIsLoading(false);
-      console.log(response);
       if (response.ok) {
         setAlertTitle('Uspesna registracia');
         setShowAlert(true);
@@ -141,7 +145,6 @@ const Registracia = props => {
         }
       }
       setShowAlert(true);
-      console.log(response);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -161,9 +164,18 @@ const Registracia = props => {
   );
 
   return (
-    <KeyboardAwareScrollView extraScrollHeight={50} extraHeight={30}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flex: 1 }}
+      extraScrollHeight={50}
+      extraHeight={30}
+    >
       <View style={styles.container}>
-        <Image style={styles.logo} source={require('../Images/form.png')} />
+        <View style={{ marginVertical: hp('5%') }}>
+          <Text style={{ textAlign: 'center', fontSize: hp('2.75%') }}>
+            Pre uspesnu registraciu vyplne prosim nasledovne polia a zvolte si
+            vasu rolu v aplikacii
+          </Text>
+        </View>
         <Input
           id="fullName"
           placeholder="meno a priezvisko"
@@ -213,19 +225,14 @@ const Registracia = props => {
             <Picker.Item label="Majitel" value="owner" />
           </Picker>
         </View>
-        <View style={styles.loginButton}>
-          {isLoading ? (
-            <View style={{ paddingTop: 10, textAlign: 'center' }}>
-              <ActivityIndicator size="small" color="white" />
-            </View>
-          ) : (
-            <TouchableOpacity activeOpacity={0.3} onPress={authHandler}>
-              <Text style={styles.inputLoginText}>Odosli</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        <AuthButton
+          title="Registruj"
+          onPress={authHandler}
+          isLoading={isLoading}
+          containerStyle={{ marginTop: hp('7%') }}
+        />
         <AwesomeAlert
-          overlayStyle={{ flex: 2 }}
+          overlayStyle={{ flex: 1 }}
           show={showAlert}
           title={alertTitle}
           message={error}
@@ -250,42 +257,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginHorizontal: 20,
+    marginHorizontal: wp('8%'),
     paddingBottom: 2
   },
-  logo: {
-    width: 100,
-    height: 200,
-    resizeMode: 'contain'
-  },
-
-  inputLoginText: {
-    paddingVertical: 3,
-    textAlign: 'center',
-    fontSize: 22,
-    color: '#fff'
-  },
   picker: {
-    height: 40,
-    width: 200,
-    justifyContent: 'center'
+    height: hp('6%'),
+    width: wp('50%'),
+    textAlign: 'center'
   },
   pickerOut: {
-    marginVertical: 5,
-    marginHorizontal: 20,
-    backgroundColor: (255, 255, 255, 0.9),
     borderWidth: 2,
     borderColor: '#ccc',
-    borderRadius: 5
-  },
-  loginButton: {
-    marginTop: 12,
-    width: 200,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: Colors.primaryColor,
-    marginHorizontal: 10,
-    elevation: 6
+    borderRadius: hp('1%')
   }
 });
 

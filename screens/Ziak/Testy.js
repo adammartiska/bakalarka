@@ -25,7 +25,6 @@ const Testy = props => {
   const zobrazHandler = async () => {
     const response = await api.get('/tests/');
     setTesty(response.data);
-    console.log(response.data);
     zobraz === 'zobraz testy'
       ? setZobraz('skry testy')
       : setZobraz('zobraz testy');

@@ -28,7 +28,6 @@ const KickScreen = props => {
     const fetchRequests = async () => {
       const response = await api.get('/school/getInactiveUsers');
       if (response.ok) {
-        console.log(response);
         setInactiveUsers(response.data);
       }
     };
@@ -37,7 +36,6 @@ const KickScreen = props => {
 
   const kickHandler = async id => {
     const reponse = await api.post(`/school/kickUser/${id}`);
-    console.log(reponse);
     if (response.ok) {
       setInactiveUsers(inactiveUsers.filter(user => user.relationID !== id));
     }
@@ -84,7 +82,7 @@ const KickScreen = props => {
           <Text
             style={{
               fontSize: 22,
-              textAlign: 'center',
+              textAlign: 'center'
             }}
           >
             Vo vasej autoskole nie su ziadni neaktivni ziaci

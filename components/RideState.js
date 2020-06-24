@@ -3,14 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import Colors from '../constants/Colors';
 
 const RideState = props => {
-  const stav = () => {
-    if (props.state === 'absolvovana') {
-      return Colors.lightGreen;
-    } else if (props.state === 'zrusena') {
-      return Colors.lightRed;
-    }
-    return Colors.sedatmava;
-  };
   return (
     <View
       style={[

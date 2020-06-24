@@ -6,7 +6,6 @@ import InstruktorBar from './InstruktorBar';
 import TimeButton from './TimeButton';
 
 const AbsolvovanePending = props => {
-  const [showDetails, setShowDetails] = useState(false);
   return (
     <View style={[styles.default, props.style]}>
       <View

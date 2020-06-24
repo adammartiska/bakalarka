@@ -12,10 +12,9 @@ export const useFetchPost = ({ endpoint, data }) => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        console.log(data);
         const res = await api.post(endpoint, data);
         setResponse(res);
-        console.log('nacitavam skoro?');
+        ('nacitavam skoro?');
         setIsLoading(false);
       } catch (error) {
         setError(error);

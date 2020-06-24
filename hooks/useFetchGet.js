@@ -30,7 +30,7 @@ export const useFetchGet = url => {
       try {
         const res = await api.get(url);
         setResponse(res);
-        console.log('nacitavam skoro?');
+        ('nacitavam skoro?');
         setIsLoading(false);
       } catch (error) {
         setError(error);

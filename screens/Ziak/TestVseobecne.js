@@ -21,7 +21,6 @@ export default class Prvy extends Component {
     //   return jdata[k];
     // });
     arrnew = jdata;
-    console.log(arrnew);
 
     this.state = {
       vyhodnot: false,
@@ -34,7 +33,6 @@ export default class Prvy extends Component {
     };
   }
   next() {
-    console.log(arrnew.questions.length);
     if (
       `answer_${arrnew.questions[this.Qno].correctAnswer}` ===
       `answer_${this.state.value + 1}`
@@ -56,8 +54,6 @@ export default class Prvy extends Component {
         correct: arrnew.questions[this.Qno].correctAnswer
       });
     }
-    console.log(this.Qno);
-    console.log(this.state.vyhodnot);
   }
 
   check() {
@@ -71,7 +67,6 @@ export default class Prvy extends Component {
     } else {
       this.setState({ neuhadnute: true });
     }
-    console.log(this.state.vyhodnot);
   }
 
   zobrazVysledok() {

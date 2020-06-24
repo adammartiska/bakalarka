@@ -43,7 +43,6 @@ export const signup = (fullname, email, phonenumber, password) => {
     }
 
     const resData = await response.json();
-    console.log(resData);
     dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localId });
     const expirationDate = new Date(
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
@@ -73,7 +72,6 @@ export const login = (email, password) => {
 
     if (!response.ok) {
       const errorResData = await response.json();
-      console.log(errorResData);
       const errorId = errorResData.error.message;
       let message = 'Something went wrong!';
       if (errorId === 'EMAIL_NOT_FOUND') {
@@ -83,10 +81,7 @@ export const login = (email, password) => {
       }
       throw new Error(message);
     }
-    console.log(JSON.stringify(response));
     const resData = await response.json();
-    console.log(navigation);
-    console.log(JSON.stringify(resData));
     dispatch({
       type: LOGIN,
       token: resData.jwtToken,
@@ -126,8 +121,6 @@ export const forgotpass = email => {
     if (!response.ok) {
       const errorResData = await response.json();
       errorId = errorResData.error.message;
-      console.log(errorResData);
-      console.log(errorId);
       let message = 'Something went wrong!';
       if (errorId === 'EMAIL_EXISTS') {
         message = 'Entered email already exists!';
@@ -136,7 +129,6 @@ export const forgotpass = email => {
     }
 
     const resData = await response.json();
-    console.log(resData);
     dispatch({ type: FORGOTPASS, email: resData.email });
     //const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
     //saveDataToStorage(resData.idToken, resData.localId, expirationDate);
@@ -173,13 +165,10 @@ export const loginmyapp = (email, password) => {
 
     if (!response.ok) {
       const errorResData = await response.json();
-      console.log(errorResData);
       const errorMessage = errorHandler(errorResData.message);
-      console.log(errorMessage);
       throw new Error(errorMessage);
     }
     const resData = await response.json();
-    console.log(resData);
 
     dispatch({
       type: LOGINMYAPP,
@@ -211,11 +200,9 @@ export const reduxdata = (jwt, relationId) => {
     );
     if (!response.ok) {
       const errorResData = await response.json();
-      console.log(errorResData);
       throw new Error(errorResData);
     }
     const resData = await response.json();
-    console.log(resData);
 
     dispatch({
       type: REDUXDATA,
@@ -238,45 +225,3 @@ export const userInfo = userInfo => {
     userInfo: userInfo
   };
 };
-
-// export const loginmyapp = (email, password) => {
-//   return async dispatch => {
-//     const response = await fetch(
-//       'http://147.175.121.250:80/authenticate/login',
-//       {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//           email: email,
-//           password: password
-//         })
-//       }
-//     );
-
-//     if (!response.ok) {
-//       const errorResData = await response.json();
-//       console.log(errorResData);
-//       const errorId = errorResData.error.message;
-//       let message = 'Something went wrong!';
-//       if (errorId === 'EMAIL_NOT_FOUND') {
-//         message = 'Entered email not found!';
-//       } else if (errorId === 'INVALID_PASSWORD') {
-//         message = 'Entered password is not valid!';
-//       }
-//       throw new Error(message);
-//     }
-//     const resData = await response.json();
-//     console.log(resData);
-
-//     dispatch({
-//       type: LOGINMYAPP,
-//       token: resData.jwtToken,
-//       relationId: resData.relationIDd,
-//       info: resData.info
-//     });
-//     return resData.info.role;
-//     // RootNavigation.navigate('SignedInZiak', {});
-//   };
-// };

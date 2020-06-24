@@ -10,12 +10,18 @@ import {
   TouchableWithoutFeedback,
   View
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../components/Input';
 import Colors from '../constants/Colors';
+import AuthButton from '../components/AuthButton';
 import * as authActions from '../store/actions/auth';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
@@ -39,12 +45,6 @@ const formReducer = (state, action) => {
     };
   }
   return state;
-};
-const mapStateToProps = state => {
-  console.log('zbehnemapstate');
-  return {
-    info: state
-  };
 };
 
 const Login = props => {
@@ -82,15 +82,15 @@ const Login = props => {
   useEffect(() => {
     if (error) {
       setShowAlert(true);
-      console.log(error);
+      error;
     }
   }, [error]);
 
   const authHandler = async () => {
     Keyboard.dismiss();
     let action;
-    console.log('Pod tymto email');
-    console.log(formState.inputValues.password);
+    ('Pod tymto email');
+    formState.inputValues.password;
     action = authActions.loginmyapp(
       formState.inputValues.email,
       formState.inputValues.password
@@ -102,7 +102,7 @@ const Login = props => {
     try {
       const where = await dispatch(action);
       const { token, relations, schoolCount } = where;
-      console.log(token, schoolCount);
+      token, schoolCount;
       if (relations.length > 0) {
         if (schoolCount === 1 && relations[0].information === 'completed') {
           await dispatch(authActions.headerData(relations[0].relationID));
@@ -113,10 +113,8 @@ const Login = props => {
           if (relations[0].role === 'INSTRUCTOR') {
             props.navigation.navigate('SignedInInstructor');
           } else if (relations[0].role === 'STUDENT') {
-            console.log('naviguje ziak');
             props.navigation.navigate('SignedInZiak');
           } else if (relations[0].role === 'OWNER') {
-            console.log('navigujem owner');
             props.navigation.navigate('SignedInOwner');
           }
         }
@@ -124,7 +122,6 @@ const Login = props => {
           schoolCount > 1 &&
           relations.map(item => item.information !== 'active')
         ) {
-          console.log('preco som tu');
           props.navigation.navigate('VyberScreen');
         }
       } else {
@@ -132,7 +129,7 @@ const Login = props => {
       }
     } catch (err) {
       setError(err.message);
-      console.log(err.message);
+      err.message;
       setIsLoading(false);
     }
   };
@@ -177,62 +174,31 @@ const Login = props => {
             required
             secureTextEntry={true}
           />
-
-          <View style={styles.loginButton}>
-            {isLoading ? (
-              <View style={{ paddingTop: 10, textAlign: 'center' }}>
-                <ActivityIndicator size="small" color="white" />
-              </View>
-            ) : (
-              <TouchableOpacity activeOpacity={0.3} onPress={authHandler}>
-                <Text style={styles.inputLoginText}>Prihlasit</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.3}
-            onPress={() => {
+          <AuthButton
+            title="Prihlasit"
+            isLoading={isLoading}
+            onPress={authHandler}
+            containerStyle={{ marginTop: hp('0%') }}
+          />
+          <AuthButton
+            title="Registracia"
+            onPress={() =>
               props.navigation.navigate({
                 routeName: 'Registracia'
-              });
-            }}
-          >
-            <View
-              style={{
-                marginTop: 12,
-                width: 200,
-                height: 40,
-                borderRadius: 10,
-                backgroundColor: Colors.primaryColor,
-                elevation: 5,
-                marginHorizontal: 10,
-                elevation: 6
-              }}
-            >
-              <Text style={styles.inputLoginText}>Registracia</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.3}
-            onPress={() => {
+              })
+            }
+            containerStyle={{ marginBottom: hp('0.6%') }}
+          />
+          <AuthButton
+            title="Zabudnute heslo"
+            onPress={() =>
               props.navigation.navigate({
                 routeName: 'ZabudnuteHeslo'
-              });
-            }}
-          >
-            <View
-              style={{
-                marginTop: 12,
-                width: 150,
-                height: 30,
-                borderRadius: 10,
-                backgroundColor: Colors.sedatmava,
-                marginHorizontal: 10
-              }}
-            >
-              <Text style={styles.inputLoginTextBlack}>Zabudnute heslo</Text>
-            </View>
-          </TouchableOpacity>
+              })
+            }
+            fontStyle={{ fontSize: hp('2.5%'), color: Colors.sedaTmava }}
+            buttonStyle={styles.forgotPasswordButton}
+          />
         </View>
       </TouchableWithoutFeedback>
       <AwesomeAlert
@@ -243,7 +209,7 @@ const Login = props => {
         closeOnTouchOutside={true}
         closeOnHardwareBackPress={false}
         showCancelButton={false}
-        contentContainerStyle={{ width: '75%', height: '25%' }}
+        contentContainerStyle={{ width: wp('75%'), height: hp('22%') }}
         showConfirmButton={true}
         confirmText="Skusit znova"
         confirmButtonColor={'#7a7a7a'}
@@ -258,12 +224,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 30
+    marginHorizontal: wp('8%')
   },
   logo: {
-    marginBottom: 30,
-    width: 200,
-    height: 100
+    marginBottom: hp('5%'),
+    width: wp('40%'),
+    height: hp('13%')
   },
 
   inputLoginText: {
@@ -278,14 +244,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'black'
   },
-  loginButton: {
-    marginTop: 12,
-    width: 200,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: Colors.primaryColor,
-    marginHorizontal: 10,
-    elevation: 6
+  forgotPasswordButton: {
+    elevation: 2,
+    width: wp('40%'),
+    height: hp('5%'),
+    borderRadius: hp('1%'),
+    backgroundColor: '#e0e0e0'
   }
 });
 

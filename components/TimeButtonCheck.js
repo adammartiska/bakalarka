@@ -1,20 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import Colors from '../constants/Colors';
 
 const TimeButtonCheck = props => {
-  const [ceknute, setCeknute] = useState(true);
-  const array = ['10:00'];
-  const key = ['15:00'];
-  const checkHandler = id => {
-    setCeknute(!ceknute);
-    if (!ceknute) {
-      props.dajPole(array, key);
-    } else {
-      console.log('filtruj');
-    }
-  };
   return (
     <View style={styles.customButon}>
       <CheckBox

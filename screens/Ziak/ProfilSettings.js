@@ -71,7 +71,6 @@ const ProfilSettings = props => {
       const response = await api.post('/user/update/email', {
         newEmail: newEmail
       });
-      console.log(response);
       if (response.ok) {
         setDialogTitle('Uspesna zmena emailu');
         setDialogMessage('Vas email bol uspesne zmeneny!');

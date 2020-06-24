@@ -6,17 +6,6 @@ import InstruktorBar from '../components/InstruktorBar';
 import Colors from '../constants/Colors';
 
 const RezervovanaJazda = props => {
-  const [showDetails, setShowDetails] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-
-  showAlertfunction = () => {
-    setShowAlert(true);
-  };
-
-  hideAlert = () => {
-    setShowAlert(false);
-  };
-
   return (
     <View style={{ elevation: 50, marginBottom: 12 }} id={props.id}>
       <View style={styles.screen}>

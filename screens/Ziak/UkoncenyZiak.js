@@ -46,7 +46,6 @@ const UkoncenyZiak = props => {
             })
           );
           setData(res.data.body.rides);
-          console.log(res.data.body.rides);
         }
         setIsLoading(false);
       } catch (error) {

@@ -73,12 +73,10 @@ const JazdyAbsolvovane = props => {
     if (recent === false) {
       setIsLoading(true);
       const response = await api.get('/instructor/getLastRides?count=6');
-      console.log(response);
       if (response.ok) {
         setRecentRides(response.data);
       }
       setIsLoading(false);
-      console.log(response);
     }
   };
   const iconButtonHandler = (statePicker, stateUpper) => {

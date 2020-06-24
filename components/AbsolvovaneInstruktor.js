@@ -6,7 +6,6 @@ import InstruktorBar from './InstruktorBar';
 import RideState from './RideState';
 
 const AbsolvovaneInstruktor = props => {
-  const [showDetails, setShowDetails] = useState(false);
   return (
     <View style={[styles.default, props.style]}>
       <View
@@ -26,7 +25,7 @@ const AbsolvovaneInstruktor = props => {
         </View>
       </View>
       <View style={{ marginTop: 7, alignItems: 'center' }}>
-        <InstruktorBar name={props.name}/>
+        <InstruktorBar name={props.name} />
       </View>
       <View style={{ alignItems: 'center' }}>
         <RideState state={props.state} />

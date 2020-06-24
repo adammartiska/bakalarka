@@ -34,7 +34,6 @@ const JazdyNadchadzajuce = props => {
       setIsLoading(true);
       try {
         const res = await api.get('/instructor/getPendingRides');
-        console.log(res);
         setRides(res.data);
         setIsLoading(false);
       } catch (error) {
@@ -51,7 +50,6 @@ const JazdyNadchadzajuce = props => {
 
   const confirmHandler = async id => {
     const response = await api.post('/instructor/completeRide', { id: id });
-    console.log(response);
     if (response.ok) {
       setRides(rides.filter(ride => ride.id !== id));
     }
@@ -63,7 +61,6 @@ const JazdyNadchadzajuce = props => {
       {},
       { data: [{ date: date, time: time }] }
     );
-    console.log(response);
     if (response.ok) {
       setRides(rides.filter(ride => ride.id !== id));
     }

@@ -17,6 +17,7 @@ export default class TabViewExample extends React.Component {
   render() {
     return (
       <TabView
+        lazy
         navigationState={this.state}
         renderScene={SceneMap({
           first: ConfirmScreen,
@@ -26,7 +27,7 @@ export default class TabViewExample extends React.Component {
           <TabBar
             {...props}
             indicatorStyle={{ backgroundColor: 'white' }}
-            style={{ backgroundColor: 'white' }}
+            style={{ backgroundColor: 'white', fontSize: 12 }}
             activeColor={Colors.primaryColor}
             inactiveColor={Colors.carhartt}
           />
