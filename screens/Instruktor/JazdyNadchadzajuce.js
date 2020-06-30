@@ -70,6 +70,7 @@ const JazdyNadchadzajuce = props => {
   const iconButtonHandler = (statePicker, stateUpper) => {
     setShowPickerRides(statePicker);
     setUper(stateUpper);
+    console.log(dataPicker);
   };
   const handleRecent = async () => {
     setIsLoadingRecent(true);
@@ -91,9 +92,11 @@ const JazdyNadchadzajuce = props => {
       {upper && (
         <View>
           <View style={{ alignItems: 'center' }}>
-            <Text style={{ fontSize: 23 }}>Vitaje {userInfo.fullName}</Text>
-            <View style={{ marginVertical: 15, alignItems: 'center' }}>
-              <Text style={{ textAlign: 'center', fontSize: 16 }}>
+            <Text style={{ fontSize: hp('3.5%') }}>
+              Vitaje {userInfo.fullName}
+            </Text>
+            <View style={{ marginTop: hp('2.75%'), alignItems: 'center' }}>
+              <Text style={{ textAlign: 'center', fontSize: hp('2.5%') }}>
                 Pozrite si zoznam jazd na dnes
               </Text>
             </View>
@@ -124,13 +127,13 @@ const JazdyNadchadzajuce = props => {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginVertical: 120
+                  marginVertical: hp('17%')
                 }}
               >
-                <Text style={{ fontSize: 20, color: Colors.inActive }}>
+                <Text style={{ fontSize: hp('3.25%'), color: Colors.inActive }}>
                   Na dnes nemate ziadne
                 </Text>
-                <Text style={{ fontSize: 20, color: Colors.inActive }}>
+                <Text style={{ fontSize: hp('3.25%'), color: Colors.inActive }}>
                   rezervovane jazdy
                 </Text>
               </View>
@@ -141,11 +144,11 @@ const JazdyNadchadzajuce = props => {
         style={{
           borderWidth: 1,
           borderColor: Colors.sedatmava,
-          marginVertical: 20
+          marginVertical: hp('3%')
         }}
       ></View>
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ textAlign: 'center', fontSize: 16 }}>
+        <Text style={{ textAlign: 'center', fontSize: hp('2.5%') }}>
           Ak by ste si chceli prezriet jazdy, ktore vas cakaju do buducna staci
           si zvolit datum
         </Text>
@@ -181,7 +184,7 @@ const JazdyNadchadzajuce = props => {
             {showPickerRides &&
               (dataPicker.length > 0 ? (
                 <SafeAreaView>
-                  {data.map(item => (
+                  {dataPicker.map(item => (
                     <NadchadzajuceInstruktor
                       key={item.time}
                       datum={moment(item.date).format('DD.MM.YYYY')}
@@ -196,12 +199,12 @@ const JazdyNadchadzajuce = props => {
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginVertical: 20
+                    marginVertical: hp('12%')
                   }}
                 >
                   <Text
                     style={{
-                      fontSize: 20,
+                      fontSize: hp('3.25%'),
                       color: Colors.inActive,
                       textAlign: 'center'
                     }}

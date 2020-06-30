@@ -11,9 +11,13 @@ import {
 } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import { useSelector } from 'react-redux';
-import PonukniButton from '../../components/PonukniButton';
+import AuthButton from '../../components/AuthButton';
 import TimeButtonCheck from '../../components/TimeButtonCheck';
 import Colors from '../../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyInstruktor = props => {
   const [pole, setPole] = useState([]);
@@ -24,6 +28,7 @@ const JazdyInstruktor = props => {
   const relationId = useSelector(state => state.auth.relationId);
   const [isLoading, setIsLoading] = useState(false);
   const [displayText, setDisplayText] = useState(true);
+  const [isLoadingOffer, setIsLoadingOffer] = useState(false);
   const [dateToSent, setDateToSent] = useState('');
   const [initialTimes, setInitialTimes] = useState([]);
   const [bigData, setBigData] = useState([]);
@@ -72,6 +77,7 @@ const JazdyInstruktor = props => {
   };
 
   const zhromazdiData = async data => {
+    setIsLoadingOffer(true);
     setPole([]);
     setBigData([]);
     data.map(item => {
@@ -87,7 +93,6 @@ const JazdyInstruktor = props => {
         pole
       );
       if (!isEmpty(unCheckedChanged)) {
-        setIsLoading(true);
         const poslaneUnchecked = await api.delete(
           '/instructor/removeRides',
           {},
@@ -103,7 +108,6 @@ const JazdyInstruktor = props => {
             time: item.time
           });
         });
-        setIsLoading(true);
         const poslaneChecked = await api.post('/instructor/addRides', temp);
         setIsLoading(false);
       }
@@ -121,6 +125,7 @@ const JazdyInstruktor = props => {
         setShowAlert(true);
       }
     }
+    setIsLoadingOffer(false);
   };
 
   function handleToggleCheckbox(value) {
@@ -143,15 +148,15 @@ const JazdyInstruktor = props => {
         {isLoading ? (
           <View
             style={{
-              marginTop: 20,
-              paddingTop: 10,
+              marginTop: hp('3%'),
+              alignItems: 'center',
               textAlign: 'center'
             }}
           >
             <ActivityIndicator size="large" color={Colors.primaryColor} />
           </View>
         ) : (
-          <View style={{ marginHorizontal: 18 }}>
+          <View>
             <View style={styles.screen}>
               {data.map(({ value, label, isChecked }) => (
                 <TimeButtonCheck
@@ -164,17 +169,16 @@ const JazdyInstruktor = props => {
             </View>
           </View>
         )}
-        <View style={styles.confirmButton}>
-          {isLoading ? (
-            <View style={{ paddingTop: 10, textAlign: 'center' }}>
-              <ActivityIndicator size="small" color="white" />
-            </View>
-          ) : (
-            <View style={{ marginTop: 15 }}>
-              <PonukniButton onPress={() => zhromazdiData(data)} />
-            </View>
-          )}
-        </View>
+        {!isLoading && (
+          <View style={{ marginTop: hp('2%'), alignItems: 'center' }}>
+            <AuthButton
+              title="Ponukni jazdy"
+              onPress={() => zhromazdiData(data)}
+              isLoading={isLoadingOffer}
+              buttonStyle={{ marginTop: hp('0%'), borderRadius: hp('0.5%') }}
+            />
+          </View>
+        )}
       </View>
     );
   };
@@ -210,6 +214,7 @@ const JazdyInstruktor = props => {
         minDate={minDate}
         onDateChange={dateChangeHandler}
         selectedDayColor={Colors.lightGreen}
+        restrictMonthNavigation={true}
       />
       <View>
         {displayText ? (
@@ -219,7 +224,7 @@ const JazdyInstruktor = props => {
             </View>
           ) : (
             <View style={styles.centered}>
-              <Text style={{ textAlign: 'center' }}>
+              <Text style={{ textAlign: 'center', fontSize: hp('2.5%') }}>
                 Ak chcete ponuknut studentom jazdy kliknite na datum a vyberte,
                 v akych casoch chcete jazdy ponukat
               </Text>
@@ -238,17 +243,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    marginTop: 20
+    marginTop: hp('3%')
   },
   centered: {
-    marginTop: 30,
+    marginTop: hp('0.5%'),
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 30
+    marginHorizontal: wp('6%')
   },
   center: {
     flexDirection: 'column',
-    alignItems: 'center'
+    marginHorizontal: wp('4%')
   },
   screen: {
     //flex: 1,

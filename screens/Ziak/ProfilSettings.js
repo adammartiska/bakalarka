@@ -13,6 +13,10 @@ import { useSelector } from 'react-redux';
 import ButtonIcon from '../../components/ButtonIcon';
 import CustomButton from '../../components/CustomButton';
 import Colors from '../../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
@@ -116,7 +120,7 @@ const ProfilSettings = props => {
       >
         <View style={styles.screen}>
           <CustomButton
-            name="Zmen heslo"
+            name="Zmena hesla"
             iconName="ios-key"
             onPress={() => {
               dispatchFormState({
@@ -135,7 +139,7 @@ const ProfilSettings = props => {
                 onChangeText={inputChangeHandler.bind(this, 'stareHeslo')}
                 required
                 secureTextEntry={true}
-                style={[styles.input, { marginTop: 15 }]}
+                style={[styles.input, { marginTop: hp('3%') }]}
               />
               <TextInput
                 id="noveHeslo"
@@ -153,7 +157,7 @@ const ProfilSettings = props => {
                 onChangeText={inputChangeHandler.bind(this, 'noveHesloZnovu')}
                 required
                 secureTextEntry={true}
-                style={[styles.input, { marginBottom: 0 }]}
+                style={[styles.input, { marginBottom: hp('1.25%') }]}
               />
               <ButtonIcon
                 iconName="md-checkmark"
@@ -168,7 +172,7 @@ const ProfilSettings = props => {
             </View>
           )}
           <CustomButton
-            name="Zmen e-mail"
+            name="Zmena mailu"
             iconName="ios-mail"
             onPress={() => {
               dispatchFormState({
@@ -194,7 +198,7 @@ const ProfilSettings = props => {
                 value={formState.inputValues.novyMailZnovu}
                 onChangeText={inputChangeHandler.bind(this, 'novyMailZnovu')}
                 required
-                style={[styles.input, { marginBottom: 0 }]}
+                style={[styles.input, { marginBottom: hp('1.25%') }]}
               />
               <ButtonIcon
                 iconName="md-checkmark"
@@ -228,7 +232,6 @@ const ProfilSettings = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    marginTop: 40,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
@@ -238,18 +241,16 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   input: {
-    marginVertical: 12,
-    marginHorizontal: 20,
-    fontSize: 20,
+    marginVertical: hp('2.25%'),
+    fontSize: hp('3%'),
     textAlign: 'center',
     justifyContent: 'center',
-    width: 200,
-    height: 40,
+    width: wp('50%'),
+    height: hp('6%'),
     backgroundColor: (255, 255, 255, 0.9),
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-
+    borderRadius: hp('1%'),
     elevation: 2
   }
 });

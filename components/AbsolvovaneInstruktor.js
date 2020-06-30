@@ -4,6 +4,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 import InstruktorBar from './InstruktorBar';
 import RideState from './RideState';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const AbsolvovaneInstruktor = props => {
   return (
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
   default: {
     elevation: 1,
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVertical: hp('1.5%'),
     borderWidth: 2,
     borderColor: Colors.sedatmava,
     padding: 8

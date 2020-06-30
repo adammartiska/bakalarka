@@ -8,15 +8,16 @@ import {
   Image,
   ActivityIndicator
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from '../../components/DetailJazdy';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Colors from '../../constants/Colors';
-import InstruktorBar from '../../components/InstruktorBar';
 import AbsolvovaneZiak from '../../components/AbsolvovaneZiak';
 import { create } from 'apisauce';
 import moment from 'moment';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyAbsolvovane = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -53,7 +54,7 @@ const JazdyAbsolvovane = props => {
       {isLoading ? (
         <View
           style={{
-            marginTop: 80,
+            marginTop: hp('25%'),
             alignItems: 'center'
           }}
         >
@@ -64,12 +65,12 @@ const JazdyAbsolvovane = props => {
           style={{
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: 180
+            marginTop: hp('35%')
           }}
         >
           <Text
             style={{
-              fontSize: 22,
+              fontSize: hp('3.25%'),
               textAlign: 'center',
               color: Colors.inActive
             }}
@@ -88,6 +89,7 @@ const JazdyAbsolvovane = props => {
               instructorName={item.instructor}
             />
           )}
+          keyExtractor={item => item.id.toString()}
         />
       )}
     </SafeAreaView>
@@ -97,7 +99,9 @@ const JazdyAbsolvovane = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginBottom: 20
+    marginBottom: hp('3%'),
+    marginTop: hp('1%'),
+    marginHorizontal: wp('4%')
   }
 });
 

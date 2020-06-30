@@ -4,19 +4,26 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import InstruktorBar from '../components/InstruktorBar';
 import Colors from '../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const RezervovanaJazda = props => {
   return (
-    <View style={{ elevation: 50, marginBottom: 12 }} id={props.id}>
+    <View
+      style={{ marginBottom: hp('2.5%'), justifyContent: 'center' }}
+      id={props.id}
+    >
       <View style={styles.screen}>
-        <View style={{ width: '60%', flexDirection: 'column' }}>
-          <View style={{ marginBottom: 5 }}>
+        <View style={{ width: wp('55%'), flexDirection: 'column' }}>
+          <View style={{ marginBottom: hp('1%') }}>
             <InstruktorBar name={props.name} />
           </View>
 
           <View style={{ flexDirection: 'row' }}>
-            <View style={{ marginLeft: 10 }}>
-              <Icon name="ios-flag" size={25} />
+            <View style={{ marginLeft: wp('3%') }}>
+              <Icon name="ios-flag" size={wp('6%')} />
             </View>
             <View style={styles.item}>
               <Text style={styles.title}>{props.datum}</Text>
@@ -26,7 +33,7 @@ const RezervovanaJazda = props => {
             </View>
           </View>
         </View>
-        <View style={{ marginLeft: 90, marginTop: 18 }}>
+        <View>
           <TouchableOpacity onPress={props.onPress}>
             <Icon
               name="md-close-circle-outline"
@@ -43,22 +50,22 @@ const RezervovanaJazda = props => {
 const styles = StyleSheet.create({
   screen: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     flex: 1,
-    marginTop: 8,
+    marginTop: hp('1%'),
     borderWidth: 1.5,
     borderColor: '#000',
     backgroundColor: '#eeeeee',
-    padding: 10,
-    marginTop: 8,
-    marginHorizontal: 15
+    paddingHorizontal: wp('5%'),
+    paddingVertical: hp('1%')
   },
   item: {
-    marginLeft: 25,
-    marginRight: 20
+    marginHorizontal: wp('6.5%')
   },
 
   title: {
-    fontSize: 18
+    fontSize: hp('2.65%')
   }
 });
 

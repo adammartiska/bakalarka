@@ -18,11 +18,14 @@ import moment from 'moment';
 import { useSelector, connect } from 'react-redux';
 import TimeButton from '../../components/TimeButton';
 import InstruktorBar from '../../components/InstruktorBar';
-import TimeButtonCheck from '../../components/TimeButtonCheck';
 import ObjednajButton from '../../components/ObjednajButton';
 import { create } from 'apisauce';
 import ReservationTab from '../../components/ReservationTab';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyRezervacia = props => {
   const screenWidth = Math.round(Dimensions.get('window').width);
@@ -78,45 +81,13 @@ const JazdyRezervacia = props => {
     // scrollViewRef.current.scrollToEnd();
   };
 
-  const maper = data => {
-    return (
-      <View style={{ marginHorizontal: 18 }}>
-        <View style={styles.instruktor}>
-          <InstruktorBar />
-        </View>
-        <View style={styles.screen}>
-          {data.map(item => {
-            return (
-              <TimeButton
-                styles={
-                  selected === item.time && {
-                    elevation: 15
-                  }
-                }
-                key={item.time}
-                name={item.time}
-                onPress={() => jazdaHandler(item)}
-              />
-            );
-          })}
-        </View>
-        {/*
-        (objednal) && (
-          <View style={{flex: 1}}>
-          <View style={{position: 'absolute', left: 0, right: 0, bottom: 0}}><Text>My fixed footer</Text></View>
-          </View>
-        )
-        */}
-      </View>
-    );
-  };
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   // const [selectedDate, setSelectedDate] = useState([]);
   const token = useSelector(state => state.auth.token);
   const dateChangeHandler = date => {
+    setIsLoading(true);
     setSelected('');
     setObjednal(false);
-    setIsLoading(true);
     fetchniCasy(moment(date).format('YYYY-MM-DD'));
     setIsLoading(false);
     setDisplayText(false);
@@ -157,10 +128,12 @@ const JazdyRezervacia = props => {
         {isLoading ? (
           displayText ? (
             <View style={styles.centered}>
-              <Text>Pre zobrazenie volnych terminov si vyberte datum</Text>
+              <Text style={{ fontSize: hp('3%'), textAlign: 'center' }}>
+                Pre zobrazenie volnych terminov si vyberte datum
+              </Text>
             </View>
           ) : (
-            <View style={{ paddingTop: 10, textAlign: 'center' }}>
+            <View style={{ alignItems: 'center', textAlign: 'center' }}>
               <ActivityIndicator size="large" color={Colors.primaryColor} />
             </View>
           )
@@ -169,14 +142,13 @@ const JazdyRezervacia = props => {
             {casy.map(item => (
               <View
                 style={{
-                  marginHorizontal: 20,
-                  marginBottom: 25,
+                  marginBottom: hp('3.5%'),
                   borderBottomColor: '#CCC',
                   borderBottomWidth: 1
                 }}
               >
                 <ReservationTab
-                  key={item.instructoName}
+                  key={item.instructorName}
                   instructorName={item.instructorName}
                   data={item.rides}
                   onChildClick={jazdaHandler}
@@ -185,21 +157,19 @@ const JazdyRezervacia = props => {
             ))}
           </View>
         ) : isLoading ? (
-          <View style={{ paddingTop: 10, textAlign: 'center' }}>
+          <View style={{ alignItems: 'center', textAlign: 'center' }}>
             <ActivityIndicator size="large" color={Colors.primaryColor} />
           </View>
         ) : (
           <View
             style={{
-              marginTop: 30,
-              marginHorizontal: 20,
               justifyContent: 'center',
               alignItems: 'center'
             }}
           >
             <Text
               style={{
-                fontSize: 20,
+                fontSize: hp('3%'),
                 textAlign: 'center'
               }}
             >
@@ -211,10 +181,9 @@ const JazdyRezervacia = props => {
       {objednal && (
         <View
           style={{
-            marginVertical: 40,
-            alignItems: 'center',
-            width: '100%',
-            height: 40
+            marginTop: hp('2%'),
+            marginBottom: hp('5%'),
+            alignItems: 'center'
           }}
         >
           <ObjednajButton
@@ -240,29 +209,23 @@ const JazdyRezervacia = props => {
       />
     </ScrollView>
   );
-
-  //<View style={{width: '100%', height: 40, position: 'absolute', left: ((screenWidth/4) - 10), right: 0, bottom: 60}}>
 };
 
 export default JazdyRezervacia;
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: '#FFF',
+    marginHorizontal: wp('5%')
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center'
   },
   screen: {
-    //flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     flexWrap: 'wrap'
-  },
-  instruktor: {
-    marginLeft: 8,
-    marginBottom: 10
   }
 });

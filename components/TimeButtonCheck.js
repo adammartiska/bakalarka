@@ -2,20 +2,24 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import Colors from '../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
-const TimeButtonCheck = props => {
+const TimeButtonCheck = ({ isChecked, value, onPress, label }) => {
   return (
     <View style={styles.customButon}>
       <CheckBox
-        checked={props.isChecked}
-        value={props.value}
-        onPress={props.onPress}
+        checked={isChecked}
+        value={value}
+        onPress={onPress}
         checkedColor={Colors.primaryColor}
         containerStyle={{ padding: 0 }}
       />
 
-      <TouchableOpacity activeOpacity={0.5}>
-        <Text style={styles.textInButton}>{props.label}</Text>
+      <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+        <Text style={styles.textInButton}>{label}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,9 +33,10 @@ const styles = StyleSheet.create({
   },
   customButon: {
     flexDirection: 'row',
-    margin: 5,
-    height: 30,
-    width: '30%',
+    marginHorizontal: wp('1.5%'),
+    marginVertical: hp('1%'),
+    height: hp('4%'),
+    width: wp('27.5%'),
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     borderRadius: 5,
@@ -42,10 +47,7 @@ const styles = StyleSheet.create({
     elevation: 3
   },
   textInButton: {
-    fontSize: 20,
-    color: 'black'
-    //fontFamily: 'open-sans-bold',
-    //textAlign: 'center',
+    fontSize: hp('3%')
   }
 });
 

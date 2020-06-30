@@ -7,6 +7,10 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 let arrnew = [];
 
@@ -17,9 +21,6 @@ export default class Prvy extends Component {
     this.score = 0;
     const { params } = this.props.navigation.state;
     const jdata = params.test;
-    // arrnew = Object.keys(jdata).map(function(k) {
-    //   return jdata[k];
-    // });
     arrnew = jdata;
 
     this.state = {
@@ -74,10 +75,10 @@ export default class Prvy extends Component {
       return (
         <View style={styles.centered}>
           <View>
-            <Icon name="md-flag" size={35} />
+            <Icon name="md-flag" size={wp('9%')} />
           </View>
-          <View style={{ marginVertical: 5 }}>
-            <Text>
+          <View style={{ marginVertical: hp('1.75%') }}>
+            <Text style={{ fontSize: hp('2.25%') }}>
               Dosiahol si {this.score} z {arrnew.questions.length} moznych bodov
             </Text>
           </View>
@@ -87,10 +88,12 @@ export default class Prvy extends Component {
       return (
         <View style={styles.centered}>
           <View>
-            <Icon name="md-checkmark" size={35} color={Colors.carhartt} />
+            <Icon name="md-checkmark" size={wp('9%')} color={Colors.carhartt} />
           </View>
-          <View style={{ marginVertical: 5 }}>
-            <Text>Spravne! Len tak dalej</Text>
+          <View style={{ marginVertical: hp('1.75%') }}>
+            <Text style={{ fontSize: hp('2.25%') }}>
+              Spravne! Len tak dalej
+            </Text>
           </View>
         </View>
       );
@@ -98,10 +101,10 @@ export default class Prvy extends Component {
       return (
         <View style={styles.centered}>
           <View>
-            <Icon name="md-close" size={35} color="#f00" />
+            <Icon name="md-close" size={wp('9%')} color="#f00" />
           </View>
-          <View style={{ marginVertical: 5 }}>
-            <Text>Nespravna odpoved</Text>
+          <View style={{ marginVertical: hp('1.75%') }}>
+            <Text style={{ fontSize: hp('2.25%') }}>Nespravna odpoved</Text>
           </View>
         </View>
       );
@@ -136,11 +139,11 @@ export default class Prvy extends Component {
     return (
       <View style={styles.center}>
         <View style={styles.questionHeader}>
-          <Text style={{ fontSize: 22, textAlign: 'center' }}>
+          <Text style={{ fontSize: hp('3%'), textAlign: 'center' }}>
             {this.state.question}
           </Text>
         </View>
-        <View style={styles.radio}>
+        <View>
           <RadioForm initial={1}>
             {radio_props.map((obj, i) => (
               <RadioButton labelHorizontal={true} key={i}>
@@ -166,10 +169,9 @@ export default class Prvy extends Component {
                       : '#000'
                   }
                   buttonOuterColor="#000"
-                  buttonSize={15}
-                  buttonOuterSize={25}
-                  buttonStyle={{ marginVertical: 5 }}
-                  buttonWrapStyle={{ marginLeft: 10 }}
+                  buttonSize={wp('4%')}
+                  buttonOuterSize={wp('6%')}
+                  buttonStyle={{ marginVertical: hp('2%') }}
                 />
                 <RadioButtonLabel
                   obj={obj}
@@ -182,8 +184,7 @@ export default class Prvy extends Component {
                     });
                   }}
                   labelHorizontal={true}
-                  labelStyle={{ fontSize: 15 }}
-                  labelWrapStyle={{}}
+                  labelStyle={{ fontSize: hp('2.25%') }}
                 />
               </RadioButton>
             ))}
@@ -203,7 +204,16 @@ export default class Prvy extends Component {
           }}
         >
           <View style={styles.customButon}>
-            <TouchableOpacity activeOpacity={0.5} onPress={() => this.check()}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => this.check()}
+              hitSlop={{
+                left: wp('7%'),
+                right: wp('7%'),
+                top: hp('3%'),
+                bottom: hp('3%')
+              }}
+            >
               <Icon name="md-search" size={30} />
             </TouchableOpacity>
           </View>
@@ -213,6 +223,12 @@ export default class Prvy extends Component {
               onPress={
                 this.state.vyhodnot ? () => this.vyhodnot() : () => this.next()
               }
+              hitSlop={{
+                left: wp('7%'),
+                right: wp('7%'),
+                top: hp('3%'),
+                bottom: hp('3%')
+              }}
             >
               {this.nextButtonHandler()}
             </TouchableOpacity>
@@ -228,23 +244,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 50
+    paddingHorizontal: wp('12%')
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 5
+    marginVertical: hp('8%')
   },
   questionHeader: {
-    paddingBottom: 20
-  },
-  radio: {
-    marginBottom: 20
+    marginBottom: hp('5%')
   },
   customButon: {
-    margin: 5,
-    height: 35,
-    width: '28%',
+    marginHorizontal: wp('2%'),
+    height: hp('5%'),
+    width: wp('22%'),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DDDDDD',

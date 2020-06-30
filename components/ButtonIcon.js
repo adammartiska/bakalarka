@@ -1,11 +1,24 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const ButtonIcon = props => {
   return (
     <View style={[styles.customButon, props.style]}>
-      <TouchableOpacity activeOpacity={0.5} onPress={props.onPress}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={props.onPress}
+        hitSlop={{
+          left: wp('5%'),
+          right: wp('5%'),
+          top: hp('3%'),
+          bottom: hp('3%')
+        }}
+      >
         <View>
           <Icon name={props.iconName} size={32} />
         </View>

@@ -17,6 +17,10 @@ import AbsolvovaneInstruktor from '../../components/AbsolvovaneInstruktor';
 import CustomButton from '../../components/CustomButton';
 import IconButton from '../../components/IconButton';
 import Colors from '../../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyAbsolvovane = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -47,10 +51,11 @@ const JazdyAbsolvovane = props => {
     const currentDate = selectedDate || date;
     setIsLoadingPicker(true);
     const response = await api.get(
-      `/instructor/getCompletedRides/date?=${moment(selectedDate).format(
+      `/instructor/getCompletedRides?date=${moment(selectedDate).format(
         'YYYY-MM-DD'
       )}`
     );
+    console.log(response);
     if (response.ok) {
       setDateRides(response.data);
     }
@@ -88,8 +93,8 @@ const JazdyAbsolvovane = props => {
     <ScrollView contentContainerStyle={styles.screen}>
       {showDateRides && (
         <View>
-          <View style={{ marginVertical: 8, alignItems: 'center' }}>
-            <Text style={{ textAlign: 'center', fontSize: 16 }}>
+          <View style={{ marginVertical: hp('2%'), alignItems: 'center' }}>
+            <Text style={{ textAlign: 'center', fontSize: hp('2.5%') }}>
               Tu si mozte pozriet vase posledne absolvovane jazdy
             </Text>
           </View>
@@ -110,7 +115,7 @@ const JazdyAbsolvovane = props => {
                 {recentRides.length > 0 ? (
                   recentRides.map(item => (
                     <AbsolvovaneInstruktor
-                      state="absolvovana"
+                      state={item.status}
                       key={item.time}
                       name={item.student}
                       datum={item.date}
@@ -123,12 +128,12 @@ const JazdyAbsolvovane = props => {
                     style={{
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginVertical: 130
+                      marginVertical: hp('18.2%')
                     }}
                   >
                     <Text
                       style={{
-                        fontSize: 22,
+                        fontSize: hp('3.25%'),
                         textAlign: 'center',
                         color: Colors.inActive
                       }}
@@ -145,12 +150,12 @@ const JazdyAbsolvovane = props => {
         style={{
           borderWidth: 1,
           borderColor: Colors.sedatmava,
-          marginVertical: 20
+          marginVertical: hp('3%')
         }}
       ></View>
 
       <View style={{ alignItems: 'center' }}>
-        <Text style={{ textAlign: 'center', fontSize: 16 }}>
+        <Text style={{ textAlign: 'center', fontSize: hp('2.5%') }}>
           Ak by ste si chceli prezriet jazdy z predoslych datumov, staci si
           zvolit datum
         </Text>
@@ -160,6 +165,8 @@ const JazdyAbsolvovane = props => {
           iconName="md-calendar"
           onPress={showDatepicker}
         />
+      </View>
+      <View style={{ marginBottom: hp('4%') }}>
         {show && (
           <DateTimePicker
             maximumDate={new Date()}
@@ -187,29 +194,26 @@ const JazdyAbsolvovane = props => {
               </View>
               {showPickerRides &&
                 (dateRides.length > 0 ? (
-                  <FlatList
-                    data={dateRides}
-                    renderItem={({ item }) => (
-                      <AbsolvovaneInstruktor
-                        state="absolvovana"
-                        key={item.time}
-                        name={item.student}
-                        datum={item.title}
-                        cas={item.time}
-                      />
-                    )}
-                  />
+                  dateRides.map(item => (
+                    <AbsolvovaneInstruktor
+                      state={item.status}
+                      key={item.time}
+                      name={item.student}
+                      datum={item.date}
+                      cas={item.time}
+                    />
+                  ))
                 ) : (
                   <View
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
-                      marginVertical: 20
+                      marginVertical: hp('12%')
                     }}
                   >
                     <Text
                       style={{
-                        fontSize: 20,
+                        fontSize: hp('3.25%'),
                         color: Colors.inActive,
                         textAlign: 'center'
                       }}
@@ -228,8 +232,8 @@ const JazdyAbsolvovane = props => {
 const styles = StyleSheet.create({
   screen: {
     flexGrow: 1,
-    marginTop: 13,
-    marginHorizontal: 20
+    marginTop: hp('2%'),
+    marginHorizontal: wp('4%')
   }
 });
 

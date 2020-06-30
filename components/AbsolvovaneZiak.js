@@ -3,6 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DetailJazdy from './DetailJazdy';
 import InstruktorBar from './InstruktorBar';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
+import Colors from '../constants/Colors';
 
 const AbsolvovaneZiak = props => {
   const [showDetails, setShowDetails] = useState(false);
@@ -36,10 +41,8 @@ const AbsolvovaneZiak = props => {
     >
       <View style={styles.screen}>
         <View style={[styles.riadokJazdy, calculateColor(props.rideState)]}>
-          <View>
-            <InstruktorBar name={props.instructorName} />
-          </View>
-          <View style={styles.item}>
+          <InstruktorBar name={props.instructorName} />
+          <View style={{ paddingTop: hp('1.4%') }}>
             <Text style={styles.title}>{props.date}</Text>
           </View>
         </View>
@@ -60,7 +63,7 @@ const AbsolvovaneZiak = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop: 8
+    marginTop: hp('1%')
   },
 
   riadokJazdy: {
@@ -68,18 +71,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    marginTop: 8,
-    marginHorizontal: 16
+    paddingHorizontal: wp('5%'),
+    paddingVertical: hp('2%'),
+    marginTop: hp('1.8%')
   },
   vysunute: {
-    backgroundColor: '#fff',
-    marginTop: 0,
-    marginHorizontal: 16
+    backgroundColor: '#f5f5f5'
   },
 
   title: {
-    fontSize: 18
+    fontSize: hp('2.75%')
   }
 });
 

@@ -5,6 +5,10 @@ import JazdyAbsolvovane from './JazdyAbsolvovane';
 import JazdyNadchadzajuce from './JazdyNadchadzajuce';
 import Colors from '../../constants/Colors';
 import { TabBar } from 'react-native-tab-view';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 export default class TabViewExample extends React.Component {
   state = {
@@ -33,11 +37,10 @@ export default class TabViewExample extends React.Component {
           />
         )}
         onIndexChange={index => this.setState({ index })}
-        initialLayout={{ width: Dimensions.get('window').width }}
+        initialLaut={{ width: Dimensions.get('window').width }}
       />
     );
   }
 }
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});

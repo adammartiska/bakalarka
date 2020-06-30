@@ -36,7 +36,7 @@ export default class TabViewExample extends React.Component {
             {...props}
             indicatorStyle={{ backgroundColor: 'white' }}
             style={{ backgroundColor: 'white' }}
-            activeColor={Colors.primaryColor}
+            activeColor={Colors.carhartt}
             inactiveColor={'black'}
             labelStyle={{ fontSize: wp('3.5%') }}
           />

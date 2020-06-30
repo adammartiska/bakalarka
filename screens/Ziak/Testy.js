@@ -2,7 +2,11 @@ import { create } from 'apisauce';
 import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import TimeButton from '../../components/TimeButton';
+import AuthButton from '../../components/AuthButton';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const Testy = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -39,60 +43,54 @@ const Testy = props => {
   };
 
   return (
-    <View style={styles.center}>
-      <Text style={{ fontSize: 20, textAlign: 'center' }}>
+    <ScrollView contentContainerStyle={styles.center}>
+      <Text style={{ fontSize: hp('3%'), textAlign: 'center' }}>
         Vyber si test, z ktoreho sa chces preskusat
       </Text>
       <View>
         <Image style={styles.logo} source={require('../../Images/test.png')} />
       </View>
-      <View style={{ marginBottom: 20 }}>
-        <TimeButton
-          name={zobraz}
-          styles={styles.mainButton}
+      <View style={{ marginBottom: hp('3%') }}>
+        <AuthButton
+          title={zobraz}
           onPress={zobrazHandler}
-          styles={{ width: 150, height: 40 }}
+          fontStyle={{ fontSize: hp('2.75%') }}
         />
       </View>
-      <ScrollView>
+      <View style={styles.testContainer}>
         {stav &&
           testy.map(test => {
             return (
-              <TimeButton
+              <AuthButton
                 key={test}
-                testId={test}
-                name={`${test}. test`}
-                styles={styles.testButton}
+                title={`${test}. test`}
                 onPress={() => {
                   navigujHandler(test);
                 }}
+                fontStyle={{ fontSize: hp('2.5%') }}
+                buttonStyle={{ width: wp('40%'), backgroundColor: '#000' }}
               />
             );
           })}
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   center: {
-    flex: 1,
+    flexGrow: 1,
     paddingTop: 30,
     alignItems: 'center',
-    paddingHorizontal: 50
+    marginHorizontal: wp('4%')
   },
-  mainButton: {
-    width: 160,
-    marginVertical: 20
-  },
-  testButton: {
-    width: 150,
-    marginVertical: 10
+  testContainer: {
+    marginBottom: hp('5%')
   },
   logo: {
-    marginVertical: 30,
-    width: 90,
-    height: 130
+    marginVertical: hp('4%'),
+    width: wp('23%'),
+    height: hp('19%')
   }
 });
 

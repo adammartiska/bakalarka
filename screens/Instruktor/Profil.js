@@ -10,13 +10,17 @@ import {
   View
 } from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButon from '../../components/CustomButton';
 import CustomHeaderButton from '../../components/CustomHeaderButton';
 import Colors from '../../constants/Colors';
+import ProfileRow from '../../components/ProfileRow';
 import * as authActions from '../../store/actions/auth';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const Profil = props => {
   const dispatch = useDispatch();
@@ -59,36 +63,27 @@ const Profil = props => {
         <Image style={styles.logo} source={require('../../Images/user.png')} />
       </TouchableOpacity>
       <View style={styles.heading}>
-        <Text style={{ fontSize: 20 }}>{fullName}</Text>
+        <Text style={{ fontSize: hp('3.25%') }}>{fullName}</Text>
       </View>
-      <View style={{ marginTop: 5, marginBottom: 25 }}>
-        <Text>Spolu odjazdenych {ridesCompleted} jazd</Text>
+      <View style={{ marginBottom: hp('4%') }}>
+        <Text style={{ fontSize: hp('2.25%') }}>
+          Spolu odjazdenych {ridesCompleted} jazd
+        </Text>
       </View>
-      <View style={styles.input}>
-        <View>
-          <Icon name="ios-mail" size={30} />
-        </View>
-        <View style={{ paddingTop: 5 }}>
-          <Text>{email}</Text>
-        </View>
-      </View>
-      <View style={styles.input}>
-        <View>
-          <Icon name="ios-call" size={30} />
-        </View>
-        <View style={{ paddingTop: 5 }}>
-          <Text>{phoneNumber}</Text>
-        </View>
-      </View>
-      <View style={styles.input}>
-        <View>
-          <Icon name="ios-flag" size={30} />
-        </View>
-        <View style={{ paddingTop: 5 }}>
-          <Text>{date}</Text>
-        </View>
-      </View>
-      <View style={{ marginTop: 10 }}>
+      <ProfileRow information={email} iconName="ios-mail" />
+      <ProfileRow information={phoneNumber} iconName="ios-call" />
+      <ProfileRow information={date} iconName="ios-flag" />
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: hp('1%'),
+          top: 0,
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      >
         <CustomButon
           name="Nastavenia"
           iconName="md-settings"
@@ -131,23 +126,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginHorizontal: 20
+    marginHorizontal: wp('4%')
   },
 
   logo: {
-    marginTop: 20,
-    height: 100,
-    width: 100
+    marginTop: hp('4%'),
+    height: hp('15%'),
+    width: wp('25%')
   },
   heading: {
-    marginVertical: 20
+    marginVertical: hp('3.5%')
   },
 
   input: {
     flexDirection: 'row',
-    marginVertical: 10,
-    width: '85%',
-    height: 30,
+    marginVertical: hp('2%'),
+    width: wp('80%'),
+    height: hp('4.5%'),
     borderBottomColor: '#ccc',
     borderBottomWidth: 2,
     justifyContent: 'space-between'

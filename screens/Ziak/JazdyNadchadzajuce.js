@@ -20,6 +20,10 @@ import { useSelector } from 'react-redux';
 import { create } from 'apisauce';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import moment from 'moment';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyNadchadzajuce = props => {
   const [zvolenaCancel, setZvolenaCancel] = useState({
@@ -87,7 +91,7 @@ const JazdyNadchadzajuce = props => {
       {isLoading ? (
         <View
           style={{
-            marginTop: 80,
+            marginTop: hp('25%'),
             alignItems: 'center'
           }}
         >
@@ -98,12 +102,12 @@ const JazdyNadchadzajuce = props => {
           style={{
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: 180
+            marginTop: hp('35%')
           }}
         >
           <Text
             style={{
-              fontSize: 22,
+              fontSize: hp('3.25%'),
               textAlign: 'center',
               color: Colors.inActive
             }}
@@ -123,6 +127,7 @@ const JazdyNadchadzajuce = props => {
               onPress={() => showAlertfunction(item)}
             />
           )}
+          keyExtractor={item => item.id.toString()}
         />
       )}
 
@@ -142,7 +147,7 @@ const JazdyNadchadzajuce = props => {
         cancelText="Nie"
         confirmText="Ano, zrusit jazdu"
         confirmButtonColor="#000"
-        cancelButtonColor={'#7a7a7a'}
+        cancelButtonColor={Colors.darkRed}
         onCancelPressed={hideAlert}
         onConfirmPressed={() => zmazHandler(zvolenaCancel.id)}
       />
@@ -152,9 +157,9 @@ const JazdyNadchadzajuce = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    marginHorizontal: 12,
+    marginHorizontal: wp('4%'),
     flex: 1,
-    marginTop: 8
+    marginTop: hp('2%')
   }
 });
 

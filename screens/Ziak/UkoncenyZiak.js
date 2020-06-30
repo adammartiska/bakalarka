@@ -11,6 +11,10 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import AbsolvovaneZiak from '../../components/AbsolvovaneZiak';
 import * as authActions from '../../store/actions/auth';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const UkoncenyZiak = props => {
   const jwt = useSelector(state => state.auth.token);
@@ -60,7 +64,7 @@ const UkoncenyZiak = props => {
       {isLoading ? (
         <View
           style={{
-            marginTop: 80,
+            marginTop: hp('25%'),
             alignItems: 'center'
           }}
         >
@@ -77,6 +81,7 @@ const UkoncenyZiak = props => {
               instructorName={item.instructor}
             />
           )}
+          keyExtractor={item => item.id.toString()}
         />
       )}
     </SafeAreaView>
@@ -86,7 +91,7 @@ const UkoncenyZiak = props => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginBottom: 20
+    marginBottom: hp('4%')
   }
 });
 

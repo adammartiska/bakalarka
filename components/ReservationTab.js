@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import InstruktorBar from './InstruktorBar';
 import TimeButton from './TimeButton';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const ReservationTab = props => {
   const [selected, setSelected] = useState('');
@@ -10,7 +14,7 @@ const ReservationTab = props => {
     setSelected(time.time);
   };
   return (
-    <View style={{ marginHorizontal: 18 }}>
+    <View style={{}}>
       <View style={styles.instruktor}>
         <InstruktorBar name={props.instructorName} />
       </View>
@@ -18,11 +22,12 @@ const ReservationTab = props => {
         {props.data.map(item => {
           return (
             <TimeButton
+              key={`${props.instructorName}-${item.time}`}
               name={item.time}
               onPress={() => handler(item)}
               styles={
                 selected === item.time && {
-                  elevation: 15
+                  elevation: 12
                 }
               }
             />
@@ -40,11 +45,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
-    marginBottom: 25
+    marginBottom: hp('2%')
   },
   instruktor: {
-    marginLeft: 8,
-    marginBottom: 10
+    marginLeft: wp('2%'),
+    marginBottom: hp('1.5%')
   }
 });
 

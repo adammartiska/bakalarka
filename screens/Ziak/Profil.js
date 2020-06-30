@@ -9,13 +9,17 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import ProfileRow from '../../components/ProfileRow';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButon from '../../components/CustomButton';
 import CustomHeaderButton from '../../components/CustomHeaderButton';
 import Colors from '../../constants/Colors';
 import * as authActions from '../../store/actions/auth';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const Profil = props => {
   const dispatch = useDispatch();
@@ -58,10 +62,10 @@ const Profil = props => {
         <Image style={styles.logo} source={require('../../Images/user.png')} />
       </TouchableOpacity>
       <View style={styles.heading}>
-        <Text style={{ fontSize: 20 }}>{fullName}</Text>
+        <Text style={{ fontSize: hp('3.25%') }}>{fullName}</Text>
       </View>
       <View style={{ marginVertical: 5 }}>
-        <Text>Progres</Text>
+        <Text style={{ fontSize: hp('2.5%') }}>Progres</Text>
       </View>
       <View style={styles.progressBar}>
         <Animated.View
@@ -73,34 +77,13 @@ const Profil = props => {
       </View>
       <View style={{ marginVertical: 5 }}>
         <Text>
-          {progString} , Odjazdenych {ridesCompleted} jazd z 20.
+          {progString} , Odjazdenych {ridesCompleted} jazd z 15.
         </Text>
       </View>
-      <View style={styles.input}>
-        <View>
-          <Icon name="ios-mail" size={30} />
-        </View>
-        <View style={{ paddingTop: 5 }}>
-          <Text>{email}</Text>
-        </View>
-      </View>
-      <View style={styles.input}>
-        <View>
-          <Icon name="ios-call" size={30} />
-        </View>
-        <View style={{ paddingTop: 5 }}>
-          <Text>{phoneNumber}</Text>
-        </View>
-      </View>
-      <View style={styles.input}>
-        <View>
-          <Icon name="ios-flag" size={30} />
-        </View>
-        <View style={{ paddingTop: 5 }}>
-          <Text>{date}</Text>
-        </View>
-      </View>
-      <View style={{ marginTop: 10 }}>
+      <ProfileRow information={email} iconName="ios-mail" />
+      <ProfileRow information={phoneNumber} iconName="ios-call" />
+      <ProfileRow information={date} iconName="ios-flag" />
+      <View style={{ marginTop: hp('2%') }}>
         <CustomButon
           name="Nastavenia"
           iconName="md-settings"
@@ -127,16 +110,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginHorizontal: 20
+    marginHorizontal: wp('4%')
   },
 
   logo: {
-    marginTop: 20,
-    height: 100,
-    width: 100
+    marginTop: hp('2%'),
+    height: hp('15%'),
+    width: wp('25%')
   },
   heading: {
-    marginVertical: 20
+    marginVertical: hp('3%')
   },
   progressBar: {
     flexDirection: 'row',

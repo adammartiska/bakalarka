@@ -13,6 +13,10 @@ import Icon from 'react-native-vector-icons/Entypo';
 import { useSelector } from 'react-redux';
 import AbsolvovanePending from '../../components/AbsolvovanePending';
 import Colors from '../../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const JazdyNadchadzajuce = props => {
   const [rides, setRides] = useState([]);
@@ -94,15 +98,17 @@ const JazdyNadchadzajuce = props => {
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 35
+            marginTop: hp('20%')
           }}
         >
           <View>
-            <Icon name="thumbs-up" size={50} color="black" />
+            <Icon name="thumbs-up" size={wp('12.5%')} color="black" />
           </View>
-          <View style={{ alignItems: 'center', marginVertical: 25 }}>
-            <Text style={{ fontSize: 20 }}>Vsetko je v poriadku,</Text>
-            <Text style={{ fontSize: 20 }}>nemate ziadne nove ziadosti</Text>
+          <View style={{ alignItems: 'center', marginVertical: hp('3%') }}>
+            <Text style={{ fontSize: hp('3.25%') }}>Vsetko je v poriadku,</Text>
+            <Text style={{ fontSize: hp('3.25%') }}>
+              nemate ziadne nove ziadosti
+            </Text>
           </View>
         </View>
       )}
@@ -112,9 +118,9 @@ const JazdyNadchadzajuce = props => {
 
 const styles = StyleSheet.create({
   screen: {
-    marginHorizontal: 12,
+    marginHorizontal: wp('4%'),
     flex: 1,
-    marginTop: 8
+    marginTop: hp('1.2%')
   }
 });
 
