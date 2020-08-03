@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     elevation: 6
   },
   textInButton: {
-    fontSize: hp('3.25%')
+    fontSize: hp('3.25%'),
+    fontFamily: 'Roboto'
   },
   buttonContainer: {
     marginTop: hp('0.5%')

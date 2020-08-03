@@ -33,7 +33,6 @@ const Profil = props => {
   const p = () => {
     return progString;
   };
-  let animation = useRef(new Animated.Value(0));
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -87,7 +86,7 @@ const Profil = props => {
         <CustomButon
           name="Nastavenia"
           iconName="md-settings"
-          onPress={() => props.navigation.navigate('ProfilSettings')}
+          onPress={() => console.log(image)}
         />
       </View>
     </View>

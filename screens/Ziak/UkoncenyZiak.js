@@ -6,7 +6,8 @@ import {
   FlatList,
   SafeAreaView,
   StyleSheet,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import AbsolvovaneZiak from '../../components/AbsolvovaneZiak';
@@ -60,38 +61,38 @@ const UkoncenyZiak = props => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.screen}>
-      {isLoading ? (
-        <View
-          style={{
-            marginTop: hp('25%'),
-            alignItems: 'center'
-          }}
-        >
-          <ActivityIndicator size="large" color="black" />
-        </View>
-      ) : (
-        <FlatList
-          data={data}
-          renderItem={({ item }) => (
+    <ScrollView contentContainerStyle={styles.screen}>
+      <SafeAreaView
+        style={{ marginBottom: hp('4%'), marginHorizontal: wp('5%') }}
+      >
+        {isLoading ? (
+          <View
+            style={{
+              marginTop: hp('25%'),
+              alignItems: 'center'
+            }}
+          >
+            <ActivityIndicator size="large" color="black" />
+          </View>
+        ) : (
+          data.map(item => (
             <AbsolvovaneZiak
+              key={item.id.toString()}
               date={moment(item.date).format('DD.MM.YYYY')}
               time={item.time}
               rideState={item.status}
               instructorName={item.instructor}
             />
-          )}
-          keyExtractor={item => item.id.toString()}
-        />
-      )}
-    </SafeAreaView>
+          ))
+        )}
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    marginBottom: hp('4%')
+    flexGrow: 1
   }
 });
 

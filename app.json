@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Autoskola",
+    "name": "Bakalarska_praca_Autoskola",
     "icon": "./assets/icon.png",
     "version": "1.0.0",
-    "slug": "autoskola",
+    "slug": "bakalarska_praca_autoskola",
     "ios": {
       "bundleIdentifier": "com.yourcompany.yourappname",
       "buildNumber": "1.0.0"
