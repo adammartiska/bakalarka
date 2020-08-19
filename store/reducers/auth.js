@@ -11,7 +11,7 @@ import {
 } from '../actions/auth';
 
 const initialState = {
-  token: 'token nezmeneny napr',
+  token: null,
   userId: null,
   fullname: '',
   phonenumber: '',
@@ -38,7 +38,9 @@ export default (state = initialState, action) => {
     case LOGINMYAPP:
       return {
         token: action.token,
-        relations: action.relations
+        relations: action.relations,
+        relationId: action.relationId,
+        userInfo: action.userInfo
       };
 
     case SIGNUP:

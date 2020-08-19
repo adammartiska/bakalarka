@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import Navigacia from './navigation/Navigacia';
+//import Navigacia from './navigation/Navigacia';
+import MainNavigator from './navigation/MainNavigator';
 import authReducer from './store/reducers/auth';
 
 //useScreens();  //optimalizacia screenov performance
@@ -31,7 +32,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default function App() {
   return (
     <Provider store={store}>
-      <Navigacia />
+      <MainNavigator />
     </Provider>
   );
 }

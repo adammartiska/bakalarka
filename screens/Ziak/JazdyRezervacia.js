@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#FFF',
-    marginHorizontal: wp('5%')
+    paddingHorizontal: wp('5%')
   },
   centered: {
     justifyContent: 'center',

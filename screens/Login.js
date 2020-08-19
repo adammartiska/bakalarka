@@ -89,49 +89,46 @@ const Login = props => {
   const authHandler = async () => {
     Keyboard.dismiss();
     let action;
-    ('Pod tymto email');
-    formState.inputValues.password;
     action = authActions.loginmyapp(
       formState.inputValues.email,
       formState.inputValues.password
     );
 
-    setIsLoading(true);
+    //setIsLoading(true);
     setError(null);
-
-    try {
-      const where = await dispatch(action);
-      const { token, relations, schoolCount } = where;
-      token, schoolCount;
-      if (relations.length > 0) {
-        if (schoolCount === 1 && relations[0].information === 'completed') {
-          await dispatch(authActions.headerData(relations[0].relationID));
-          props.navigation.navigate('CompletedZiak');
-        }
-        if (relations[0].information === 'active' && schoolCount === 1) {
-          await dispatch(authActions.reduxdata(token, relations[0].relationID));
-          if (relations[0].role === 'INSTRUCTOR') {
-            props.navigation.navigate('SignedInInstructor');
-          } else if (relations[0].role === 'STUDENT') {
-            props.navigation.navigate('SignedInZiak');
-          } else if (relations[0].role === 'OWNER') {
-            props.navigation.navigate('SignedInOwner');
-          }
-        }
-        if (
-          schoolCount > 1 &&
-          relations.map(item => item.information !== 'active')
-        ) {
-          props.navigation.navigate('VyberScreen');
-        }
-      } else {
-        props.navigation.navigate('Vyber');
-      }
-    } catch (err) {
-      setError(err.message);
-      err.message;
-      setIsLoading(false);
-    }
+    const where = await dispatch(action);
+    const { token, relations, schoolCount } = where;
+    await dispatch(authActions.reduxdata(token, relations[0].relationID));
+    //   const { token, relations, schoolCount } = where;
+    //   token, schoolCount;
+    //   if (relations.length > 0) {
+    //     if (schoolCount === 1 && relations[0].information === 'completed') {
+    //       await dispatch(authActions.headerData(relations[0].relationID));
+    //       props.navigation.navigate('CompletedZiak');
+    //     }
+    //     if (relations[0].information === 'active' && schoolCount === 1) {
+    //       await dispatch(authActions.reduxdata(token, relations[0].relationID));
+    //       if (relations[0].role === 'INSTRUCTOR') {
+    //         props.navigation.navigate('SignedInInstructor');
+    //       } else if (relations[0].role === 'STUDENT') {
+    //         props.navigation.navigate('SignedInZiak');
+    //       } else if (relations[0].role === 'OWNER') {
+    //         props.navigation.navigate('SignedInOwner');
+    //       }
+    //     }
+    //     if (
+    //       schoolCount > 1 &&
+    //       relations.map(item => item.information !== 'active')
+    //     ) {
+    //       props.navigation.navigate('VyberScreen');
+    //     }
+    //   } else {
+    //     props.navigation.navigate('Vyber');
+    //   }
+    // } catch (err) {
+    //   setError(err.message);
+    //   err.message;
+    //   setIsLoading(false);
   };
 
   const inputChangeHandler = useCallback(

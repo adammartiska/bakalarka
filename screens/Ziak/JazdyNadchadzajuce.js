@@ -52,6 +52,7 @@ const JazdyNadchadzajuce = props => {
       setIsLoading(true);
       try {
         const res = await api.get('/student/getReservedRides');
+        console.log(res);
         setData(res.data);
         setIsLoading(false);
       } catch (error) {
@@ -87,7 +88,7 @@ const JazdyNadchadzajuce = props => {
   // const message = `Naozaj si prajete zrusit jazdu ${item.title}?`
   //!!!! chcem uchovavat zvolenu jazdu v stave objekte kvoli alertu!
   return (
-    <SafeAreaView style={styles.screen}>
+    <View style={styles.screen}>
       {isLoading ? (
         <View
           style={{
@@ -151,7 +152,7 @@ const JazdyNadchadzajuce = props => {
         onCancelPressed={hideAlert}
         onConfirmPressed={() => zmazHandler(zvolenaCancel.id)}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

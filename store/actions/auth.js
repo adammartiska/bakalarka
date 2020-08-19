@@ -51,101 +51,101 @@ export const signup = (fullname, email, phonenumber, password) => {
   };
 };
 
-export const login = (email, password) => {
-  const navigation = useNavigation();
-  return async dispatch => {
-    const response = await fetch(
-      //'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
-      'http://147.175.121.250:80/authenticate/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-          /*returnSecureToken: true  */
-        })
-      }
-    );
+// export const login = (email, password) => {
+//   const navigation = useNavigation();
+//   return async dispatch => {
+//     const response = await fetch(
+//       //'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
+//       'http://147.175.121.250:80/authenticate/login',
+//       {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//           email: email,
+//           password: password
+//           /*returnSecureToken: true  */
+//         })
+//       }
+//     );
 
-    if (!response.ok) {
-      const errorResData = await response.json();
-      const errorId = errorResData.error.message;
-      let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_NOT_FOUND') {
-        message = 'Entered email not found!';
-      } else if (errorId === 'INVALID_PASSWORD') {
-        message = 'Entered password is not valid!';
-      }
-      throw new Error(message);
-    }
-    const resData = await response.json();
-    dispatch({
-      type: LOGIN,
-      token: resData.jwtToken,
-      userId: resData.relationID
-    });
-    navigation.navigate('SignedInZiak');
-    /*
-    const expirationDate = new Date(
-      new Date().getTime() + parseInt(resData.expiresIn) * 1000
-    );
-    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-    */
-  };
-};
+//     if (!response.ok) {
+//       const errorResData = await response.json();
+//       const errorId = errorResData.error.message;
+//       let message = 'Something went wrong!';
+//       if (errorId === 'EMAIL_NOT_FOUND') {
+//         message = 'Entered email not found!';
+//       } else if (errorId === 'INVALID_PASSWORD') {
+//         message = 'Entered password is not valid!';
+//       }
+//       throw new Error(message);
+//     }
+//     const resData = await response.json();
+//     dispatch({
+//       type: LOGIN,
+//       token: resData.jwtToken,
+//       userId: resData.relationID
+//     });
+//     navigation.navigate('SignedInZiak');
+//     /*
+//     const expirationDate = new Date(
+//       new Date().getTime() + parseInt(resData.expiresIn) * 1000
+//     );
+//     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+//     */
+//   };
+// };
 
 export const logout = () => {
   return { type: LOGOUT };
 };
 
-export const forgotpass = email => {
-  return async dispatch => {
-    const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
-      //'http://192.168.43.52:8080/authenticate',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          requestType: 'PASSWORD_RESET',
-          email: email
-        })
-      }
-    );
+// export const forgotpass = email => {
+//   return async dispatch => {
+//     const response = await fetch(
+//       'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBiqLlRCDS9oROWbMbaTGZ0jXEDpRvRjjc',
+//       //'http://192.168.43.52:8080/authenticate',
+//       {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//           requestType: 'PASSWORD_RESET',
+//           email: email
+//         })
+//       }
+//     );
 
-    if (!response.ok) {
-      const errorResData = await response.json();
-      errorId = errorResData.error.message;
-      let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_EXISTS') {
-        message = 'Entered email already exists!';
-      }
-      throw new Error(message);
-    }
+//     if (!response.ok) {
+//       const errorResData = await response.json();
+//       errorId = errorResData.error.message;
+//       let message = 'Something went wrong!';
+//       if (errorId === 'EMAIL_EXISTS') {
+//         message = 'Entered email already exists!';
+//       }
+//       throw new Error(message);
+//     }
 
-    const resData = await response.json();
-    dispatch({ type: FORGOTPASS, email: resData.email });
-    //const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
-    //saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-  };
-};
+//     const resData = await response.json();
+//     dispatch({ type: FORGOTPASS, email: resData.email });
+//     //const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
+//     //saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+//   };
+// };
 
-const saveDataToStorage = (token, userId, expirationDate) => {
-  AsyncStorage.setItem(
-    'userData',
-    JSON.stringify({
-      token: token,
-      userId: userId,
-      expiryDate: expirationDate.toISOString()
-    })
-  );
-};
-/*token: resData.idToken, userId: resData.localId */
+// const saveDataToStorage = (token, userId, expirationDate) => {
+//   AsyncStorage.setItem(
+//     'userData',
+//     JSON.stringify({
+//       token: token,
+//       userId: userId,
+//       expiryDate: expirationDate.toISOString()
+//     })
+//   );
+// };
+// /*token: resData.idToken, userId: resData.localId */
 
 export const loginmyapp = (email, password) => {
   return async dispatch => {
@@ -168,19 +168,35 @@ export const loginmyapp = (email, password) => {
       const errorMessage = errorHandler(errorResData.message);
       throw new Error(errorMessage);
     }
-    const resData = await response.json();
-
-    dispatch({
-      type: LOGINMYAPP,
-      token: resData.jwtToken,
-      relations: resData.relations
-    });
-    return {
-      token: resData.jwtToken,
-      relations: resData.relations,
-      schoolCount: resData.schoolCount
-    };
-    // RootNavigation.navigate('SignedInZiak', {});
+    const { jwtToken, relations } = await response.json();
+    console.log(relations[0].relationID);
+    console.log(jwtToken);
+    if (relations.length === 1) {
+      const responseReduxData = await fetch(
+        'http://147.175.121.250:80/relationship/getRelationInfo',
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
+            Relation: relations[0].relationID
+          }
+        }
+      );
+      if (!responseReduxData.ok) {
+        const errorResData = await responseReduxData.json();
+        throw new Error(errorResData);
+      }
+      const resData = await responseReduxData.json();
+      dispatch({
+        type: LOGINMYAPP,
+        token: jwtToken,
+        relations: relations,
+        relationId: relations[0].relationID,
+        userInfo: resData
+      });
+    }
   };
 };
 

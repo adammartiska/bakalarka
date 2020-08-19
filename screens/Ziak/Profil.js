@@ -48,12 +48,17 @@ const Profil = props => {
 
   const logoutHandler = useCallback(() => {
     dispatch(authActions.logout());
-    props.navigation.navigate('SignedOut');
   }, [dispatch]);
 
-  useEffect(() => {
-    props.navigation.setParams({ odhlas: () => logoutHandler() });
-  }, [logoutHandler]);
+  React.useLayoutEffect(() => {
+    props.navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item title="Logout" iconName="ios-log-out" onPress={logoutHandler} />
+        </HeaderButtons>
+      )
+    });
+  });
 
   return (
     <View style={styles.screen}>
@@ -86,22 +91,11 @@ const Profil = props => {
         <CustomButon
           name="Nastavenia"
           iconName="md-settings"
-          onPress={() => console.log(image)}
+          onPress={() => props.navigation.navigate('ProfileSettings')}
         />
       </View>
     </View>
   );
-};
-
-Profil.navigationOptions = navData => {
-  const odhlasSa = navData.navigation.getParam('odhlas');
-  return {
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item title="Logout" iconName="ios-log-out" onPress={odhlasSa} />
-      </HeaderButtons>
-    )
-  };
 };
 
 const styles = StyleSheet.create({
