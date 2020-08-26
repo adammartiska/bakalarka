@@ -1,36 +1,19 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-//import * as Font from 'expo-font';
-import { useScreens } from 'react-native-screens';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
-import { AppLoading } from 'expo';
-import Navigacia, { createRootNavigator } from './navigation/Navigacia';
-import Login from './screens/Login';
-import { isSignedIn } from './components/Auth';
-import Testy from './screens/Ziak/Testy';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import ReduxThunk from 'redux-thunk';
+//import Navigacia from './navigation/Navigacia';
+import MainNavigator from './navigation/MainNavigator';
 import authReducer from './store/reducers/auth';
-import orderReducer from './store/reducers/orders';
-import JazdyAbsolvovane from './screens/Instruktor/JazdyAbsolvovane';
-import Profil from './screens/Ziak/Profil';
-import JazdyRezervacia from './screens/Ziak/JazdyRezervacia';
-import JazdyInstruktor from './screens/Instruktor/JazdyInstruktor';
-import Prvy from './screens/Testy/Prvy';
-import ProfilSettings from './screens/Ziak/ProfilSettings';
-import NavigaciaInstrktor from './navigation/NavigaciaInstruktor';
-import NadchadzajuceInstruktor from './components/NadchadzajuceInstruktor';
-import JazdyNadchadzajuce from './screens/Instruktor/JazdyNadchadzajuce';
 
 //useScreens();  //optimalizacia screenov performance
 
-
 const rootReducer = combineReducers({
-  orders: orderReducer,
   auth: authReducer
 });
 
-const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 // const fetchfonts = () => {
 //   return Font.loadAsync({
@@ -38,58 +21,18 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 //     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
 //   });
 // }; //funkcia na nacitanie fontov
-  // const [fontLoaded, setFontLoaded] = useState('false');
-  // if(!fontLoaded) {
-  //   return <AppLoading startAsync={fetchfonts}
-  //     onFinish={() => setFontLoaded(true)}
-  //     />
-    
-  // };
+// const [fontLoaded, setFontLoaded] = useState('false');
+// if(!fontLoaded) {
+//   return <AppLoading startAsync={fetchfonts}
+//     onFinish={() => setFontLoaded(true)}
+//     />
 
-  // const [isLoggedIn, setIsLoggedIn] = useState('false');
+// };
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoggedIn: false,
-      signedIn: false,
-      checkedSignIn: false,
-    };
-  };
-
-  // }
-render() {
-  // const { signedIn, checkedSignIn } = this.state;
-  // const Layout = createRootNavigator(signedIn);
+export default function App() {
   return (
-    <Provider store = {store}>
-    <NavigaciaInstrktor />
+    <Provider store={store}>
+      <MainNavigator />
     </Provider>
   );
-};
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-
-// {
-//   const { checkedSignIn, signedIn } = this.state;
-//   if(!checkedSignIn) {
-//     return null;
-//   }
-//   if(!signedIn){
-//     return <Login />;
-//   }
-//   if(signedIn) {
-//     return (<View style={styles.container}><Text> si prihlaseny</Text></View>)
-//   }
-// }

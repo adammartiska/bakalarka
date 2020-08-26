@@ -1,97 +1,58 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, SafeAreaView, Image} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import DetailJazdy from '../components/DetailJazdy';
-import { useState } from 'react';
-import Colors from '../constants/Colors';
-import InstruktorBar from '../components/InstruktorBar';
+import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import TimeButton from './TimeButton';
-
+import InstruktorBar from '../components/InstruktorBar';
+import Colors from '../constants/Colors';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
 const NadchadzajuceInstruktor = props => {
-    const [showDetails, setShowDetails] = useState(false);
-    return (
-        
-        <View style = {[styles.default, props.style]}>
-        <View style = {{flexDirection: 'row', justifyContent: 'space-around', borderBottomWidth: 2, borderBottomColor: Colors.sedatmava}}>
+  return (
+    <View style={[styles.default, props.style]}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          borderBottomWidth: 2,
+          borderBottomColor: Colors.sedatmava
+        }}
+      >
         <View>
-        <Text style={styles.velky}>{props.datum}</Text>
+          <Text style={styles.velky}>{props.datum}</Text>
         </View>
-        <Icon name="ios-flag" size={25}/>
+        <Icon name="ios-flag" size={wp('7%')} />
         <View>
-        <Text style={styles.velky}>{props.cas}</Text>
+          <Text style={styles.velky}>{props.cas}</Text>
         </View>
-        </View>
-        <View style = {{marginTop: 7, alignItems: 'center'}}>
-        <InstruktorBar />
-        </View>
-        </View>
-        
-        
-        
+      </View>
+      <View
+        style={{
+          marginLeft: wp('3%'),
+          marginTop: hp('0.75%'),
+          alignItems: 'center'
+        }}
+      >
+        <InstruktorBar name={props.name} />
+      </View>
+    </View>
+  );
+};
 
-
-      );
+const styles = StyleSheet.create({
+  default: {
+    elevation: 1,
+    justifyContent: 'center',
+    marginVertical: hp('2%'),
+    borderWidth: 2,
+    borderColor: Colors.sedatmava,
+    padding: wp('2.5%')
+  },
+  velky: {
+    textAlign: 'center',
+    fontSize: hp('2.75%')
   }
-
-
-  const styles = StyleSheet.create({
-    screen: {
-        flexDirection: 'row',
-        flex: 1, 
-        marginTop: 8,
-        borderWidth: 2,
-        borderColor: Colors.carhartt,
-        backgroundColor: '#eeeeee',
-        padding: 10,
-        marginTop: 8,
-        marginHorizontal: 15,
-    },
-    default: {
-   elevation: 1, justifyContent: 'center', marginVertical: 10, borderWidth: 2, borderColor: Colors.sedatmava, padding: 8,
-    },
-    item: {
-        marginLeft: 25,
-        marginRight: 20,
-    },
-    velky: {
-        textAlign: 'center', 
-        fontSize: 18,
-    },
-
-    riadokJazdy: {
-        borderWidth: 2,
-        borderColor: '#000',
-        //backgroundColor: Colors.sedatmava,
-        padding: 10,
-        marginTop: 8,
-        width: '100%',
-        marginHorizontal: 15,
-
-    },
-    vysunute: {
-        borderWidth: 1,
-        marginTop: 0,
-        marginHorizontal: 16,
-        alignItems: 'center', 
-        paddingVertical: 8,
-        marginVertical: 15,
-
-
-
-    },
-
-      title: {
-        fontSize: 20,
-      },
-      logo: {
-        width: 22,
-        height: 22,
-
-      }
-
 });
 
-
-  export default NadchadzajuceInstruktor;
+export default NadchadzajuceInstruktor;

@@ -1,40 +1,74 @@
-import { LOGIN, SIGNUP, AUTHENTICATE, LOGOUT, FORGOTPASS } from '../actions/auth';
+import {
+  LOGIN,
+  SIGNUP,
+  AUTHENTICATE,
+  LOGOUT,
+  FORGOTPASS,
+  LOGINMYAPP,
+  REDUXDATA,
+  UPDATERELATIONID,
+  USERINFO
+} from '../actions/auth';
 
 const initialState = {
-    token: null,
-    userId: null,
+  token: null,
+  userId: null,
+  fullname: '',
+  phonenumber: '',
+  ridesCompleted: '',
+  startDate: null,
+  relationId: null,
+  relations: []
 };
 
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case AUTHENTICATE:
+      return {
+        token: action.token,
+        userId: action.userId
+      };
+    case LOGOUT:
+      return initialState;
+    case LOGIN:
+      return {
+        token: action.token,
+        userId: action.userId
+      };
+    case LOGINMYAPP:
+      return {
+        token: action.token,
+        relations: action.relations,
+        relationId: action.relationId,
+        userInfo: action.userInfo
+      };
 
-export default(state = initialState, action) => {
-    switch(action.type){
-        case AUTHENTICATE: 
-        return {
-            token: action.token,
-            userId: action.userId
-        };
-        case LOGOUT: 
-        return initialState;
-        case LOGIN: 
-        return {
-            token: action.token,
-            userId: action.userId
-        };
-        case SIGNUP:
-        return {
-            token: action.token,
-            userId: action.userId
-
-        };
-        case FORGOTPASS:
-            return {
-                email: action.email
-            }
-        default:
-            return state;
-
-
-
-    }
-
-}
+    case SIGNUP:
+      return {
+        token: action.token,
+        userId: action.userId
+      };
+    case FORGOTPASS:
+      return {
+        email: action.email
+      };
+    case REDUXDATA:
+      return {
+        ...state,
+        userInfo: action.userInfo,
+        relationId: action.relationId
+      };
+    case UPDATERELATIONID:
+      return {
+        ...state,
+        relationId: action.relationId
+      };
+    case USERINFO:
+      return {
+        ...state,
+        userInfo: action.userInfo
+      };
+    default:
+      return state;
+  }
+};

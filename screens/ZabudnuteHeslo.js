@@ -1,193 +1,153 @@
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Alert } from 'react-native';
-import { TouchableOpacity, Directions } from 'react-native-gesture-handler';
-import Colors from '../constants/Colors';
-import { KeyboardAvoidingView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native';
 import Input from '../components/Input';
-import { useDispatch } from 'react-redux';
-import * as authActions from '../store/actions/auth';
-const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
-
+import AuthButton from '../components/AuthButton';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Colors from '../constants/Colors';
+import { create } from 'apisauce';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
-    if(action.type === FORM_INPUT_UPDATE) {
-        const updatedValues = {
-            ...state.inputValues,
-            [action.input]: action.value
-        };
-        const updatedValidities = {
-            ...state.inputValidities,
-            [action.input]: action.isValid
-        }
-        let updatedFormIsValid = true;
-        for(const key in updatedValidities) {
-            updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
-        }
-        return {
-            formIsValid: updatedFormIsValid,
-            inputValidities: updatedValidities,
-            inputValues: updatedValues
-        }
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value
     };
-    return state;
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues
+    };
+  }
+  return state;
 };
 
-
-
 const ZabudnuteHeslo = props => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isEmail, setIsEmail] = useState(false);
-    const [error, setError] = useState();
-    const dispatch = useDispatch();
-    const [formState, dispatchFormState] = useReducer(formReducer, {
-        inputValues: {
-            email: '',
-        },
-        inputValidities: {
-            email: false,
-        },
-        formIsValid: false
+  const api = create({
+    baseURL: 'http://147.175.121.250:80',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [title, setTitle] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      email: ''
+    },
+    inputValidities: {
+      email: false
+    },
+    formIsValid: false
+  });
+
+  const authHandler = async () => {
+    setIsLoading(true);
+    setMessage(null);
+    const response = await api.post('/authenticate/forgotPassword', {
+      userEmail: formState.inputValues.email
     });
+    setShowAlert(true);
+    setIsLoading(false);
+    if (response.ok) {
+      setTitle('Uspesne resetovanie hesla!');
+      setMessage('Na vas mail bolo zaslane nove docasne heslo');
+    } else {
+      setTitle('Neuspesne resetovanie hesla');
+      setMessage('Ucet s takymto mailom bohuzial neevidujeme');
+    }
+  };
 
-    useEffect(() => {
-        if(error) {
-            Alert.alert('Nastala chyba!', error, [{text: 'Okay'}]);
-        }
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier
+      });
+    },
+    [dispatchFormState]
+  );
 
-    }, [error]);
-
-    const authHandler = async () => {
-        let action;
-
-        action = authActions.forgotpass(
-            formState.inputValues.email,
-        );
-        
-        setIsLoading(true);
-        setError(null);
-        
-
-        try {
-        await dispatch(action);
-        setIsEmail(true);
-        setIsLoading(false);
-        //props.navigation.navigate('Login');
-        }   catch(err) {
-            setError(err.message);
-            setIsLoading(false);
-        }
-
-    };
-
-    const inputChangeHandler = useCallback(
-        (inputIdentifier, inputValue, inputValidity) => {
-            dispatchFormState({
-                type: FORM_INPUT_UPDATE,
-                value: inputValue,
-                isValid: inputValidity,
-                input: inputIdentifier
-            })
-        }, [dispatchFormState]
-    );
-
-    return (
-    <KeyboardAvoidingView style = {{flex: 1}}
-     behavior='padding'
-     enabled>
-    <TouchableWithoutFeedback onPress={
-        () => {Keyboard.dismiss();}}>
-    <View style={styles.container}> 
-    <View style={{marginVertical: 5}}>
-    <Text>Zadajte e-mail pre obnovu hesla</Text>
-    </View>
-    <Input 
-    id="email"
-    placeholder="e-mail"
-    keyboardType={'email-address'}
-    required
-    email
-    onInputChange={inputChangeHandler}
-    />
-
-    <View style = {styles.loginButton}>
-    {(isLoading) ? (<View style = {{paddingTop: 10,
-        textAlign: 'center',}}><ActivityIndicator size='small' color='white'/></View>) :
-         (
-    <TouchableOpacity
-    activeOpacity={0.3}
-    onPress={authHandler}
-    >    
-    <Text style={styles.inputLoginText}>Odosli</Text>       
-    </TouchableOpacity>)}
-    </View>
-    <View>
-    {(isEmail) && (        
-        <View style={styles.sprava}><Text>Na vas e-mail bol poslany link na reset vasho heslo</Text>
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }} enabled>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
+      >
+        <View style={styles.container}>
+          <View style={{ marginVertical: hp('2%') }}>
+            <Text style={{ fontSize: hp('3%') }}>
+              Zadajte e-mail pre obnovu hesla
+            </Text>
+          </View>
+          <Input
+            id="email"
+            placeholder="e-mail"
+            keyboardType={'email-address'}
+            required
+            email
+            onInputChange={inputChangeHandler}
+          />
+          <AuthButton
+            title="Odosli"
+            onPress={authHandler}
+            isLoading={isLoading}
+            containerStyle={{ marginTop: hp('5%') }}
+          />
         </View>
- )}
-    </View>
-    </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      <AwesomeAlert
+        show={showAlert}
+        title={title}
+        message={message}
+        cancelText="Spat"
+        confirmText="Prihlasit ma"
+        showProgress={false}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={false}
+        cancelButtonColor={'#7a7a7a'}
+        confirmButtonColor={Colors.carhartt}
+        onCancelPressed={() => setShowAlert(false)}
+        onConfirmPressed={() => props.navigation.navigate('Login')}
+      />
     </KeyboardAvoidingView>
-
-    );
-
-   
-    };
-
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 30,
-
-    },
-    logo: {     
-        marginVertical: 30,
-        width: 200,
-        height: 100,
-    },
-    zarovnaj: {
-        alignItems: 'flex-start'
-    },
-
-    inputLoginText: {
-        paddingVertical: 3,
-        textAlign: 'center',
-        fontSize: 22,
-        color: '#fff'
-
-    },
-    inputLoginTextBlack: {
-        paddingVertical: 3,
-        textAlign: 'center',
-        fontSize: 22,
-
-    },
-    sprava: {
-        marginVertical: 10,
-    },
-    loginButton: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 12,
-        width: 200,
-        height: 40,
-        borderRadius: 10,
-        backgroundColor: Colors.primaryColor,
-        marginHorizontal: 10,
-        elevation: 6,
-    
-
-    },
-  
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: wp('9%')
+  }
 });
 
 export default ZabudnuteHeslo;
-
-
-        //poznamka prvotny login nejde kvoli tomu, ze potvrdenie inputu mam zatial 
-        //nastavene na onblur cize ked stratim focus z daneho textinputu

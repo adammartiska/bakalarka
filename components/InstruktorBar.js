@@ -1,48 +1,37 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
+import { juxt } from 'ramda';
 
 const InstruktorBar = props => {
-
-    return (
-        <View style={styles.instruktorLayout}>
-        <Image 
-        style={styles.logo}
-        source={require('../Images/instruktor.jpg')}
-        />
-        <View style={styles.menoInstruktora}>
-        <Text style={{fontSize: 20,}}>Drahomir Januska</Text>
-        </View>  
-        </View>
-    );
-
-
+  return (
+    <View style={styles.instruktorLayout}>
+      <Image style={styles.logo} source={require('../Images/instruktor.jpg')} />
+      <View style={styles.menoInstruktora}>
+        <Text style={{ fontSize: hp('3%') }}>{props.name}</Text>
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    center: {
-        flex: 1,
-        paddingTop: 120,
-        alignItems: 'center',
-    },
-
-    instruktorLayout: {
-        flexDirection: 'row',
-
-    },
-    logo: {
-        borderColor: 'black',
-        borderRadius: 10,
-        width: 35,
-        height: 35,
-    },
-    menoInstruktora: {
-        marginLeft: 15,
-        paddingVertical: 5,
-    },
-
-
-
-
+  instruktorLayout: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: hp('1%')
+  },
+  logo: {
+    borderColor: 'black',
+    borderRadius: 10,
+    width: wp('10%'),
+    height: hp('5.5%')
+  },
+  menoInstruktora: {
+    marginLeft: wp('4%')
+  }
 });
 
 export default InstruktorBar;

@@ -1,82 +1,54 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import Colors from '../constants/Colors';
-import { CheckBox } from 'react-native-elements'
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from 'react-native-responsive-screen';
 
+const TimeButtonCheck = ({ isChecked, value, onPress, label }) => {
+  return (
+    <View style={styles.customButon}>
+      <CheckBox
+        checked={isChecked}
+        value={value}
+        onPress={onPress}
+        checkedColor={Colors.primaryColor}
+        containerStyle={{ padding: 0 }}
+      />
 
-
-const TimeButtonCheck = props => {
-    const [ceknute, setCeknute] = useState(true);
-    const array = ["10:00"];
-    const key = ["15:00"];
-    const checkHandler = (id) => {
-        setCeknute(!ceknute);
-        if(!ceknute) {
-            props.dajPole(array, key);
-        }
-        else
-        {
-            console.log("filtruj");
-        }
-
-    };
-    return (
-            <View style={styles.customButon}>
-            <CheckBox
-            checked = {props.isChecked}
-            value = {props.value}
-            onPress = {props.onPress}
-            checkedColor = {Colors.primaryColor}
-            containerStyle = {{padding:0,}}
-            
-            />
-
-                <TouchableOpacity activeOpacity={0.5}>
-                    <Text 
-                    style={styles.textInButton}>
-                    {props.label}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-    );
-
-
-
+      <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+        <Text style={styles.textInButton}>{label}</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-
-
-    },
-    customButon: {
-        flexDirection: 'row',
-        margin: 5,
-        height: 30,
-        width: '30%',
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        borderRadius: 5,
-        shadowColor: 'black',
-        shadowOpacity: 0.3,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 10,
-        elevation: 3,
-
-
-    },
-    textInButton: {
-        fontSize: 20,
-        color: 'black',
-        //fontFamily: 'open-sans-bold',
-        //textAlign: 'center',
-
-    },
-
-
+  screen: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  customButon: {
+    flexDirection: 'row',
+    marginHorizontal: wp('1.5%'),
+    marginVertical: hp('1%'),
+    height: hp('4%'),
+    width: wp('27.5%'),
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    borderRadius: 5,
+    shadowColor: 'black',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    elevation: 3
+  },
+  textInButton: {
+    fontSize: hp('3%')
+  }
 });
 
 export default TimeButtonCheck;
